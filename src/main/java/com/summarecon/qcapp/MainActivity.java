@@ -10,12 +10,18 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Test
+        initA();
+        
+    
         initB();
     }
 
+    private void initA() {
+        // A
     private void initB() {
         //B
     }
 
+    
 
 }
