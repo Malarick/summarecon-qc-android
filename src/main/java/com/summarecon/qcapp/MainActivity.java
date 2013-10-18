@@ -11,6 +11,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(getApplicationContext(),"Tes Agung",Toast.LENGTH_SHORT);
+        //Toast.makeText(getApplicationContext(),"Tes Agung",Toast.LENGTH_SHORT);
     }
 }
