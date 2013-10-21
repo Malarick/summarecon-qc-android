@@ -31,6 +31,15 @@
         <activity
             android:name="com.summarecon.qcapp.MainActivity"
             android:label="@string/app_name" />
+        <activity
+            android:name=".TakePictureActivity"
+            android:label="TakePictureActivity" />
+        <activity
+            android:name=".MarkPictureActivity"
+            android:label="MarkPictureActivity" />
+        <activity
+            android:name=".MarkFloorMapActivity"
+            android:label="MarkFloorMapActivity" />
     </application>
 
 </manifest>
