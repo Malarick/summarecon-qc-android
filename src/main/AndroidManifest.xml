@@ -22,6 +22,7 @@
 
         <activity
             android:name=".LoginActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:label="LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,7 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFF"
+    tools:context=".SplashScreenActivity">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom|center_horizontal">
+        <!-- android:gravity="center_vertical|center_horizontal" -->
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="270dp"
+            android:layout_height="120dp"
+            android:src="@drawable/summarecon"/>
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" "/>
+
+        <EditText
+            android:id="@+id/edttxt_username"
+            android:hint="Username"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" "/>
+
+        <EditText
+            android:id="@+id/edtTxt_password"
+            android:hint="Password"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" "/>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="LOGIN"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:background="@drawable/blue_button_style"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/lbl_footer"
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|bottom"
+        android:text="\u00a9 2013 PT.Summarecon Tbk."/>
+
+</RelativeLayout>
