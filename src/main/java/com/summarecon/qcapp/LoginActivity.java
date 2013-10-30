@@ -3,6 +3,8 @@ package com.summarecon.qcapp;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,12 +12,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -31,11 +31,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class LoginActivity extends Activity {
+    //**Deklarasi variable Global
     CheckLoginData checklogin;
     String response;
     EditText edt_username,edt_password;
     Button btn_login;
     ImageView img_logo;
+    LinearLayout layout_user_input;
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,54 +49,26 @@ public class LoginActivity extends Activity {
         check.execute();
         //Log.i("tes","step 3");
 
-        //**Deklarasi
-        final float toX, toY;
-        final LinearLayout layout_logo;
-
         //**initialisasi
         checklogin = new CheckLoginData();
-        toX = 0;
-        toY = -300;
+
+        //**inisialisasi EditText, Button, ImageView, Layout yg mau di gerakin (Logo, username, password)
         edt_username = (EditText) findViewById(R.id.edttxt_username);
         edt_password = (EditText) findViewById(R.id.edtTxt_password);
         btn_login = (Button) findViewById(R.id.btn_login);
         img_logo =(ImageView) findViewById(R.id.img_logo);
+        layout_user_input = (LinearLayout) findViewById(R.id.user_input_layout);
 
-        //**animasi
+        //**inisialisasi animasi yg akan digunakan
         final Animation fade_in = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-        final TranslateAnimation anim = new TranslateAnimation(0, toX, 0, toY);
-        anim.setDuration(1500);
+        final Animation translation = AnimationUtils.loadAnimation(this, R.anim.translation);
 
-        //**inisialisasi Layout yg mau di gerakin (Logo, username, password)
-        layout_logo = (LinearLayout) findViewById(R.id.logo);
-
-        //**buat animasi listener untuk layout Logo(logo summarecon,username,password, button login)
-        anim.setAnimationListener(new TranslateAnimation.AnimationListener()
-        {
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)layout_logo.getLayoutParams();
-            @Override
-            public void onAnimationStart(Animation animation) {
-                params.bottomMargin += toY*(-1);
-                params.leftMargin += toX;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) { }
-
-            @Override
-            public void onAnimationEnd(Animation animation)
-            {
-                //Toast.makeText(getApplicationContext(), "Animation Stopped",Toast.LENGTH_SHORT).show();
-                animation.cancel();
-                layout_logo.setLayoutParams(params);
-                edt_username.startAnimation(fade_in);
-                edt_password.startAnimation(fade_in);
-                btn_login.startAnimation(fade_in);
-            }
-        }
-        );
+        //**jalankan animasi
+        img_logo.startAnimation(translation);
+        layout_user_input.startAnimation(fade_in);
 
         //**set animasi listener fade-in untuk isian username dan password
+        /*
         fade_in.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -105,9 +79,9 @@ public class LoginActivity extends Activity {
             public void onAnimationEnd(Animation animation) {
                 //Toast.makeText(getApplicationContext(), "Animation FadeIn Stopped",Toast.LENGTH_SHORT).show();
                 //** SetVisibility agar setelah animasi fadeIn tetap nampak di layar
-                edt_username.setVisibility(View.VISIBLE);
-                edt_password.setVisibility(View.VISIBLE);
-                btn_login.setVisibility(View.VISIBLE);
+                //edt_username.setVisibility(View.VISIBLE);
+                //edt_password.setVisibility(View.VISIBLE);
+                //btn_login.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -115,15 +89,14 @@ public class LoginActivity extends Activity {
 
             }
         });
-
-        //**jalankan animasi layout logo bergerak ke atas
-        layout_logo.startAnimation(anim);
+        */
 
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //**Upload data login user untuk dicheck di server (VALID/INVALID)
+                checklogin = new CheckLoginData();
                 checklogin.execute();
             }
         });
@@ -150,7 +123,7 @@ public class LoginActivity extends Activity {
             //Log.e("");
             //Contact c = contacts[0];
             HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("http://192.168.100.119/login/list.php");
+            HttpPost request = new HttpPost("http://192.168.100.127/login/list.php");
             try {
                 // Add Multipart Post Data
                 MultipartEntity entity = new MultipartEntity();
@@ -166,8 +139,10 @@ public class LoginActivity extends Activity {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                loading.dismiss(); //buang login kalau error
             } catch (Exception e) {
                 e.printStackTrace();
+                loading.dismiss(); //buang login kalau error
             }
             return null;
         }
@@ -179,12 +154,17 @@ public class LoginActivity extends Activity {
             if (response.equals("VALID")){
                 Toast.makeText(getApplicationContext(), "Login Sukses", Toast.LENGTH_SHORT).show();
                 //panggil ulang task (buat refresh pengecekan biar bisa dipanggil ulang)
-                checklogin = new CheckLoginData();
+                Intent intent_main_menu = new Intent(LoginActivity.this, MainActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("username",edt_username.getText().toString());
+                bundle.putString("password",edt_password.getText().toString());
+                intent_main_menu.putExtra("bundle",bundle);
+                startActivity(intent_main_menu);
             }
             if (response.equals("INVALID")){
                 Toast.makeText(getApplicationContext(),"Login Gagal",Toast.LENGTH_SHORT).show();
                 //panggil ulang task (buat refresh pengecekan biar bisa dipanggil ulang)
-                checklogin = new CheckLoginData();
+                //checklogin = new CheckLoginData();
             }
 
         }
@@ -200,7 +180,7 @@ public class LoginActivity extends Activity {
 
             try {
                 HttpURLConnection.setFollowRedirects(false);
-                HttpURLConnection con = (HttpURLConnection) new URL("http://192.168.100.119/login/list.php").openConnection();
+                HttpURLConnection con = (HttpURLConnection) new URL("http://192.168.100.127/login/list.php").openConnection();
                 con.setRequestMethod("HEAD");
 
                 con.setConnectTimeout(5000); //set timeout to 5 seconds
