@@ -1,11 +1,26 @@
 package com.summarecon.qcapp;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.summarecon.qcapp.adapter.NavDrawerAdapter;
+import com.summarecon.qcapp.item.NavDrawerItem;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -19,27 +34,119 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends Activity {
-    String username;
-    String password;
-    String response;
+    private String username;
+    private String password;
+    private String response;
+
+    //DrawerLayout
+    private DrawerLayout mDrawerLayout;
+    private CustomActionBarDrawerToggle mActionBarDrawerToggle;
+    private NavDrawerAdapter mNavDrawerAdapter;
     
-    TextView lbl_user;
-    Bundle bundle = new Bundle();
-    GetDataFromServer getData = new GetDataFromServer();
+    private TextView lbl_user;
+    private Bundle bundle = new Bundle();
+    private GetDataFromServer getData = new GetDataFromServer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //SETUP THE ACTION BARS
+        setupActionBar();
+
         bundle = getIntent().getBundleExtra("bundle");
-        username = bundle.getString("username");
-        password = bundle.getString("password");
+        if(bundle != null){
+            username = bundle.getString("username");
+            password = bundle.getString("password");
+        }
+
+        //INITIALIZING NAVIGATION DRAWER LAYOUT
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mActionBarDrawerToggle = new CustomActionBarDrawerToggle(
+                this
+                , mDrawerLayout
+                , R.drawable.ic_drawer
+                , R.string.desc_drawer_open
+                , R.string.desc_drawer_close
+        );
+        mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
+        populateNavDrawerSection(R.array.arr_list_section_penugasan, R.layout.drawer_item, R.id.list_section_penugasan);
 
         lbl_user = (TextView) findViewById(R.id.lbl_username);
-        getData.execute();
+        //DI COMMENT SEMENTARA
+        //getData.execute();
+    }
+
+    /**
+     * Set up the {@link android.app.ActionBar}, if the API is available.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setupActionBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setHomeButtonEnabled(true);
+        }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mActionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        if(mActionBarDrawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void populateNavDrawerSection(int arr_res, int layout_res, int list_view_res) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        List<String> stringArrayList = new ArrayList<String>();
+        List<NavDrawerItem> itemArrayList = new ArrayList<NavDrawerItem>();
+        View header = inflater.inflate(R.layout.drawer_header, null);
+
+        Collections.addAll(stringArrayList, getResources().getStringArray(arr_res));
+        Integer max_size = stringArrayList.size();
+
+        for(String s:stringArrayList){
+            itemArrayList.add(new NavDrawerItem(s));
+        }
+        mNavDrawerAdapter = new NavDrawerAdapter(this, layout_res, itemArrayList);
+
+        ListView list_view_main = (ListView) findViewById(list_view_res);
+        list_view_main.addHeaderView(header);
+        list_view_main.setAdapter(mNavDrawerAdapter);
+
+        //Toast
+        Toast.makeText(this, stringArrayList.get(0), 100).show();
+        Toast.makeText(this, stringArrayList.get(1), 100).show();
+        Toast.makeText(this, max_size.toString() + " Integer", 100).show();
+        Toast.makeText(this, String.valueOf(stringArrayList.size()) + " valueOf", 100).show();
     }
 
     class GetDataFromServer extends AsyncTask<Void, Void, Void> {
@@ -181,4 +288,19 @@ public class MainActivity extends Activity {
         }
     }
 
+    private class CustomActionBarDrawerToggle extends ActionBarDrawerToggle {
+        public CustomActionBarDrawerToggle(Activity activity, DrawerLayout drawerLayout, int drawerImageRes, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
+            super(activity, drawerLayout, drawerImageRes, openDrawerContentDescRes, closeDrawerContentDescRes);
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+            super.onDrawerOpened(drawerView);
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+            super.onDrawerClosed(drawerView);
+        }
+    }
 }

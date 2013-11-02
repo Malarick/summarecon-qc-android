@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="arr_list_section_dashboard">
+        <item>Dashboard</item>
+    </string-array>
+
+    <string-array name="arr_list_section_penugasan">
+        <item>Penugasan Lama</item>
+        <item>Penugasan Ulang</item>
+        <item>Jadwal</item>
+    </string-array>
+
+    <string-array name="arr_list_section_etc">
+        <item>Settings</item>
+        <item>About</item>
+        <item>Sign Out</item>
+    </string-array>
+
+    <string-array name="arr_list_jenis_defect">
+        <item>Retak</item>
+        <item>Bocor</item>
+        <item>Miring</item>
+        <item>Tidak simetris</item>
+        <item>Patah</item>
+    </string-array>
+
+    <string-array name="arr_list_status">
+        <item>New</item>
+        <item>Finished</item>
+        <item>Pending</item>
+    </string-array>
+</resources>

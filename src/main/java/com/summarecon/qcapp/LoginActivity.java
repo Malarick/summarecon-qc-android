@@ -70,8 +70,12 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 //**Upload data login user untuk dicheck di server (VALID/INVALID)
-                checklogin = new CheckLoginData();
-                checklogin.execute();
+                //Di Non-Aktifkan sementara untuk testing
+                //checklogin = new CheckLoginData();
+                //checklogin.execute();
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 
