@@ -47,7 +47,6 @@ public class LoginActivity extends Activity {
         //** Check koneksi internet
         CheckWifiConnection check = new CheckWifiConnection();
         check.execute();
-        //Log.i("tes","step 3");
 
         //**initialisasi
         checklogin = new CheckLoginData();
@@ -66,31 +65,6 @@ public class LoginActivity extends Activity {
         //**jalankan animasi
         img_logo.startAnimation(translation);
         layout_user_input.startAnimation(fade_in);
-
-        //**set animasi listener fade-in untuk isian username dan password
-        /*
-        fade_in.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                //Toast.makeText(getApplicationContext(), "Animation FadeIn Stopped",Toast.LENGTH_SHORT).show();
-                //** SetVisibility agar setelah animasi fadeIn tetap nampak di layar
-                //edt_username.setVisibility(View.VISIBLE);
-                //edt_password.setVisibility(View.VISIBLE);
-                //btn_login.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        */
-
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,13 +89,10 @@ public class LoginActivity extends Activity {
             loading = new ProgressDialog(LoginActivity.this);
             loading.setMessage("Checking login data. Please wait...");
             loading.show();
-            //btn_login.setEnabled(false);
         }
 
         @Override
         protected Void doInBackground(Void... Void) {
-            //Log.e("");
-            //Contact c = contacts[0];
             HttpClient client = new DefaultHttpClient();
             HttpPost request = new HttpPost("http://192.168.100.127/login/list.php");
             try {
@@ -151,20 +122,22 @@ public class LoginActivity extends Activity {
         protected void onPostExecute(Void returnValue) {
             loading.dismiss();
 
-            if (response.equals("VALID")){
-                Toast.makeText(getApplicationContext(), "Login Sukses", Toast.LENGTH_SHORT).show();
-                //panggil ulang task (buat refresh pengecekan biar bisa dipanggil ulang)
-                Intent intent_main_menu = new Intent(LoginActivity.this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("username",edt_username.getText().toString());
-                bundle.putString("password",edt_password.getText().toString());
-                intent_main_menu.putExtra("bundle",bundle);
-                startActivity(intent_main_menu);
-            }
-            if (response.equals("INVALID")){
+            if(response != null){
+                if (response.equals("VALID")){
+                    Toast.makeText(getApplicationContext(), "Login Sukses", Toast.LENGTH_SHORT).show();
+                    //panggil ulang task (buat refresh pengecekan biar bisa dipanggil ulang)
+                    Intent intent_main_menu = new Intent(LoginActivity.this, MainActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username",edt_username.getText().toString());
+                    bundle.putString("password",edt_password.getText().toString());
+                    intent_main_menu.putExtra("bundle",bundle);
+                    startActivity(intent_main_menu);
+                }
+                if (response.equals("INVALID")){
+                    Toast.makeText(getApplicationContext(),"Login Gagal",Toast.LENGTH_SHORT).show();
+                }
+            }else{
                 Toast.makeText(getApplicationContext(),"Login Gagal",Toast.LENGTH_SHORT).show();
-                //panggil ulang task (buat refresh pengecekan biar bisa dipanggil ulang)
-                //checklogin = new CheckLoginData();
             }
 
         }
@@ -174,7 +147,6 @@ public class LoginActivity extends Activity {
     class CheckWifiConnection extends AsyncTask<Void, Void, Boolean> {
         ProgressDialog progressDialog;
 
-        //GetDataFromServer data_server = new GetDataFromServer();
         @Override
         protected Boolean doInBackground(Void... voids) {
 
@@ -196,12 +168,9 @@ public class LoginActivity extends Activity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            //progressDialog.dismiss();
-            Log.i("tes","step 2");
             super.onPostExecute(result);
             if (result == true){
                 Toast.makeText(getApplicationContext(),"Koneksi ke server Berhasil!",Toast.LENGTH_SHORT).show();
-                //data_server.execute();
             }else {
                 Toast.makeText(getApplicationContext(),"Koneksi ke server Gagal!",Toast.LENGTH_SHORT).show();
             }
@@ -212,13 +181,6 @@ public class LoginActivity extends Activity {
         protected void onPreExecute() {
 
             super.onPreExecute();
-            //progressDialog = ProgressDialog.show(HomeActivity.this, "","Loading...");
         }
     }
-
-    //private class Animasi extends TranslateAnimation{
-    //    private Animasi(float fromXDelta, float toXDelta, float fromYDelta, float toYDelta) {
-    //        super(fromXDelta, toXDelta, fromYDelta, toYDelta);
-    //    }
-    //}
 }

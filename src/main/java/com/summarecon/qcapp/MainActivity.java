@@ -23,10 +23,11 @@ import java.io.IOException;
 public class MainActivity extends Activity {
     String username;
     String password;
+    String response;
+    
     TextView lbl_user;
     Bundle bundle = new Bundle();
-    String response;
-    GetDataFromServer getdata = new GetDataFromServer();
+    GetDataFromServer getData = new GetDataFromServer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class MainActivity extends Activity {
         password = bundle.getString("password");
 
         lbl_user = (TextView) findViewById(R.id.lbl_username);
-        getdata.execute();
+        getData.execute();
     }
 
     class GetDataFromServer extends AsyncTask<Void, Void, Void> {
