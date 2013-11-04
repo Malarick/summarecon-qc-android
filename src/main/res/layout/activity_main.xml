@@ -17,26 +17,36 @@
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/drawer_main"
         android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_width="280dp"
         android:layout_gravity="start"
-        android:background="@android:color/darker_gray">
+        android:background="@android:drawable/screen_background_dark">
 
         <ListView
             android:id="@+id/list_section_dashboard"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:divider="#555555"
+            android:headerDividersEnabled="false"
+            android:dividerHeight="2dp"
             android:choiceMode="singleChoice"></ListView>
         <ListView
             android:id="@+id/list_section_penugasan"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:divider="#555555"
+            android:headerDividersEnabled="false"
+            android:dividerHeight="2dp"
             android:choiceMode="singleChoice"></ListView>
         <ListView
             android:id="@+id/list_section_etc"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:divider="#555555"
+            android:headerDividersEnabled="false"
+            android:dividerHeight="2dp"
             android:choiceMode="singleChoice"></ListView>
     </LinearLayout>
 

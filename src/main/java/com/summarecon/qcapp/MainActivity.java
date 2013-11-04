@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,9 +47,13 @@ public class MainActivity extends Activity {
 
     //DrawerLayout
     private DrawerLayout mDrawerLayout;
+    private LinearLayout mDrawerMain;
     private CustomActionBarDrawerToggle mActionBarDrawerToggle;
     private NavDrawerAdapter mNavDrawerAdapter;
-    
+    private ListView mListSectionDashboard;
+    private ListView mListSectionPenugasan;
+    private ListView mListSectionEtc;
+
     private TextView lbl_user;
     private Bundle bundle = new Bundle();
     private GetDataFromServer getData = new GetDataFromServer();
@@ -68,6 +74,7 @@ public class MainActivity extends Activity {
 
         //INITIALIZING NAVIGATION DRAWER LAYOUT
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
+        mDrawerMain = (LinearLayout) findViewById(R.id.drawer_main);
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         mActionBarDrawerToggle = new CustomActionBarDrawerToggle(
                 this
@@ -78,7 +85,13 @@ public class MainActivity extends Activity {
         );
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-        populateNavDrawerSection(R.array.arr_list_section_penugasan, R.layout.drawer_item, R.id.list_section_penugasan);
+        //POPULATE MASING-MASING LISTVIEW
+        mListSectionDashboard = (ListView) findViewById(R.id.list_section_dashboard);
+        mListSectionPenugasan = (ListView) findViewById(R.id.list_section_penugasan);
+        mListSectionEtc = (ListView) findViewById(R.id.list_section_etc);
+        populateNavDrawerSection(R.array.arr_list_section_dashboard, R.layout.drawer_item, mListSectionDashboard, null);
+        populateNavDrawerSection(R.array.arr_list_section_penugasan, R.layout.drawer_item, mListSectionPenugasan, getString(R.string.header_section_penugasan));
+        populateNavDrawerSection(R.array.arr_list_section_etc, R.layout.drawer_item, mListSectionEtc, getString(R.string.header_section_etc));
 
         lbl_user = (TextView) findViewById(R.id.lbl_username);
         //DI COMMENT SEMENTARA
@@ -124,11 +137,18 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void populateNavDrawerSection(int arr_res, int layout_res, int list_view_res) {
+    public void populateNavDrawerSection(int arr_res, int layout_res, ListView listView, String header) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         List<String> stringArrayList = new ArrayList<String>();
         List<NavDrawerItem> itemArrayList = new ArrayList<NavDrawerItem>();
-        View header = inflater.inflate(R.layout.drawer_header, null);
+
+        //Adding the header
+        if(header != null){
+            View header_view = inflater.inflate(R.layout.drawer_header, null);
+            TextView lbl_header = (TextView) header_view.findViewById(R.id.lbl_header);
+            lbl_header.setText(header);
+            listView.addHeaderView(header_view);
+        }
 
         Collections.addAll(stringArrayList, getResources().getStringArray(arr_res));
         Integer max_size = stringArrayList.size();
@@ -138,15 +158,26 @@ public class MainActivity extends Activity {
         }
         mNavDrawerAdapter = new NavDrawerAdapter(this, layout_res, itemArrayList);
 
-        ListView list_view_main = (ListView) findViewById(list_view_res);
-        list_view_main.addHeaderView(header);
-        list_view_main.setAdapter(mNavDrawerAdapter);
+        listView.setAdapter(mNavDrawerAdapter);
+        listView.setOnItemClickListener(new DrawerItemClickListener());
 
         //Toast
         Toast.makeText(this, stringArrayList.get(0), 100).show();
-        Toast.makeText(this, stringArrayList.get(1), 100).show();
+        Toast.makeText(this, stringArrayList.get(max_size - 1), 100).show();
         Toast.makeText(this, max_size.toString() + " Integer", 100).show();
         Toast.makeText(this, String.valueOf(stringArrayList.size()) + " valueOf", 100).show();
+    }
+
+    public void selectItem(AdapterView adapterView, int position){
+        //Handle item selected except the headers themselves
+        if(position > 0){
+            mDrawerLayout.closeDrawer(mDrawerMain);
+            mListSectionDashboard.clearChoices();
+            mListSectionPenugasan.clearChoices();
+            mListSectionEtc.clearChoices();
+
+            adapterView.setSelection(position);
+        }
     }
 
     class GetDataFromServer extends AsyncTask<Void, Void, Void> {
@@ -301,6 +332,13 @@ public class MainActivity extends Activity {
         @Override
         public void onDrawerClosed(View drawerView) {
             super.onDrawerClosed(drawerView);
+        }
+    }
+
+    private class DrawerItemClickListener implements AdapterView.OnItemClickListener{
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            selectItem(adapterView, position);
         }
     }
 }

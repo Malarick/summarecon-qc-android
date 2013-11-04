@@ -7,7 +7,8 @@
     <string-array name="arr_list_section_penugasan">
         <item>Penugasan Lama</item>
         <item>Penugasan Ulang</item>
-        <item>Jadwal</item>
+        <item>Penugasan Baru</item>
+        <item>Schedule</item>
     </string-array>
 
     <string-array name="arr_list_section_etc">
