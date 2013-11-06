@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.summarecon.qcapp.R;
@@ -21,6 +22,7 @@ public class NavDrawerAdapter extends BaseAdapter {
     private List<NavDrawerItem> items;
     private LayoutInflater inflater;
     private TextView textView_lbl;
+    private ImageView imgView_icon;
 
     public NavDrawerAdapter(Context context, int viewHolder, List<NavDrawerItem> items) {
         this.context = context;
@@ -53,8 +55,12 @@ public class NavDrawerAdapter extends BaseAdapter {
             view = inflater.inflate(this.viewHolder, null);
         }
 
+        imgView_icon = (ImageView) view.findViewById(R.id.drawer_item_icon);
+        imgView_icon.setImageResource(item.getItemIcon());
+
         textView_lbl = (TextView) view.findViewById(R.id.drawer_item_label);
-        textView_lbl.setText(item.getTxt_item_label());
+        textView_lbl.setText(item.getItemLabel());
+
 
         return view;
     }

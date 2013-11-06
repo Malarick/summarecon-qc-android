@@ -89,9 +89,9 @@ public class MainActivity extends Activity {
         mListSectionDashboard = (ListView) findViewById(R.id.list_section_dashboard);
         mListSectionPenugasan = (ListView) findViewById(R.id.list_section_penugasan);
         mListSectionEtc = (ListView) findViewById(R.id.list_section_etc);
-        populateNavDrawerSection(R.array.arr_list_section_dashboard, R.layout.drawer_item, mListSectionDashboard, null);
-        populateNavDrawerSection(R.array.arr_list_section_penugasan, R.layout.drawer_item, mListSectionPenugasan, getString(R.string.header_section_penugasan));
-        populateNavDrawerSection(R.array.arr_list_section_etc, R.layout.drawer_item, mListSectionEtc, getString(R.string.header_section_etc));
+        populateNavDrawerSection(R.array.arr_icon_section_dashboard, R.array.arr_lbl_section_dashboard, R.layout.drawer_item, mListSectionDashboard, null);
+        populateNavDrawerSection(R.array.arr_icon_section_penugasan, R.array.arr_lbl_section_penugasan, R.layout.drawer_item, mListSectionPenugasan, getString(R.string.header_section_penugasan));
+        populateNavDrawerSection(R.array.arr_icon_section_etc, R.array.arr_lbl_section_etc, R.layout.drawer_item, mListSectionEtc, getString(R.string.header_section_etc));
 
         lbl_user = (TextView) findViewById(R.id.lbl_username);
         //DI COMMENT SEMENTARA
@@ -137,10 +137,11 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void populateNavDrawerSection(int arr_res, int layout_res, ListView listView, String header) {
+    public void populateNavDrawerSection(int arr_icon_res, int arr_lbl_res, int layout_res, ListView listView, String header) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        List<String> stringArrayList = new ArrayList<String>();
-        List<NavDrawerItem> itemArrayList = new ArrayList<NavDrawerItem>();
+        List<String> labelList = new ArrayList<String>();
+        List<String> iconList = new ArrayList<String>();
+        List<NavDrawerItem> itemList = new ArrayList<NavDrawerItem>();
 
         //Adding the header
         if(header != null){
@@ -148,36 +149,53 @@ public class MainActivity extends Activity {
             TextView lbl_header = (TextView) header_view.findViewById(R.id.lbl_header);
             lbl_header.setText(header);
             listView.addHeaderView(header_view);
+            listView.setOnItemClickListener(new DrawerItemClickListener());
+        }else{
+            listView.setOnItemClickListener(new DrawerNoHeaderItemClickListener());
         }
 
-        Collections.addAll(stringArrayList, getResources().getStringArray(arr_res));
-        Integer max_size = stringArrayList.size();
+        Collections.addAll(iconList, getResources().getStringArray(arr_icon_res));
+        Collections.addAll(labelList, getResources().getStringArray(arr_lbl_res));
+        Integer lblListSize = labelList.size();
+        Integer iconListSize = iconList.size();
 
-        for(String s:stringArrayList){
-            itemArrayList.add(new NavDrawerItem(s));
+        int c = 0;
+        for(String s:labelList){
+            //Assign icon kecuali pada label yang tidak memiliki icon alias "null"
+            if(iconList.get(c) != "null"){
+                int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", this.getPackageName());
+                itemList.add(new NavDrawerItem(id_icon, s));
+            }else{
+                itemList.add(new NavDrawerItem(s));
+            }
+            c++;
         }
-        mNavDrawerAdapter = new NavDrawerAdapter(this, layout_res, itemArrayList);
+        mNavDrawerAdapter = new NavDrawerAdapter(this, layout_res, itemList);
 
         listView.setAdapter(mNavDrawerAdapter);
-        listView.setOnItemClickListener(new DrawerItemClickListener());
 
         //Toast
-        Toast.makeText(this, stringArrayList.get(0), 100).show();
-        Toast.makeText(this, stringArrayList.get(max_size - 1), 100).show();
-        Toast.makeText(this, max_size.toString() + " Integer", 100).show();
-        Toast.makeText(this, String.valueOf(stringArrayList.size()) + " valueOf", 100).show();
+        Toast.makeText(this, labelList.get(0), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, labelList.get(lblListSize - 1), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, lblListSize.toString() + " Integer", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, String.valueOf(labelList.size()) + " valueOf", Toast.LENGTH_SHORT).show();
     }
 
-    public void selectItem(AdapterView adapterView, int position){
+    public void selectItem(View adapterView, int position){
         //Handle item selected except the headers themselves
         if(position > 0){
+            mListSectionDashboard.setItemChecked(-1, true);
+            mListSectionPenugasan.setItemChecked(-1, true);
+            mListSectionEtc.setItemChecked(-1, true);
             mDrawerLayout.closeDrawer(mDrawerMain);
-            mListSectionDashboard.clearChoices();
-            mListSectionPenugasan.clearChoices();
-            mListSectionEtc.clearChoices();
-
-            adapterView.setSelection(position);
         }
+    }
+
+    public void selectNoHeaderItem(int position){
+        mListSectionDashboard.setItemChecked(-1, true);
+        mListSectionPenugasan.setItemChecked(-1, true);
+        mListSectionEtc.setItemChecked(-1, true);
+        mDrawerLayout.closeDrawer(mDrawerMain);
     }
 
     class GetDataFromServer extends AsyncTask<Void, Void, Void> {
@@ -339,6 +357,13 @@ public class MainActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
             selectItem(adapterView, position);
+        }
+    }
+
+    private class DrawerNoHeaderItemClickListener implements AdapterView.OnItemClickListener{
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            selectNoHeaderItem(position);
         }
     }
 }

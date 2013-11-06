@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="arr_list_section_dashboard">
+    <string-array name="arr_lbl_section_dashboard">
         <item>Dashboard</item>
     </string-array>
+    <string-array name="arr_icon_section_dashboard">
+        <item>ic_launcher</item>
+    </string-array>
 
-    <string-array name="arr_list_section_penugasan">
+    <string-array name="arr_lbl_section_penugasan">
         <item>Penugasan Lama</item>
         <item>Penugasan Ulang</item>
         <item>Penugasan Baru</item>
         <item>Schedule</item>
     </string-array>
+    <string-array name="arr_icon_section_penugasan">
+        <item>ic_penugasan_lama</item>
+        <item>ic_penugasan_ulang</item>
+        <item>ic_penugasan_baru</item>
+        <item>ic_schedule</item>
+    </string-array>
 
-    <string-array name="arr_list_section_etc">
+    <string-array name="arr_lbl_section_etc">
         <item>Settings</item>
         <item>About</item>
         <item>Sign Out</item>
     </string-array>
+    <string-array name="arr_icon_section_etc">
+        <item>ic_settings</item>
+        <item>ic_about</item>
+        <item>null</item>
+    </string-array>
 
-    <string-array name="arr_list_jenis_defect">
+    <string-array name="arr_lbl_jenis_defect">
         <item>Retak</item>
         <item>Bocor</item>
         <item>Miring</item>
@@ -25,7 +39,7 @@
         <item>Patah</item>
     </string-array>
 
-    <string-array name="arr_list_status">
+    <string-array name="arr_lbl_status">
         <item>New</item>
         <item>Finished</item>
         <item>Pending</item>

@@ -5,36 +5,35 @@ package com.summarecon.qcapp.item;
  */
 public class NavDrawerItem {
 
-    int img_item_icon;
-    String txt_item_label;
-    int img_item_counter;
+    int itemIcon;
+    String itemLabel;
+    int itemCounter;
 
-    public int getImg_item_icon() {
-        return img_item_icon;
+    public int getItemIcon() {
+        return itemIcon;
     }
 
-    public String getTxt_item_label() {
-        return txt_item_label;
+    public String getItemLabel() {
+        return itemLabel;
     }
 
-    public int getImg_item_counter() {
-        return img_item_counter;
+    public int getItemCounter() {
+        return itemCounter;
     }
 
-    public NavDrawerItem(String txt_item_label) {
-        this.txt_item_label = txt_item_label;
+    public NavDrawerItem(String itemLabel) {
+        this.itemLabel = itemLabel;
     }
 
-    public NavDrawerItem(String txt_item_label, int img_item_icon) {
-        this.txt_item_label = txt_item_label;
-
-        this.img_item_icon = img_item_icon;
+    public NavDrawerItem(int itemIcon, String itemLabel) {
+        this.itemIcon = itemIcon;
+        this.itemLabel = itemLabel;
     }
 
-    public NavDrawerItem(int img_item_icon, String txt_item_label, int img_item_counter) {
-        this.img_item_icon = img_item_icon;
-        this.txt_item_label = txt_item_label;
-        this.img_item_counter = img_item_counter;
+    public NavDrawerItem(int itemIcon, String itemLabel, int itemCounter) {
+        this.itemIcon = itemIcon;
+        this.itemLabel = itemLabel;
+        this.itemCounter = itemCounter;
 
     }
 }
