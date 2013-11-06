@@ -2,6 +2,9 @@ package com.summarecon.qcapp;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -22,6 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.summarecon.qcapp.adapter.NavDrawerAdapter;
+import com.summarecon.qcapp.fragment.AboutFragment;
+import com.summarecon.qcapp.fragment.DashboardFragment;
+import com.summarecon.qcapp.fragment.PenugasanFragment;
 import com.summarecon.qcapp.item.NavDrawerItem;
 
 import org.apache.http.HttpResponse;
@@ -44,6 +50,8 @@ public class MainActivity extends Activity {
     private String username;
     private String password;
     private String response;
+    private CharSequence mTitle;
+    private CharSequence mDrawerTitle;
 
     //DrawerLayout
     private DrawerLayout mDrawerLayout;
@@ -53,6 +61,12 @@ public class MainActivity extends Activity {
     private ListView mListSectionDashboard;
     private ListView mListSectionPenugasan;
     private ListView mListSectionEtc;
+
+    //Fragment
+    private Fragment mFragment;
+    private FragmentManager mFragmentManager;
+    private FragmentTransaction mFragmentTransaction;
+    private Bundle fragmentArgs;
 
     private TextView lbl_user;
     private Bundle bundle = new Bundle();
@@ -65,6 +79,7 @@ public class MainActivity extends Activity {
 
         //SETUP THE ACTION BARS
         setupActionBar();
+        mTitle = mDrawerTitle = getTitle();
 
         bundle = getIntent().getBundleExtra("bundle");
         if(bundle != null){
@@ -93,7 +108,10 @@ public class MainActivity extends Activity {
         populateNavDrawerSection(R.array.arr_icon_section_penugasan, R.array.arr_lbl_section_penugasan, R.layout.drawer_item, mListSectionPenugasan, getString(R.string.header_section_penugasan));
         populateNavDrawerSection(R.array.arr_icon_section_etc, R.array.arr_lbl_section_etc, R.layout.drawer_item, mListSectionEtc, getString(R.string.header_section_etc));
 
-        lbl_user = (TextView) findViewById(R.id.lbl_username);
+        //Default Main Menu Fragment (Dashboard)
+        fragmentDashboard(new DashboardFragment());
+
+        lbl_user = (TextView) findViewById(R.id.lbl_test);
         //DI COMMENT SEMENTARA
         //getData.execute();
     }
@@ -148,16 +166,11 @@ public class MainActivity extends Activity {
             View header_view = inflater.inflate(R.layout.drawer_header, null);
             TextView lbl_header = (TextView) header_view.findViewById(R.id.lbl_header);
             lbl_header.setText(header);
-            listView.addHeaderView(header_view);
-            listView.setOnItemClickListener(new DrawerItemClickListener());
-        }else{
-            listView.setOnItemClickListener(new DrawerNoHeaderItemClickListener());
+            listView.addHeaderView(header_view, null, false);
         }
 
         Collections.addAll(iconList, getResources().getStringArray(arr_icon_res));
         Collections.addAll(labelList, getResources().getStringArray(arr_lbl_res));
-        Integer lblListSize = labelList.size();
-        Integer iconListSize = iconList.size();
 
         int c = 0;
         for(String s:labelList){
@@ -173,29 +186,62 @@ public class MainActivity extends Activity {
         mNavDrawerAdapter = new NavDrawerAdapter(this, layout_res, itemList);
 
         listView.setAdapter(mNavDrawerAdapter);
+        listView.setOnItemClickListener(new DrawerItemClickListener());
 
-        //Toast
+        //Toast testing
         Toast.makeText(this, labelList.get(0), Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, labelList.get(lblListSize - 1), Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, lblListSize.toString() + " Integer", Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, String.valueOf(labelList.size()) + " valueOf", Toast.LENGTH_SHORT).show();
     }
 
-    public void selectItem(View adapterView, int position){
-        //Handle item selected except the headers themselves
-        if(position > 0){
-            mListSectionDashboard.setItemChecked(-1, true);
+    public void selectItem(AdapterView adapterView, View view, int position){
+        CharSequence lblItem = ((TextView) view.findViewById(R.id.drawer_item_label)).getText();
+
+        //Handle item selected
+        if(adapterView.getId() == R.id.list_section_dashboard){
             mListSectionPenugasan.setItemChecked(-1, true);
             mListSectionEtc.setItemChecked(-1, true);
-            mDrawerLayout.closeDrawer(mDrawerMain);
+            setTitle(mDrawerTitle);
+            fragmentDashboard(new DashboardFragment());
+        }else{
+            switch(adapterView.getId()){
+                case R.id.list_section_penugasan:
+                    mListSectionDashboard.setItemChecked(-1, true);
+                    mListSectionEtc.setItemChecked(-1, true);
+                    fragmentPenugasan(new PenugasanFragment(), lblItem);
+                    break;
+                case R.id.list_section_etc:
+                    mListSectionDashboard.setItemChecked(-1, true);
+                    mListSectionPenugasan.setItemChecked(-1, true);
+                    fragmentDashboard(new AboutFragment());
+                    break;
+            }
+
+            setTitle(lblItem);
         }
+        mDrawerLayout.closeDrawer(mDrawerMain);
     }
 
-    public void selectNoHeaderItem(int position){
-        mListSectionDashboard.setItemChecked(-1, true);
-        mListSectionPenugasan.setItemChecked(-1, true);
-        mListSectionEtc.setItemChecked(-1, true);
-        mDrawerLayout.closeDrawer(mDrawerMain);
+    public void setTitle(CharSequence title){
+        mTitle = title;
+        getActionBar().setTitle(mTitle);
+    }
+
+    public void fragmentDashboard(Fragment fragment){
+        mFragment = fragment;
+        mFragmentManager = getFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction().replace(R.id.content_main, mFragment);
+        mFragmentTransaction.commit();
+    }
+
+    public void fragmentPenugasan(Fragment fragment, CharSequence jenisPenugasan){
+        mFragment = fragment;
+        fragmentArgs = new Bundle();
+
+        fragmentArgs.putCharSequence(PenugasanFragment.ARGS_PENUGASAN, jenisPenugasan);
+        mFragment.setArguments(fragmentArgs);
+
+        mFragmentManager = getFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction().replace(R.id.content_main, mFragment);
+        mFragmentTransaction.commit();
     }
 
     class GetDataFromServer extends AsyncTask<Void, Void, Void> {
@@ -345,25 +391,20 @@ public class MainActivity extends Activity {
         @Override
         public void onDrawerOpened(View drawerView) {
             super.onDrawerOpened(drawerView);
+            getActionBar().setTitle(mDrawerTitle);
         }
 
         @Override
         public void onDrawerClosed(View drawerView) {
             super.onDrawerClosed(drawerView);
+            getActionBar().setTitle(mTitle);
         }
     }
 
     private class DrawerItemClickListener implements AdapterView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-            selectItem(adapterView, position);
-        }
-    }
-
-    private class DrawerNoHeaderItemClickListener implements AdapterView.OnItemClickListener{
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-            selectNoHeaderItem(position);
+            selectItem(adapterView, view, position);
         }
     }
 }
