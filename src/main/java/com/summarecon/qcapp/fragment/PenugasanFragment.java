@@ -15,7 +15,7 @@ public class PenugasanFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_penugasan, container, false);
         TextView textView = (TextView) rootView.findViewById(R.id.lbl_test);
         textView.setText(getArguments().getCharSequence(ARGS_PENUGASAN, "PENUGASAN"));
 

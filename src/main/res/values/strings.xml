@@ -18,11 +18,15 @@
 
     <string name="btn_send">Send</string>
     <string name="btn_camera">Take Picture</string>
+    <string name="btn_upload">Upload</string>
 
     <string name="desc_drawer_open">Drawer Opened</string>
     <string name="desc_drawer_close">Drawer Closed</string>
 
     <string name="header_section_penugasan">MENU PENUGASAN</string>
     <string name="header_section_etc">LAIN-LAIN</string>
+    <string name="header_section_profile">PROFILE</string>
+    <string name="header_section_notifications">NOTIFICATIONS</string>
+    <string name="header_section_upload">UPLOAD</string>
 
 </resources>

@@ -28,6 +28,7 @@ import com.summarecon.qcapp.adapter.NavDrawerAdapter;
 import com.summarecon.qcapp.fragment.AboutFragment;
 import com.summarecon.qcapp.fragment.DashboardFragment;
 import com.summarecon.qcapp.fragment.PenugasanFragment;
+import com.summarecon.qcapp.fragment.SettingFragment;
 import com.summarecon.qcapp.item.NavDrawerItem;
 
 import org.apache.http.HttpResponse;
@@ -109,7 +110,7 @@ public class MainActivity extends Activity {
         populateNavDrawerSection(R.array.arr_icon_section_etc, R.array.arr_lbl_section_etc, R.layout.drawer_item, mListSectionEtc, getString(R.string.header_section_etc));
 
         //Default Main Menu Fragment (Dashboard)
-        fragmentDashboard(new DashboardFragment());
+        fragmentCall(new DashboardFragment());
 
         lbl_user = (TextView) findViewById(R.id.lbl_test);
         //DI COMMENT SEMENTARA
@@ -199,19 +200,28 @@ public class MainActivity extends Activity {
         if(adapterView.getId() == R.id.list_section_dashboard){
             mListSectionPenugasan.setItemChecked(-1, true);
             mListSectionEtc.setItemChecked(-1, true);
+            fragmentCall(new DashboardFragment());
+
             setTitle(mDrawerTitle);
-            fragmentDashboard(new DashboardFragment());
         }else{
             switch(adapterView.getId()){
                 case R.id.list_section_penugasan:
                     mListSectionDashboard.setItemChecked(-1, true);
                     mListSectionEtc.setItemChecked(-1, true);
-                    fragmentPenugasan(new PenugasanFragment(), lblItem);
+                    fragmentCallPenugasan(new PenugasanFragment(), lblItem);
                     break;
                 case R.id.list_section_etc:
                     mListSectionDashboard.setItemChecked(-1, true);
                     mListSectionPenugasan.setItemChecked(-1, true);
-                    fragmentDashboard(new AboutFragment());
+                    if(lblItem.equals("Settings")){
+                        fragmentCall(new SettingFragment());
+                    }else if(lblItem.equals("About")){
+                        fragmentCall(new AboutFragment());
+                    }else if(lblItem.equals("Sign Out")){
+                        this.finish();
+                    }else{
+                        fragmentCall(new DashboardFragment());
+                    }
                     break;
             }
 
@@ -225,14 +235,14 @@ public class MainActivity extends Activity {
         getActionBar().setTitle(mTitle);
     }
 
-    public void fragmentDashboard(Fragment fragment){
+    public void fragmentCall(Fragment fragment){
         mFragment = fragment;
         mFragmentManager = getFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction().replace(R.id.content_main, mFragment);
         mFragmentTransaction.commit();
     }
 
-    public void fragmentPenugasan(Fragment fragment, CharSequence jenisPenugasan){
+    public void fragmentCallPenugasan(Fragment fragment, CharSequence jenisPenugasan){
         mFragment = fragment;
         fragmentArgs = new Bundle();
 
