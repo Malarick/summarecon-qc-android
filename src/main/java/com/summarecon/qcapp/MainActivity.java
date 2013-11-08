@@ -230,11 +230,13 @@ public class MainActivity extends Activity {
         mDrawerLayout.closeDrawer(mDrawerMain);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void setTitle(CharSequence title){
         mTitle = title;
         getActionBar().setTitle(mTitle);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void fragmentCall(Fragment fragment){
         mFragment = fragment;
         mFragmentManager = getFragmentManager();
@@ -242,6 +244,7 @@ public class MainActivity extends Activity {
         mFragmentTransaction.commit();
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void fragmentCallPenugasan(Fragment fragment, CharSequence jenisPenugasan){
         mFragment = fragment;
         fragmentArgs = new Bundle();
@@ -398,12 +401,14 @@ public class MainActivity extends Activity {
             super(activity, drawerLayout, drawerImageRes, openDrawerContentDescRes, closeDrawerContentDescRes);
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public void onDrawerOpened(View drawerView) {
             super.onDrawerOpened(drawerView);
             getActionBar().setTitle(mDrawerTitle);
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public void onDrawerClosed(View drawerView) {
             super.onDrawerClosed(drawerView);
