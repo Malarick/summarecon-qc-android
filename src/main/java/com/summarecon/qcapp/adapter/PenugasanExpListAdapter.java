@@ -14,7 +14,9 @@ import com.summarecon.qcapp.item.PenugasanChildItem;
 import com.summarecon.qcapp.item.PenugasanGridItem;
 import com.summarecon.qcapp.item.PenugasanParentItem;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -98,21 +100,27 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int parentPosition, int childPosition, boolean isLastChild, View view, ViewGroup viewGroup) {
         PenugasanChildItem penugasanChildItem = getChild(parentPosition, childPosition);
+        File file = new File("/storage/sdcard0/DCIM/SimpleActivity");
+        List<File> files = new ArrayList<File>();
+
+        Collections.addAll(files, file.listFiles());
 
         if(view == null){
             view = inflater.inflate(this.viewHolderChild, null);
         }
 
         List<PenugasanGridItem> gridItems = new ArrayList<PenugasanGridItem>();
-        gridItems.add(new PenugasanGridItem(Color.RED));
-        gridItems.add(new PenugasanGridItem(Color.GREEN));
-        gridItems.add(new PenugasanGridItem(Color.BLUE));
-        gridItems.add(new PenugasanGridItem(Color.GRAY));
-        gridItems.add(new PenugasanGridItem(Color.YELLOW));
-        gridItems.add(new PenugasanGridItem(Color.CYAN));
-        gridItems.add(new PenugasanGridItem(Color.MAGENTA));
-        gridItems.add(new PenugasanGridItem(Color.LTGRAY));
-        gridItems.add(new PenugasanGridItem(Color.DKGRAY));
+        for(File f : files){
+            gridItems.add(new PenugasanGridItem(f));
+        }
+//        gridItems.add(new PenugasanGridItem(Color.GREEN));
+//        gridItems.add(new PenugasanGridItem(Color.BLUE));
+//        gridItems.add(new PenugasanGridItem(Color.GRAY));
+//        gridItems.add(new PenugasanGridItem(Color.YELLOW));
+//        gridItems.add(new PenugasanGridItem(Color.CYAN));
+//        gridItems.add(new PenugasanGridItem(Color.MAGENTA));
+//        gridItems.add(new PenugasanGridItem(Color.LTGRAY));
+//        gridItems.add(new PenugasanGridItem(Color.DKGRAY));
 
         gridView = (GridView) view.findViewById(R.id.grid_penugasan_child);
         gridAdapter = new PenugasanGridAdapter(context, gridItems, R.layout.penugasan_grid_item);
