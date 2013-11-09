@@ -42,6 +42,19 @@
         <item>ic_next</item>
     </string-array>
 
+    <string-array name="arr_lbl_parent_items">
+        <item>Parent 1</item>
+        <item>Parent 2</item>
+        <item>Parent 3</item>
+    </string-array>
+
+    <string-array name="arr_lbl_child_items">
+        <item>Child 1</item>
+        <item>Child 2</item>
+        <item>Child 3</item>
+    </string-array>
+
+
     <string-array name="arr_lbl_jenis_defect">
         <item>Retak</item>
         <item>Bocor</item>

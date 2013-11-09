@@ -28,6 +28,8 @@ public class DashboardFragment extends Fragment {
     private FragmentTransaction mFragmentTransaction;
     private Bundle fragmentArgs;
 
+    private CharSequence mTitle;
+
     public DashboardFragment() {
     }
 
@@ -35,6 +37,7 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
+        mTitle = getActivity().getTitle();
         mListView = (ListView) rootView.findViewById(R.id.list_notifications);
         populateNotifications(mListView);
 
@@ -69,6 +72,8 @@ public class DashboardFragment extends Fragment {
     public void selectItem(AdapterView adapterView, View view, int position){
         CharSequence lblItem = ((TextView) view.findViewById(R.id.notifications_item_label)).getText();
         fragmentPenugasan(new PenugasanFragment(), lblItem);
+        mTitle = lblItem;
+        getActivity().setTitle(mTitle);
     }
 
     public void fragmentPenugasan(Fragment fragment, CharSequence jenisPenugasan){

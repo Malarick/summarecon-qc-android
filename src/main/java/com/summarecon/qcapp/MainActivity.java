@@ -28,6 +28,7 @@ import com.summarecon.qcapp.adapter.NavDrawerAdapter;
 import com.summarecon.qcapp.fragment.AboutFragment;
 import com.summarecon.qcapp.fragment.DashboardFragment;
 import com.summarecon.qcapp.fragment.PenugasanFragment;
+import com.summarecon.qcapp.fragment.ScheduleFragment;
 import com.summarecon.qcapp.fragment.SettingFragment;
 import com.summarecon.qcapp.item.NavDrawerItem;
 
@@ -156,6 +157,11 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        this.finish();
+    }
+
     public void populateNavDrawerSection(int arr_icon_res, int arr_lbl_res, int layout_res, ListView listView, String header) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         List<String> labelList = new ArrayList<String>();
@@ -208,7 +214,11 @@ public class MainActivity extends Activity {
                 case R.id.list_section_penugasan:
                     mListSectionDashboard.setItemChecked(-1, true);
                     mListSectionEtc.setItemChecked(-1, true);
-                    fragmentCallPenugasan(new PenugasanFragment(), lblItem);
+                    if(lblItem.equals("Schedule")){
+                        fragmentCall(new ScheduleFragment());
+                    }else{
+                        fragmentCallPenugasan(new PenugasanFragment(), lblItem);
+                    }
                     break;
                 case R.id.list_section_etc:
                     mListSectionDashboard.setItemChecked(-1, true);
