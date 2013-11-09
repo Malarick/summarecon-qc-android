@@ -12,13 +12,14 @@
         android:layout_height="200dp"
         >
         <CalendarView
-            android:id="@+id/calender"
+            android:id="@+id/cal_jadwal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:showWeekNumber="false"
             />
     </LinearLayout>
     <EditText
+        android:id="@+id/edt_keterangan"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@android:color/holo_blue_bright"
