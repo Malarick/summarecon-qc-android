@@ -2,7 +2,7 @@
 
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
-
+<!--
     <PreferenceCategory
         android:title="PreferenceCategory A">
 
@@ -12,13 +12,13 @@
             android:summary="summary_checkbox_preference" />
 
     </PreferenceCategory>
-
+-->
     <PreferenceCategory
-        android:title="PreferenceCategory B">
+        android:title="Server Connection Setting">
 
         <EditTextPreference
             android:key="edittext_preference"
-            android:title="title_edittext_preference"
+            android:title="Server IP ADDRESS"
             android:summary="summary_edittext_preference"
             android:dialogTitle="dialog_title_edittext_preference" />
 

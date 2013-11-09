@@ -8,6 +8,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.summarecon.qcapp.R;
 
@@ -25,10 +26,10 @@ public class SettingFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        checkbox_1 = (Preference) findPreference("checkbox_preference");
+        //checkbox_1 = (Preference) findPreference("checkbox_preference");
         edittext_1 = (Preference) findPreference("edittext_preference");
         loadPref();
-
+/*
         checkbox_1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
             //boolean my_checkbox_preference = mySharedPreferences.getBoolean("checkbox_preference", false);
@@ -44,7 +45,7 @@ public class SettingFragment extends PreferenceFragment {
                 return true;
             }
         });
-
+*/
         edittext_1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -60,22 +61,24 @@ public class SettingFragment extends PreferenceFragment {
         Log.e("APF : ", " loadPref()");
         SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        boolean my_checkbox_preference = mySharedPreferences.getBoolean("checkbox_preference", false);
+        //boolean my_checkbox_preference = mySharedPreferences.getBoolean("checkbox_preference", false);
         String my_edittext_preference = mySharedPreferences.getString("edittext_preference", "");
+/*
         if (my_checkbox_preference){
             checkbox_1.setSummary("Enable");
         }else
         {
             checkbox_1.setSummary("Disable");
         }
-
+*/
 
         if (my_edittext_preference != "")
         {
-            edittext_1.setSummary(mySharedPreferences.getString("edittext_preference","127.0.0.0"));
+            edittext_1.setSummary(mySharedPreferences.getString("edittext_preference",""));
+            Toast.makeText(getActivity().getApplicationContext(),my_edittext_preference,Toast.LENGTH_SHORT).show();
         }else
         {
-
+            Toast.makeText(getActivity().getApplicationContext(),"isian kosong!!",Toast.LENGTH_SHORT).show();
         }
 
         //prefEditText.setText(my_edittext_preference);

@@ -4,10 +4,11 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -37,12 +38,22 @@ public class LoginActivity extends Activity {
     EditText edt_username,edt_password;
     Button btn_login;
     ImageView img_logo;
+    String server_ip;
     LinearLayout layout_user_input;
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (mySharedPreferences.getString("edittext_preference", "") != ""){
+            server_ip = mySharedPreferences.getString("edittext_preference", "");
+        }else
+            {
+                server_ip="127.0.0.1";
+            }
+        Toast.makeText(getApplicationContext(),"IP Server : "+server_ip,Toast.LENGTH_SHORT).show();
 
         //** Check koneksi internet
         CheckWifiConnection check = new CheckWifiConnection();
@@ -98,7 +109,7 @@ public class LoginActivity extends Activity {
         @Override
         protected Void doInBackground(Void... Void) {
             HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("http://192.168.100.127/login/list.php");
+            HttpPost request = new HttpPost("http://"+server_ip+"/login/list.php");
             try {
                 // Add Multipart Post Data
                 MultipartEntity entity = new MultipartEntity();
@@ -156,7 +167,7 @@ public class LoginActivity extends Activity {
 
             try {
                 HttpURLConnection.setFollowRedirects(false);
-                HttpURLConnection con = (HttpURLConnection) new URL("http://192.168.100.127/login/list.php").openConnection();
+                HttpURLConnection con = (HttpURLConnection) new URL("http://"+server_ip+"/login/list.php").openConnection();
                 con.setRequestMethod("HEAD");
 
                 con.setConnectTimeout(5000); //set timeout to 5 seconds
