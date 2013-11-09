@@ -1,20 +1,22 @@
 package com.summarecon.qcapp.item;
 
+import java.io.File;
+
 /**
  * Created by arnold on 9/11/13.
  */
 public class PenugasanGridItem {
 
-    int imgRes;
+    File file;
 
     public PenugasanGridItem() {
     }
 
-    public PenugasanGridItem(int imgRes) {
-        this.imgRes = imgRes;
+    public PenugasanGridItem(File file) {
+        this.file = file;
     }
 
-    public int getImgRes() {
-        return imgRes;
+    public File getFile() {
+        return file;
     }
 }

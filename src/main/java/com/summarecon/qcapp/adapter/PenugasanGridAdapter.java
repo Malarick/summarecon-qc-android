@@ -1,6 +1,8 @@
 package com.summarecon.qcapp.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,12 +52,17 @@ public class PenugasanGridAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         PenugasanGridItem item = getItem(position);
 
+        //create Thumbnail
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = 8;
+        Bitmap photoThumbnail = BitmapFactory.decodeFile(item.getFile().getAbsolutePath(), opts);
+
         if(view == null){
             view = inflater.inflate(viewHolder, null);
         }
 
         imgItem = (ImageView) view.findViewById(R.id.img_grid_item);
-        imgItem.setBackgroundColor(item.getImgRes());
+        imgItem.setImageBitmap(photoThumbnail);
 
         return view;
     }
