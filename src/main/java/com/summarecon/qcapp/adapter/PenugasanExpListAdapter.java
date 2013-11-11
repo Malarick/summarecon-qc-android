@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.item.PenugasanChildItem;
@@ -100,30 +101,29 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int parentPosition, int childPosition, boolean isLastChild, View view, ViewGroup viewGroup) {
+        if(view == null){
+            view = inflater.inflate(this.viewHolderChild, null);
+        }
+
         PenugasanChildItem penugasanChildItem = getChild(parentPosition, childPosition);
-        String path = this.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+
+        String path = penugasanChildItem.getPath();
         File file = new File(path);
         List<File> files = new ArrayList<File>();
+        int reqImg = 10;
 
         //Insert all files inside the directory into a List
         Collections.addAll(files, file.listFiles());
 
-        if(view == null){
-            view = inflater.inflate(this.viewHolderChild, null);
-        }
 
         List<PenugasanGridItem> gridItems = new ArrayList<PenugasanGridItem>();
         for(File f : files){
             gridItems.add(new PenugasanGridItem(f));
         }
-//        gridItems.add(new PenugasanGridItem(Color.GREEN));
-//        gridItems.add(new PenugasanGridItem(Color.BLUE));
-//        gridItems.add(new PenugasanGridItem(Color.GRAY));
-//        gridItems.add(new PenugasanGridItem(Color.YELLOW));
-//        gridItems.add(new PenugasanGridItem(Color.CYAN));
-//        gridItems.add(new PenugasanGridItem(Color.MAGENTA));
-//        gridItems.add(new PenugasanGridItem(Color.LTGRAY));
-//        gridItems.add(new PenugasanGridItem(Color.DKGRAY));
+
+        while(gridItems.size() < reqImg){
+            gridItems.add(new PenugasanGridItem(Color.LTGRAY));
+        }
 
         gridView = (GridView) view.findViewById(R.id.grid_penugasan_child);
         gridAdapter = new PenugasanGridAdapter(context, gridItems, R.layout.penugasan_grid_item);

@@ -7,16 +7,29 @@ import java.io.File;
  */
 public class PenugasanGridItem {
 
-    File file;
+    private File file;
+    private int res;
+    private Boolean isFile = false;
 
-    public PenugasanGridItem() {
+    public PenugasanGridItem(int res) {
+        this.res = res;
+        isFile = false;
     }
 
     public PenugasanGridItem(File file) {
         this.file = file;
+        isFile = true;
     }
 
     public File getFile() {
         return file;
+    }
+
+    public int getRes() {
+        return res;
+    }
+
+    public Boolean getIsFile() {
+        return isFile;
     }
 }

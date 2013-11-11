@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.item.PenugasanGridItem;
@@ -52,15 +53,19 @@ public class PenugasanGridAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         PenugasanGridItem item = getItem(position);
 
-        //create Thumbnail
-        Bitmap photoThumbnail = createThumbnail(item, 8);
-
         if(view == null){
             view = inflater.inflate(viewHolder, null);
         }
 
         imgItem = (ImageView) view.findViewById(R.id.img_grid_item);
-        imgItem.setImageBitmap(photoThumbnail);
+
+        if(item.getIsFile()){
+            //create Thumbnail
+            Bitmap photoThumbnail = createThumbnail(item, 8);
+            imgItem.setImageBitmap(photoThumbnail);
+        }else{
+            imgItem.setBackgroundColor(item.getRes());
+        }
 
         return view;
     }

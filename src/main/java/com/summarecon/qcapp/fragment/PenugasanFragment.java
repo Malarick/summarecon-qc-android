@@ -18,6 +18,7 @@ import com.summarecon.qcapp.adapter.PenugasanExpListAdapter;
 import com.summarecon.qcapp.item.PenugasanChildItem;
 import com.summarecon.qcapp.item.PenugasanParentItem;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,31 +39,29 @@ public class PenugasanFragment extends Fragment {
         mExpListPenugasan = (ExpandableListView) rootView.findViewById(R.id.exp_list_penugasan);
         alignExpIndicatorToRight();
         populateExpListPenugasan();
-        Toast.makeText(getActivity(), "Environment: toString(): "+Environment.getExternalStorageDirectory().toString(), Toast.LENGTH_LONG).show();
-        Toast.makeText(getActivity(), "Environment: getAbsolutePath(): "+Environment.getExternalStorageDirectory().getAbsolutePath(), Toast.LENGTH_LONG).show();
-        Toast.makeText(getActivity(), "Environment: getPath(): "+Environment.getExternalStorageDirectory().getPath(), Toast.LENGTH_LONG).show();
-        Toast.makeText(getActivity(), "ExternalPublic: getPath(): "+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath(), Toast.LENGTH_LONG).show();
-        Toast.makeText(getActivity(), "Context: toString(): "+getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString(), Toast.LENGTH_LONG).show();
-        Toast.makeText(getActivity(), "Context: getAbsolutePath(): "+getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), Toast.LENGTH_LONG).show();
-        Toast.makeText(getActivity(), "Context: getPath(): "+getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath(), Toast.LENGTH_LONG).show();
 
         return rootView;
     }
 
     public void populateExpListPenugasan(){
         List<String> parentLblList = new ArrayList<String>();
-        List<String> childLblList = new ArrayList<String>();
+        //List<String> childLblList = new ArrayList<String>();
         List<PenugasanParentItem> parentItemsList = new ArrayList<PenugasanParentItem>();
 
         Collections.addAll(parentLblList, getResources().getStringArray(R.array.arr_lbl_parent_items));
-        Collections.addAll(childLblList, getResources().getStringArray(R.array.arr_lbl_child_items));
+        //Collections.addAll(childLblList, getResources().getStringArray(R.array.arr_lbl_child_items));
 
+        int c = 0;
         for(String sParent : parentLblList){
             PenugasanParentItem parentItem = new PenugasanParentItem(sParent);
-            for(String sChild : childLblList){
-                parentItem.getChildItemList().add(new PenugasanChildItem(sChild));
+            if(c == 1){
+                parentItem.getChildItemList().add(new PenugasanChildItem(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()
+                        + File.separator + "Camera" + File.separator));
+            }else{
+                parentItem.getChildItemList().add(new PenugasanChildItem(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()));
             }
             parentItemsList.add(parentItem);
+            c++;
         }
 
         mAdapter = new PenugasanExpListAdapter(getActivity(), R.layout.penugasan_parent_item, R.layout.penugasan_child_item, parentItemsList);
