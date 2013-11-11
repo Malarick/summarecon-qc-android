@@ -9,20 +9,26 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:background="@drawable/table_style"
         >
         <CalendarView
             android:id="@+id/cal_jadwal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:showWeekNumber="false"
+            android:background="#fff"
+            android:selectedWeekBackgroundColor="#33b5e5"
+            android:unfocusedMonthDateColor="#b4b8b8"
             />
     </LinearLayout>
     <EditText
         android:id="@+id/edt_keterangan"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@android:color/holo_blue_bright"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:background="#f44"
         android:text="Buah :\n1. Apel\n2. Plum\n3. Enau\n4. Lontar"
         android:gravity="top"
         />

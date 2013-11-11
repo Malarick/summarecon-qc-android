@@ -25,7 +25,7 @@ public class ScheduleFragment extends Fragment {
         jadwal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                edt_keterangan.append(String.valueOf(dayOfMonth)+"-"+String.valueOf(month)+"-"+String.valueOf(year));
+                edt_keterangan.setText(String.valueOf(dayOfMonth)+"-"+String.valueOf(month)+"-"+String.valueOf(year));
             }
         });
 

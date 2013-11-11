@@ -2,7 +2,9 @@ package com.summarecon.qcapp;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -51,7 +53,7 @@ public class LoginActivity extends Activity {
             server_ip = mySharedPreferences.getString("edittext_preference", "");
         }else
             {
-                server_ip="127.0.0.1";
+                server_ip="192.168.100.106";
             }
         Toast.makeText(getApplicationContext(),"IP Server : "+server_ip,Toast.LENGTH_SHORT).show();
 
