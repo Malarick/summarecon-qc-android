@@ -2,6 +2,7 @@ package com.summarecon.qcapp.fragment;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.adapter.PenugasanExpListAdapter;
@@ -36,6 +38,13 @@ public class PenugasanFragment extends Fragment {
         mExpListPenugasan = (ExpandableListView) rootView.findViewById(R.id.exp_list_penugasan);
         alignExpIndicatorToRight();
         populateExpListPenugasan();
+        Toast.makeText(getActivity(), "Environment: toString(): "+Environment.getExternalStorageDirectory().toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Environment: getAbsolutePath(): "+Environment.getExternalStorageDirectory().getAbsolutePath(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Environment: getPath(): "+Environment.getExternalStorageDirectory().getPath(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "ExternalPublic: getPath(): "+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Context: toString(): "+getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Context: getAbsolutePath(): "+getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Context: getPath(): "+getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath(), Toast.LENGTH_LONG).show();
 
         return rootView;
     }
@@ -61,6 +70,7 @@ public class PenugasanFragment extends Fragment {
     }
 
     public void alignExpIndicatorToRight(){
+        //get device resolution size in pixels
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager windowManager = getActivity().getWindowManager();
         Display display = windowManager.getDefaultDisplay();

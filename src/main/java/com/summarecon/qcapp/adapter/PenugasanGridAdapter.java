@@ -53,9 +53,7 @@ public class PenugasanGridAdapter extends BaseAdapter {
         PenugasanGridItem item = getItem(position);
 
         //create Thumbnail
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inSampleSize = 8;
-        Bitmap photoThumbnail = BitmapFactory.decodeFile(item.getFile().getAbsolutePath(), opts);
+        Bitmap photoThumbnail = createThumbnail(item, 8);
 
         if(view == null){
             view = inflater.inflate(viewHolder, null);
@@ -65,5 +63,13 @@ public class PenugasanGridAdapter extends BaseAdapter {
         imgItem.setImageBitmap(photoThumbnail);
 
         return view;
+    }
+
+    public Bitmap createThumbnail(PenugasanGridItem item, int resizeRate){
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = resizeRate;
+        Bitmap photoThumbnail = BitmapFactory.decodeFile(item.getFile().getAbsolutePath(), opts);
+
+        return photoThumbnail;
     }
 }

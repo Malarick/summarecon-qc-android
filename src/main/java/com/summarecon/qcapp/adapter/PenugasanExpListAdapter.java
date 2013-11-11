@@ -2,6 +2,7 @@ package com.summarecon.qcapp.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,9 +101,11 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int parentPosition, int childPosition, boolean isLastChild, View view, ViewGroup viewGroup) {
         PenugasanChildItem penugasanChildItem = getChild(parentPosition, childPosition);
-        File file = new File("/storage/sdcard0/DCIM/SimpleActivity");
+        String path = this.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        File file = new File(path);
         List<File> files = new ArrayList<File>();
 
+        //Insert all files inside the directory into a List
         Collections.addAll(files, file.listFiles());
 
         if(view == null){
