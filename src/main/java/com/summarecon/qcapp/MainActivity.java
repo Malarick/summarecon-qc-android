@@ -194,9 +194,6 @@ public class MainActivity extends Activity {
 
         listView.setAdapter(mNavDrawerAdapter);
         listView.setOnItemClickListener(new DrawerItemClickListener());
-
-        //Toast testing
-        Toast.makeText(this, labelList.get(0), Toast.LENGTH_SHORT).show();
     }
 
     public void selectItem(AdapterView adapterView, View view, int position){

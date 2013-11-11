@@ -4,14 +4,17 @@ package com.summarecon.qcapp.item;
  * Created by arnold on 9/11/13.
  */
 public class PenugasanChildItem {
-    String childItemLbl;
+    String path;
 
-    public PenugasanChildItem(String childItemLbl) {
-
-        this.childItemLbl = childItemLbl;
+    public PenugasanChildItem() {
     }
 
-    public String getChildItemLbl() {
-        return childItemLbl;
+    public PenugasanChildItem(String path) {
+
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
     }
 }
