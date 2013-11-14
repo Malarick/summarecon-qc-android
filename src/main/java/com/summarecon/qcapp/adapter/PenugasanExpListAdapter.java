@@ -1,17 +1,21 @@
 package com.summarecon.qcapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.summarecon.qcapp.R;
+import com.summarecon.qcapp.TakePictureActivity;
 import com.summarecon.qcapp.item.PenugasanChildItem;
 import com.summarecon.qcapp.item.PenugasanGridItem;
 import com.summarecon.qcapp.item.PenugasanParentItem;
@@ -140,7 +144,21 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
         gridView = (GridView) view.findViewById(R.id.grid_penugasan_child);
         gridAdapter = new PenugasanGridAdapter(context, gridItems, R.layout.penugasan_grid_item);
         gridView.setAdapter(gridAdapter);
+        gridView.setOnItemClickListener(new GridItemClickListener());
 
         return view;
+    }
+
+    //Open the Camera
+    private void openCamera() {
+        Intent openCameraIntent = new Intent(context, TakePictureActivity.class);
+        context.startActivity(openCameraIntent);
+    }
+
+    private class GridItemClickListener implements AdapterView.OnItemClickListener{
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            openCamera();
+        }
     }
 }

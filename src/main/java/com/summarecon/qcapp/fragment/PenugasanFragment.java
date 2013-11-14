@@ -75,6 +75,7 @@ public class PenugasanFragment extends Fragment {
 
     public void alignExpIndicatorToRight(){
         //get device resolution size in pixels
+        //Get Display Size and contain it in displayMetrics
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager windowManager = getActivity().getWindowManager();
         Display display = windowManager.getDefaultDisplay();
