@@ -12,4 +12,19 @@
         android:textAppearance="?android:attr/textAppearanceListItem"
         android:gravity="center_vertical"/>
 
+    <TextView
+        android:id="@+id/txt_penugasan_parent_tgl"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+
+    <TextView
+        android:id="@+id/txt_penugasan_parent_blok"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+
+    <TextView
+        android:id="@+id/txt_penugasan_parent_total_images"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+
 </LinearLayout>

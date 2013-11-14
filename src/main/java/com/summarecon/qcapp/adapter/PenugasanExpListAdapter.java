@@ -32,6 +32,9 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
     private int viewHolderChild;
 
     private TextView txtItemLbl;
+    private TextView txtItemTglLbl;
+    private TextView txtItemBlokLbl;
+    private TextView txtItemTotalImagesLbl;
     private GridView gridView;
     private PenugasanGridAdapter gridAdapter;
 
@@ -95,6 +98,15 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
 
         txtItemLbl = (TextView) view.findViewById(R.id.txt_penugasan_parent);
         txtItemLbl.setText(penugasanParentItem.getParentItemLbl());
+
+        txtItemTglLbl = (TextView) view.findViewById(R.id.txt_penugasan_parent_tgl);
+        txtItemTglLbl.setText(penugasanParentItem.getParentTglLbl());
+
+        txtItemBlokLbl = (TextView) view.findViewById(R.id.txt_penugasan_parent_blok);
+        txtItemBlokLbl.setText(penugasanParentItem.getParentBlokLbl());
+
+        txtItemTotalImagesLbl = (TextView) view.findViewById(R.id.txt_penugasan_parent_total_images);
+        txtItemTotalImagesLbl.setText(penugasanParentItem.getParentTotalImagesLbl());
 
         return view;
     }

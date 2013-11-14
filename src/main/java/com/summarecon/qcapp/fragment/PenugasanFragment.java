@@ -19,6 +19,7 @@ import com.summarecon.qcapp.item.PenugasanChildItem;
 import com.summarecon.qcapp.item.PenugasanParentItem;
 
 import java.io.File;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,7 +54,11 @@ public class PenugasanFragment extends Fragment {
 
         int c = 0;
         for(String sParent : parentLblList){
-            PenugasanParentItem parentItem = new PenugasanParentItem(sParent);
+            PenugasanParentItem parentItem = new PenugasanParentItem(
+                    sParent
+                    , getString(R.string.lbl_parent_tgl)
+                    , getString(R.string.lbl_parent_blok)
+                    , getString(R.string.lbl_parent_total_images));
             if(c == 1){
                 parentItem.getChildItemList().add(new PenugasanChildItem(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()
                         + File.separator + "Camera" + File.separator));
@@ -83,7 +88,7 @@ public class PenugasanFragment extends Fragment {
         //get the screen density scale
         float scale = getResources().getDisplayMetrics().density;
 
-        //conver the dp(s) to pixels
+        //convert the dp(s) to pixels
         return (int) (scale * pixels + 0.5f);
     }
 }
