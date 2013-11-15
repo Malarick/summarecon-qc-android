@@ -95,6 +95,12 @@ public class LoginActivity extends Activity {
 
     }
 
+    class CheckDatabaseLocal {
+    }
+
+    class BacaDatabaseLocal {
+    }
+
 
     //**class berisi fungsi upload data login user ke server untuk dicheck di server
     class CheckLoginData extends AsyncTask<Void, Void, Void> {
