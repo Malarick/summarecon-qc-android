@@ -29,4 +29,9 @@
     <string name="header_section_notifications">NOTIFICATIONS</string>
     <string name="header_section_upload">UPLOAD</string>
 
+    <string name="lbl_parent_tgl">12/12/2013</string>
+    <string name="lbl_parent_blok">Blok: A3/4</string>
+    <string name="lbl_parent_total_images">Foto defects: 8/10</string>
+
+
 </resources>
