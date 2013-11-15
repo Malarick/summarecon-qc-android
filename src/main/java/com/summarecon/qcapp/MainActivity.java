@@ -159,7 +159,12 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        this.finish();
+        Toast.makeText(this, mFragment.toString(), Toast.LENGTH_LONG).show();
+        if(mFragment != new DashboardFragment()){
+            fragmentCall(new DashboardFragment());
+        }else{
+            this.finish();
+        }
     }
 
     public void populateNavDrawerSection(int arr_icon_res, int arr_lbl_res, int layout_res, ListView listView, String header) {
