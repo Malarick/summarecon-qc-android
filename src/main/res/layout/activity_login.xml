@@ -15,8 +15,6 @@
         android:gravity="center_vertical|center_horizontal"
         android:translationY="60dp"
         android:visibility="invisible">
-        <!-- android:gravity="center_vertical|center_horizontal" -->
-
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,7 +76,7 @@
         android:id="@+id/img_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_photo"
+        android:src="@drawable/ic_settings_dark"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"/>
 
