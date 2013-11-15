@@ -65,8 +65,8 @@ public class LoginActivity extends Activity {
         checklogin = new CheckLoginData();
 
         //**inisialisasi EditText, Button, ImageView, Layout yg mau di gerakin (Logo, username, password)
-        edt_username = (EditText) findViewById(R.id.edttxt_username);
-        edt_password = (EditText) findViewById(R.id.edtTxt_password);
+        edt_username = (EditText) findViewById(R.id.edt_username);
+        edt_password = (EditText) findViewById(R.id.edt_password);
         btn_login = (Button) findViewById(R.id.btn_login);
         img_logo =(ImageView) findViewById(R.id.img_logo);
         layout_user_input = (LinearLayout) findViewById(R.id.user_input_layout);
