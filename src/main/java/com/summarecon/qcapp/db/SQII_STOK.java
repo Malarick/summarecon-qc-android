@@ -1,42 +1,26 @@
 package com.summarecon.qcapp.db;
 
 /**
- * Created by Administrator on 10/19/13.
+ * Created by wahyu_wibisana on 11/9/13.
  */
-public class SQII_HISTORY_UPLOAD {
-    private Float ROWID;
-    private String NO_PENUGASAN;
+public class SQII_STOK {
     private String KD_KAWASAN;
     private String BLOK;
     private String NOMOR;
+    private String KD_CLUSTER;
+    private Float STOK_ID;
+    private String KD_KONTRAKTOR;
     private String KD_JENIS;
     private String KD_TIPE;
-    private Float KD_ITEM_DEFECT;
-    private Float KD_LANTAI;
-    private Float URUT_PELAKSANAAN;
-    private Float URUT_FOTO;
-    private String TGL_UPLOAD;
-    private String CATATAN;
+    private String PENGAWAS;
+    private String SM;
+    private String PETUGAS_QC;
+    private String DESKRIPSI;
+    private String FLAG_AKTIF;
     private String USER_ENTRY;
     private String TGL_ENTRY;
     private String USER_UPDATE;
     private String TGL_UPDATE;
-
-    public Float getROWID() {
-        return ROWID;
-    }
-
-    public void setROWID(Float ROWID) {
-        this.ROWID = ROWID;
-    }
-
-    public String getNO_PENUGASAN() {
-        return NO_PENUGASAN;
-    }
-
-    public void setNO_PENUGASAN(String NO_PENUGASAN) {
-        this.NO_PENUGASAN = NO_PENUGASAN;
-    }
 
     public String getKD_KAWASAN() {
         return KD_KAWASAN;
@@ -62,6 +46,30 @@ public class SQII_HISTORY_UPLOAD {
         this.NOMOR = NOMOR;
     }
 
+    public String getKD_CLUSTER() {
+        return KD_CLUSTER;
+    }
+
+    public void setKD_CLUSTER(String KD_CLUSTER) {
+        this.KD_CLUSTER = KD_CLUSTER;
+    }
+
+    public Float getSTOK_ID() {
+        return STOK_ID;
+    }
+
+    public void setSTOK_ID(Float STOK_ID) {
+        this.STOK_ID = STOK_ID;
+    }
+
+    public String getKD_KONTRAKTOR() {
+        return KD_KONTRAKTOR;
+    }
+
+    public void setKD_KONTRAKTOR(String KD_KONTRAKTOR) {
+        this.KD_KONTRAKTOR = KD_KONTRAKTOR;
+    }
+
     public String getKD_JENIS() {
         return KD_JENIS;
     }
@@ -78,52 +86,44 @@ public class SQII_HISTORY_UPLOAD {
         this.KD_TIPE = KD_TIPE;
     }
 
-    public Float getKD_ITEM_DEFECT() {
-        return KD_ITEM_DEFECT;
+    public String getPENGAWAS() {
+        return PENGAWAS;
     }
 
-    public void setKD_ITEM_DEFECT(Float KD_ITEM_DEFECT) {
-        this.KD_ITEM_DEFECT = KD_ITEM_DEFECT;
+    public void setPENGAWAS(String PENGAWAS) {
+        this.PENGAWAS = PENGAWAS;
     }
 
-    public Float getKD_LANTAI() {
-        return KD_LANTAI;
+    public String getSM() {
+        return SM;
     }
 
-    public void setKD_LANTAI(Float KD_LANTAI) {
-        this.KD_LANTAI = KD_LANTAI;
+    public void setSM(String SM) {
+        this.SM = SM;
     }
 
-    public Float getURUT_PELAKSANAAN() {
-        return URUT_PELAKSANAAN;
+    public String getPETUGAS_QC() {
+        return PETUGAS_QC;
     }
 
-    public void setURUT_PELAKSANAAN(Float URUT_PELAKSANAAN) {
-        this.URUT_PELAKSANAAN = URUT_PELAKSANAAN;
+    public void setPETUGAS_QC(String PETUGAS_QC) {
+        this.PETUGAS_QC = PETUGAS_QC;
     }
 
-    public Float getURUT_FOTO() {
-        return URUT_FOTO;
+    public String getDESKRIPSI() {
+        return DESKRIPSI;
     }
 
-    public void setURUT_FOTO(Float URUT_FOTO) {
-        this.URUT_FOTO = URUT_FOTO;
+    public void setDESKRIPSI(String DESKRIPSI) {
+        this.DESKRIPSI = DESKRIPSI;
     }
 
-    public String getTGL_UPLOAD() {
-        return TGL_UPLOAD;
+    public String getFLAG_AKTIF() {
+        return FLAG_AKTIF;
     }
 
-    public void setTGL_UPLOAD(String TGL_UPLOAD) {
-        this.TGL_UPLOAD = TGL_UPLOAD;
-    }
-
-    public String getCATATAN() {
-        return CATATAN;
-    }
-
-    public void setCATATAN(String CATATAN) {
-        this.CATATAN = CATATAN;
+    public void setFLAG_AKTIF(String FLAG_AKTIF) {
+        this.FLAG_AKTIF = FLAG_AKTIF;
     }
 
     public String getUSER_ENTRY() {

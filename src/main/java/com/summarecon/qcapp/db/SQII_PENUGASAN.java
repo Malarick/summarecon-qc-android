@@ -1,13 +1,16 @@
 package com.summarecon.qcapp.db;
 
-/*Created By Wahyu Wibisana on 10/19/2013*/
-
+/**
+ * Created by Administrator on 10/19/13.
+ */
 public class SQII_PENUGASAN {
     private String NO_PENUGASAN;
     private String TGL_PENUGASAN;
     private String KD_KAWASAN;
+    private String KD_CLUSTER;
     private String PETUGAS_QC;
     private String DESKRIPSI;
+    private String STATUS_SELESAI;
     private String FLAG_AKTIF;
     private String FLAG_BATAL;
     private String USER_BATAL;
@@ -42,6 +45,14 @@ public class SQII_PENUGASAN {
         this.KD_KAWASAN = KD_KAWASAN;
     }
 
+    public String getKD_CLUSTER() {
+        return KD_CLUSTER;
+    }
+
+    public void setKD_CLUSTER(String KD_CLUSTER) {
+        this.KD_CLUSTER = KD_CLUSTER;
+    }
+
     public String getPETUGAS_QC() {
         return PETUGAS_QC;
     }
@@ -56,6 +67,14 @@ public class SQII_PENUGASAN {
 
     public void setDESKRIPSI(String DESKRIPSI) {
         this.DESKRIPSI = DESKRIPSI;
+    }
+
+    public String getSTATUS_SELESAI() {
+        return STATUS_SELESAI;
+    }
+
+    public void setSTATUS_SELESAI(String STATUS_SELESAI) {
+        this.STATUS_SELESAI = STATUS_SELESAI;
     }
 
     public String getFLAG_AKTIF() {

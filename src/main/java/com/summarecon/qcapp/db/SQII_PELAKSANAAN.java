@@ -1,9 +1,9 @@
 package com.summarecon.qcapp.db;
 
-/*Created By Wahyu Wibisana on 10/19/2013*/
-
+/**
+ * Created by Administrator on 10/19/13.
+ */
 public class SQII_PELAKSANAAN {
-    private Float ROWID;
     private String NO_PENUGASAN;
     private String KD_KAWASAN;
     private String BLOK;
@@ -13,6 +13,8 @@ public class SQII_PELAKSANAAN {
     private Float KD_ITEM_DEFECT;
     private Float KD_LANTAI;
     private Float URUT_PELAKSANAAN;
+    private Float URUT_FOTO;
+    private String JENIS_PENUGASAN;
     private String TGL_PELAKSANAAN;
     private String PETUGAS_QC;
     private String PENGAWAS;
@@ -22,7 +24,9 @@ public class SQII_PELAKSANAAN {
     private String CATATAN;
     private String FLAG_UPLOAD;
     private String TGL_UPLOAD;
+    private String PATH_FOTO_DENAH;
     private String SRC_FOTO_DENAH;
+    private String PATH_FOTO_DEFECT;
     private String SRC_FOTO_DEFECT;
     private Float LAMA_PERBAIKAN;
     private String TGL_ENTRY_LAMA_PERBAIKAN;
@@ -35,18 +39,13 @@ public class SQII_PELAKSANAAN {
     private String USER_BATAL;
     private String TGL_BATAL;
     private String ALASAN_BATAL;
+    private String STATUS_SIMPAN;
     private String USER_ENTRY;
-    private String TGL_ENTRY ;
+    private String TGL_ENTRY;
     private String USER_UPDATE;
     private String TGL_UPDATE;
-
-    public Float getROWID() {
-        return ROWID;
-    }
-
-    public void setROWID(Float ROWID) {
-        this.ROWID = ROWID;
-    }
+    private Float PARENT_ROWID;
+    private Float ROWID;
 
     public String getNO_PENUGASAN() {
         return NO_PENUGASAN;
@@ -118,6 +117,22 @@ public class SQII_PELAKSANAAN {
 
     public void setURUT_PELAKSANAAN(Float URUT_PELAKSANAAN) {
         this.URUT_PELAKSANAAN = URUT_PELAKSANAAN;
+    }
+
+    public Float getURUT_FOTO() {
+        return URUT_FOTO;
+    }
+
+    public void setURUT_FOTO(Float URUT_FOTO) {
+        this.URUT_FOTO = URUT_FOTO;
+    }
+
+    public String getJENIS_PENUGASAN() {
+        return JENIS_PENUGASAN;
+    }
+
+    public void setJENIS_PENUGASAN(String JENIS_PENUGASAN) {
+        this.JENIS_PENUGASAN = JENIS_PENUGASAN;
     }
 
     public String getTGL_PELAKSANAAN() {
@@ -192,12 +207,28 @@ public class SQII_PELAKSANAAN {
         this.TGL_UPLOAD = TGL_UPLOAD;
     }
 
+    public String getPATH_FOTO_DENAH() {
+        return PATH_FOTO_DENAH;
+    }
+
+    public void setPATH_FOTO_DENAH(String PATH_FOTO_DENAH) {
+        this.PATH_FOTO_DENAH = PATH_FOTO_DENAH;
+    }
+
     public String getSRC_FOTO_DENAH() {
         return SRC_FOTO_DENAH;
     }
 
     public void setSRC_FOTO_DENAH(String SRC_FOTO_DENAH) {
         this.SRC_FOTO_DENAH = SRC_FOTO_DENAH;
+    }
+
+    public String getPATH_FOTO_DEFECT() {
+        return PATH_FOTO_DEFECT;
+    }
+
+    public void setPATH_FOTO_DEFECT(String PATH_FOTO_DEFECT) {
+        this.PATH_FOTO_DEFECT = PATH_FOTO_DEFECT;
     }
 
     public String getSRC_FOTO_DEFECT() {
@@ -296,6 +327,14 @@ public class SQII_PELAKSANAAN {
         this.ALASAN_BATAL = ALASAN_BATAL;
     }
 
+    public String getSTATUS_SIMPAN() {
+        return STATUS_SIMPAN;
+    }
+
+    public void setSTATUS_SIMPAN(String STATUS_SIMPAN) {
+        this.STATUS_SIMPAN = STATUS_SIMPAN;
+    }
+
     public String getUSER_ENTRY() {
         return USER_ENTRY;
     }
@@ -326,5 +365,21 @@ public class SQII_PELAKSANAAN {
 
     public void setTGL_UPDATE(String TGL_UPDATE) {
         this.TGL_UPDATE = TGL_UPDATE;
+    }
+
+    public Float getPARENT_ROWID() {
+        return PARENT_ROWID;
+    }
+
+    public void setPARENT_ROWID(Float PARENT_ROWID) {
+        this.PARENT_ROWID = PARENT_ROWID;
+    }
+
+    public Float getROWID() {
+        return ROWID;
+    }
+
+    public void setROWID(Float ROWID) {
+        this.ROWID = ROWID;
     }
 }

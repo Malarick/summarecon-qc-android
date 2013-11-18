@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.summarecon.qcapp.db.QCDBHelper;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -42,11 +44,27 @@ public class LoginActivity extends Activity {
     ImageView img_logo;
     String server_ip;
     LinearLayout layout_user_input;
+
+
+    //database
+    QCDBHelper db;
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        db = new QCDBHelper(this);
+        /*
+        if (db.checkdatabase()== true){
+            Toast.makeText(getApplicationContext(),"Database ada di Handphone anda!!",Toast.LENGTH_SHORT).show();
+        }else
+            {
+                Toast.makeText(getApplicationContext(),"Database Tidak ada di Handphone anda!!",Toast.LENGTH_SHORT).show();
+            }
+        */
+        Toast.makeText(getApplicationContext(),db.checkdatabase(),Toast.LENGTH_SHORT).show();
 
         SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (mySharedPreferences.getString("edittext_preference", "") != ""){

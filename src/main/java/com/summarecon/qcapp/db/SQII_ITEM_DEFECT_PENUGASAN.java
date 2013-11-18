@@ -1,7 +1,8 @@
 package com.summarecon.qcapp.db;
 
-/*Created By Wahyu Wibisana on 10/19/2013*/
-
+/**
+ * Created by Administrator on 10/19/13.
+ */
 public class SQII_ITEM_DEFECT_PENUGASAN {
     private String NO_PENUGASAN;
     private String KD_KAWASAN;
@@ -11,7 +12,9 @@ public class SQII_ITEM_DEFECT_PENUGASAN {
     private String KD_TIPE;
     private Float KD_ITEM_DEFECT;
     private Float KD_LANTAI;
+    private String KD_CLUSTER;
     private String JML_FOTO_PENUGASAN;
+    private String JML_FOTO_REALISASI;
     private String FLAG_AKTIF;
     private String FLAG_BATAL;
     private String USER_BATAL;
@@ -21,14 +24,6 @@ public class SQII_ITEM_DEFECT_PENUGASAN {
     private String TGL_ENTRY;
     private String USER_UPDATE;
     private String TGL_UPDATE;
-
-    public String getTGL_UPDATE() {
-        return TGL_UPDATE;
-    }
-
-    public void setTGL_UPDATE(String TGL_UPDATE) {
-        this.TGL_UPDATE = TGL_UPDATE;
-    }
 
     public String getNO_PENUGASAN() {
         return NO_PENUGASAN;
@@ -94,12 +89,28 @@ public class SQII_ITEM_DEFECT_PENUGASAN {
         this.KD_LANTAI = KD_LANTAI;
     }
 
+    public String getKD_CLUSTER() {
+        return KD_CLUSTER;
+    }
+
+    public void setKD_CLUSTER(String KD_CLUSTER) {
+        this.KD_CLUSTER = KD_CLUSTER;
+    }
+
     public String getJML_FOTO_PENUGASAN() {
         return JML_FOTO_PENUGASAN;
     }
 
     public void setJML_FOTO_PENUGASAN(String JML_FOTO_PENUGASAN) {
         this.JML_FOTO_PENUGASAN = JML_FOTO_PENUGASAN;
+    }
+
+    public String getJML_FOTO_REALISASI() {
+        return JML_FOTO_REALISASI;
+    }
+
+    public void setJML_FOTO_REALISASI(String JML_FOTO_REALISASI) {
+        this.JML_FOTO_REALISASI = JML_FOTO_REALISASI;
     }
 
     public String getFLAG_AKTIF() {
@@ -164,5 +175,13 @@ public class SQII_ITEM_DEFECT_PENUGASAN {
 
     public void setUSER_UPDATE(String USER_UPDATE) {
         this.USER_UPDATE = USER_UPDATE;
+    }
+
+    public String getTGL_UPDATE() {
+        return TGL_UPDATE;
+    }
+
+    public void setTGL_UPDATE(String TGL_UPDATE) {
+        this.TGL_UPDATE = TGL_UPDATE;
     }
 }
