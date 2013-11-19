@@ -8,6 +8,7 @@ public class NavDrawerItem {
     int itemIcon;
     String itemLabel;
     int itemCounter;
+    public Boolean counterExist = false;
 
     public int getItemIcon() {
         return itemIcon;
@@ -34,6 +35,6 @@ public class NavDrawerItem {
         this.itemIcon = itemIcon;
         this.itemLabel = itemLabel;
         this.itemCounter = itemCounter;
-
+        counterExist = true;
     }
 }

@@ -105,6 +105,8 @@ public class LoginActivity extends Activity {
                 //checklogin = new CheckLoginData();
                 //checklogin.execute();
 
+                db = new QCDBHelper(LoginActivity.this);
+                db.insertSQLBatch();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 LoginActivity.this.finish();

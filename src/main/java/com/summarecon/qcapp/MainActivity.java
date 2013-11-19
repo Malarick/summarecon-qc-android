@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.summarecon.qcapp.adapter.NavDrawerAdapter;
+import com.summarecon.qcapp.db.QCDBHelper;
 import com.summarecon.qcapp.fragment.AboutFragment;
 import com.summarecon.qcapp.fragment.DashboardFragment;
 import com.summarecon.qcapp.fragment.PenugasanFragment;
@@ -70,6 +71,9 @@ public class MainActivity extends Activity {
     private FragmentTransaction mFragmentTransaction;
     private Bundle fragmentArgs;
 
+    //DB
+    private QCDBHelper db;
+
     private TextView lbl_user;
     private Bundle bundle = new Bundle();
     private GetDataFromServer getData = new GetDataFromServer();
@@ -78,6 +82,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //DB setup
+        db = new QCDBHelper(this);
 
         //SETUP THE ACTION BARS
         setupActionBar();
@@ -183,20 +190,28 @@ public class MainActivity extends Activity {
         Collections.addAll(iconList, getResources().getStringArray(arr_icon_res));
         Collections.addAll(labelList, getResources().getStringArray(arr_lbl_res));
 
+
         int c = 0;
         for(String s:labelList){
             //Assign icon kecuali pada label yang tidak memiliki icon alias "null"
             if(iconList.get(c) != "null"){
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", this.getPackageName());
-                itemList.add(new NavDrawerItem(id_icon, s));
+                if(s.equals("Penugasan Baru")){
+                    itemList.add(new NavDrawerItem(id_icon, s, db.getAllPelaksanaan("201005469", "B").size()));
+                    Log.e("LUAR", s +"= "+ itemList.get(c).counterExist.toString());
+                }else{
+                    itemList.add(new NavDrawerItem(id_icon, s));
+                    Log.e("LUAR", s +"= "+ itemList.get(c).counterExist.toString());
+                }
             }else{
                 itemList.add(new NavDrawerItem(s));
+                Log.e("LUAR", s +"= "+ itemList.get(c).counterExist.toString());
             }
             c++;
         }
-        mNavDrawerAdapter = new NavDrawerAdapter(this, layout_res, itemList);
+       // mNavDrawerAdapter = new NavDrawerAdapter(this, layout_res, itemList);
 
-        listView.setAdapter(mNavDrawerAdapter);
+        listView.setAdapter(new NavDrawerAdapter(this, layout_res, itemList));
         listView.setOnItemClickListener(new DrawerItemClickListener());
     }
 

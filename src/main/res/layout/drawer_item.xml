@@ -31,9 +31,7 @@
         android:layout_margin="10dp"
         android:padding="5dp"
         android:gravity="center"
-        android:text="145"
         android:textSize="14sp"
-        android:textColor="@android:color/white"
-        android:background="@drawable/rectangle"/>
+        android:textColor="@android:color/white"/>
 
 </LinearLayout>

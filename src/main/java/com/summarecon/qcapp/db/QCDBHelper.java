@@ -25,11 +25,13 @@ public class QCDBHelper extends SQLiteOpenHelper {
     private static int DB_VERSION = 1;
     private static int success = 1;
     private static int failed = -1;
+    private Context mContext;
 
     public QCDBHelper(final Context context) {
         super(context, Environment.getExternalStorageDirectory()
                 + File.separator + FILE_DIR
                 + File.separator + DATABASE_NAME, null, DB_VERSION);
+        mContext = context;
         Log.e("Test", Environment.getExternalStorageDirectory().toString());
 
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Environment.getExternalStorageDirectory().toString()
@@ -383,7 +385,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 + File.separator + FILE_DIR
                 + File.separator + DATABASE_NAME,null);
 
-        File sdcard = Environment.getExternalStorageDirectory();
+        File sdcard = mContext.getExternalFilesDir("SQL");
         File file = new File(sdcard,"summarecon.txt");
 
         db.beginTransaction();
@@ -393,7 +395,11 @@ public class QCDBHelper extends SQLiteOpenHelper {
             String line;
 
             while ((line = br.readLine()) != null) {
-                db.execSQL(line);
+                try {
+                    db.execSQL(line);
+                } catch (Exception e) {
+
+                }
             }
             db.setTransactionSuccessful();
         }
