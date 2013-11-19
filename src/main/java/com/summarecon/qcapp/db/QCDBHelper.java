@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1837,6 +1836,69 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 + File.separator + FILE_DIR
                 + File.separator +DATABASE_NAME,null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_PELAKSANAAN", null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                SQII_PELAKSANAAN item = new SQII_PELAKSANAAN();
+
+                item.setNO_PENUGASAN(cursor.getString(0));
+                item.setKD_KAWASAN(cursor.getString(1));
+                item.setBLOK(cursor.getString(2));
+                item.setNOMOR(cursor.getString(3));
+                item.setKD_JENIS(cursor.getString(4));
+                item.setKD_TIPE(cursor.getString(5));
+                item.setKD_ITEM_DEFECT(cursor.getFloat(6));
+                item.setKD_LANTAI(cursor.getFloat(7));
+                item.setURUT_PELAKSANAAN(cursor.getFloat(8));
+                item.setURUT_FOTO(cursor.getFloat(9));
+                item.setJENIS_PENUGASAN(cursor.getString(10));
+                item.setTGL_PELAKSANAAN(cursor.getString(11));
+                item.setPETUGAS_QC(cursor.getString(12));
+                item.setPENGAWAS(cursor.getString(13));
+                item.setSM(cursor.getString(14));
+                item.setSTATUS_DEFECT(cursor.getString(15));
+                item.setSTATUS_PEKERJAAN(cursor.getString(16));
+                item.setCATATAN(cursor.getString(17));
+                item.setFLAG_UPLOAD(cursor.getString(18));
+                item.setTGL_UPLOAD(cursor.getString(19));
+                item.setPATH_FOTO_DENAH(cursor.getString(20));
+                item.setSRC_FOTO_DENAH(cursor.getString(21));
+                item.setPATH_FOTO_DEFECT(cursor.getString(22));
+                item.setSRC_FOTO_DEFECT(cursor.getString(23));
+                item.setLAMA_PERBAIKAN(cursor.getFloat(24));
+                item.setTGL_ENTRY_LAMA_PERBAIKAN(cursor.getString(25));
+                item.setTGL_JATUH_TEMPO_PERBAIKAN(cursor.getString(26));
+                item.setFLAG_AKTIF(cursor.getString(27));
+                item.setUSER_AKTIF(cursor.getString(28));
+                item.setTGL_AKTIF(cursor.getString(29));
+                item.setALASAN_AKTIF(cursor.getString(30));
+                item.setFLAG_BATAL(cursor.getString(31));
+                item.setUSER_BATAL(cursor.getString(32));
+                item.setTGL_BATAL(cursor.getString(33));
+                item.setALASAN_BATAL(cursor.getString(34));
+                item.setSTATUS_SIMPAN(cursor.getString(35));
+                item.setUSER_ENTRY(cursor.getString(36));
+                item.setTGL_ENTRY(cursor.getString(37));
+                item.setUSER_UPDATE(cursor.getString(38));
+                item.setTGL_UPDATE(cursor.getString(39));
+                item.setPARENT_ROWID(cursor.getFloat(40));
+                item.setROWID(cursor.getFloat(41));
+
+                listData.add(item);
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return listData;
+    }
+
+    public List<SQII_PELAKSANAAN> getAllPelaksanaan(String petugasQC, String jenisPenugasan) {
+        List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
+        /*SQLiteDatabase db = this.getReadableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Environment.getExternalStorageDirectory().toString()
+                + File.separator + FILE_DIR
+                + File.separator +DATABASE_NAME,null);
+        Cursor cursor = db.rawQuery("SELECT * FROM SQII_PELAKSANAAN WHERE PETUGAS_QC = '" + petugasQC + "' AND JENIS_PENUGASAN = '" + jenisPenugasan + "'", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 SQII_PELAKSANAAN item = new SQII_PELAKSANAAN();
