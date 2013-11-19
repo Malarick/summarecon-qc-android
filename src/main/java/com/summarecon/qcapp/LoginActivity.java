@@ -55,7 +55,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        db = new QCDBHelper(this);
+        //db = new QCDBHelper(this);
         /*
         if (db.checkdatabase()== true){
             Toast.makeText(getApplicationContext(),"Database ada di Handphone anda!!",Toast.LENGTH_SHORT).show();
@@ -64,7 +64,7 @@ public class LoginActivity extends Activity {
                 Toast.makeText(getApplicationContext(),"Database Tidak ada di Handphone anda!!",Toast.LENGTH_SHORT).show();
             }
         */
-        Toast.makeText(getApplicationContext(),db.checkdatabase(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),db.checkdatabase(),Toast.LENGTH_SHORT).show();
 
         SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (mySharedPreferences.getString("edittext_preference", "") != ""){

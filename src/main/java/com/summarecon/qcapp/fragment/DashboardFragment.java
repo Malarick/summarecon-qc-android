@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.summarecon.qcapp.MainActivity;
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.adapter.NotificationsAdapter;
 import com.summarecon.qcapp.item.NotificationsItem;
@@ -78,6 +79,7 @@ public class DashboardFragment extends Fragment {
 
     public void fragmentPenugasan(Fragment fragment, CharSequence jenisPenugasan){
         mFragment = fragment;
+        MainActivity.mFragment = mFragment;
         fragmentArgs = new Bundle();
 
         fragmentArgs.putCharSequence(PenugasanFragment.ARGS_PENUGASAN, jenisPenugasan);

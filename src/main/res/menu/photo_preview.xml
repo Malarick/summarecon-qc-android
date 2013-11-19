@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Search, should appear as action button -->
+    <item android:id="@+id/action_save"
+        android:title="@string/action_search"
+        android:orderInCategory="200"
+        android:icon="@drawable/ic_action_save"
+        android:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_clear_drawing"
+        android:title="@string/action_search"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_clear_drawing"
+        android:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+</menu>

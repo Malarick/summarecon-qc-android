@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
     private ListView mListSectionEtc;
 
     //Fragment
-    private Fragment mFragment;
+    public static Fragment mFragment;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private Bundle fragmentArgs;
@@ -159,8 +159,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, mFragment.toString(), Toast.LENGTH_LONG).show();
-        if(mFragment != new DashboardFragment()){
+        if(mFragment.getClass() != DashboardFragment.class){
             fragmentCall(new DashboardFragment());
         }else{
             this.finish();

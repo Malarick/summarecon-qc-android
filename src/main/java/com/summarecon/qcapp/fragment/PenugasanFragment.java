@@ -30,6 +30,7 @@ public class PenugasanFragment extends Fragment {
 
     private ExpandableListView mExpListPenugasan;
     private PenugasanExpListAdapter mAdapter;
+    private int lastGroupPosition;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +72,16 @@ public class PenugasanFragment extends Fragment {
 
         mAdapter = new PenugasanExpListAdapter(getActivity(), R.layout.penugasan_parent_item, R.layout.penugasan_child_item, parentItemsList);
         mExpListPenugasan.setAdapter(mAdapter);
+        mExpListPenugasan.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if(groupPosition != lastGroupPosition){
+                    mExpListPenugasan.collapseGroup(lastGroupPosition);
+                }
+
+                lastGroupPosition = groupPosition;
+            }
+        });
     }
 
     public void alignExpIndicatorToRight(){

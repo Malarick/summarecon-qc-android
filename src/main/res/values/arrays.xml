@@ -68,4 +68,11 @@
         <item>Finished</item>
         <item>Pending</item>
     </string-array>
+
+    <string-array name="arr_lbl_lantai">
+        <item>B</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>
