@@ -7,6 +7,7 @@ public class NotificationsItem {
     String itemLabel;
     int itemCounter;
     int itemIcon;
+    public Boolean counterExist = false;
 
     public String getItemLabel() {
         return itemLabel;
@@ -33,6 +34,6 @@ public class NotificationsItem {
         this.itemLabel = itemLabel;
         this.itemCounter = itemCounter;
         this.itemIcon = itemIcon;
-
+        counterExist = true;
     }
 }

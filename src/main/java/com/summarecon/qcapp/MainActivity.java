@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.ViewDragHelper;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,11 +47,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends Activity {
+    private static final String LOG_TAG = "MainActivity";
     private String username;
     private String password;
     private String response;
@@ -108,6 +112,22 @@ public class MainActivity extends Activity {
                 , R.string.desc_drawer_close
         );
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
+        try {
+            Field mDragger = mDrawerLayout.getClass().getDeclaredField("mLeftDragger"); //mRightDragger for right dragger
+            mDragger.setAccessible(true);
+            ViewDragHelper dragHelper = (ViewDragHelper) mDragger.get(mDrawerLayout);
+            Field mEdgeSize = dragHelper.getClass().getDeclaredField("mEdgeSize");
+            mEdgeSize.setAccessible(true);
+            int edge = mEdgeSize.getInt(dragHelper);
+            mEdgeSize.setInt(dragHelper, edge * 5); //may set any constant in DP
+        } catch (NoSuchFieldException e) {
+            Log.e(LOG_TAG, e.getMessage());
+        } catch (IllegalAccessException e){
+            Log.e(LOG_TAG, e.getMessage());
+        } catch (Exception e){
+            Log.e(LOG_TAG, e.getMessage());
+        }
 
         //POPULATE MASING-MASING LISTVIEW
         mListSectionDashboard = (ListView) findViewById(R.id.list_section_dashboard);
@@ -209,9 +229,9 @@ public class MainActivity extends Activity {
             }
             c++;
         }
-       // mNavDrawerAdapter = new NavDrawerAdapter(this, layout_res, itemList);
+        mNavDrawerAdapter = new NavDrawerAdapter(this, layout_res, itemList);
 
-        listView.setAdapter(new NavDrawerAdapter(this, layout_res, itemList));
+        listView.setAdapter(mNavDrawerAdapter);
         listView.setOnItemClickListener(new DrawerItemClickListener());
     }
 

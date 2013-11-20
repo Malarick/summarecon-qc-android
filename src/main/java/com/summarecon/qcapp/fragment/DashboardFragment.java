@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.summarecon.qcapp.MainActivity;
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.adapter.NotificationsAdapter;
+import com.summarecon.qcapp.db.QCDBHelper;
 import com.summarecon.qcapp.item.NotificationsItem;
 
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ public class DashboardFragment extends Fragment {
     private FragmentTransaction mFragmentTransaction;
     private Bundle fragmentArgs;
 
+    //DB
+    private QCDBHelper db;
+
     private CharSequence mTitle;
 
     public DashboardFragment() {
@@ -37,6 +41,9 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        //Init the DB
+        db = new QCDBHelper(getActivity());
 
         mTitle = getActivity().getTitle();
         mListView = (ListView) rootView.findViewById(R.id.list_notifications);
@@ -58,7 +65,11 @@ public class DashboardFragment extends Fragment {
             //Assign icon kecuali pada label yang tidak memiliki icon alias "null"
             if(iconList.get(c) != "null"){
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", getActivity().getPackageName());
-                itemList.add(new NotificationsItem(s, id_icon));
+                if(s.equals("Penugasan Baru")){
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", "B").size(), id_icon));
+                }else{
+                    itemList.add(new NotificationsItem(s, id_icon));
+                }
             }else{
                 itemList.add(new NotificationsItem(s));
             }

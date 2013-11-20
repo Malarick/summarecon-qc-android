@@ -30,13 +30,15 @@ public class PenugasanFragment extends Fragment {
 
     private ExpandableListView mExpListPenugasan;
     private PenugasanExpListAdapter mAdapter;
+    private String jenisPenugasan;
     private int lastGroupPosition;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_penugasan, container, false);
         TextView textView = (TextView) rootView.findViewById(R.id.lbl_test);
-        textView.setText(getArguments().getCharSequence(ARGS_PENUGASAN, "PENUGASAN"));
+        jenisPenugasan = getArguments().getCharSequence(ARGS_PENUGASAN, "PENUGASAN").toString();
+        textView.setText(jenisPenugasan);
 
         mExpListPenugasan = (ExpandableListView) rootView.findViewById(R.id.exp_list_penugasan);
         alignExpIndicatorToRight();
