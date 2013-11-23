@@ -15,7 +15,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -186,7 +185,8 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if(mFragment.getClass() != DashboardFragment.class){
+        Toast.makeText(this, mFragment.toString(), Toast.LENGTH_LONG).show();
+        if(mFragment != new DashboardFragment()){
             fragmentCall(new DashboardFragment());
         }else{
             this.finish();
@@ -210,22 +210,14 @@ public class MainActivity extends Activity {
         Collections.addAll(iconList, getResources().getStringArray(arr_icon_res));
         Collections.addAll(labelList, getResources().getStringArray(arr_lbl_res));
 
-
         int c = 0;
         for(String s:labelList){
             //Assign icon kecuali pada label yang tidak memiliki icon alias "null"
             if(iconList.get(c) != "null"){
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", this.getPackageName());
-                if(s.equals("Penugasan Baru")){
-                    itemList.add(new NavDrawerItem(id_icon, s, db.getAllPelaksanaan("201005469", "B").size()));
-                    Log.e("LUAR", s +"= "+ itemList.get(c).counterExist.toString());
-                }else{
-                    itemList.add(new NavDrawerItem(id_icon, s));
-                    Log.e("LUAR", s +"= "+ itemList.get(c).counterExist.toString());
-                }
+                itemList.add(new NavDrawerItem(id_icon, s));
             }else{
                 itemList.add(new NavDrawerItem(s));
-                Log.e("LUAR", s +"= "+ itemList.get(c).counterExist.toString());
             }
             c++;
         }
