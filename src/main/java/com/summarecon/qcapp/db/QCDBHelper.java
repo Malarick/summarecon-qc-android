@@ -26,6 +26,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     private static int DB_VERSION = 1;
     private static int success = 1;
     private static int failed = -1;
+    private static Context con;
 
     public QCDBHelper(final Context context) {
         super(context, Environment.getExternalStorageDirectory()
@@ -33,11 +34,15 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 + File.separator + DATABASE_NAME, null, DB_VERSION);
         Log.e("Test", Environment.getExternalStorageDirectory().toString());
 
+        /* Check database penugasan kalau ga ada create database penugasan kosongan*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Environment.getExternalStorageDirectory().toString()
                 + File.separator + FILE_DIR
                 + File.separator +DATABASE_NAME,null);
 
         onCreate(db);
+        con = context;
+        /*Check apakah ada data pada database penugasan*/
+        //checkdatabase();
     }
 
     @Override
@@ -379,24 +384,39 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-    public int insertSQLBatch() {
+    public int insertSQLBatchWifi(String data) {
+
+        Log.e("raw :",data);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Environment.getExternalStorageDirectory().toString()
                 + File.separator + FILE_DIR
                 + File.separator + DATABASE_NAME,null);
 
-        File sdcard = Environment.getExternalStorageDirectory();
-        File file = new File(sdcard,"summarecon.txt");
+        //File sdcard = Environment.getExternalStorageDirectory();
+        //File file = new File(sdcard,"summarecon.txt");
 
         db.beginTransaction();
         try
         {
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            String[] lines = data.split(System.getProperty("line.separator"));
+            //BufferedReader br = new BufferedReader(new FileReader(data));
             String line;
 
-            while ((line = br.readLine()) != null) {
-                db.execSQL(line);
+
+            for (int i=0;i< lines.length;i++){
+                line = lines[i];
+                try {
+                    db.execSQL(line);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+            //Log.e("buff :", br.readLine());
+            //while ((line = br.readLine()) != null) {
+            //    Log.e("line :",line);
+            //    db.execSQL(line);
+            //}
             db.setTransactionSuccessful();
+
         }
         catch (Exception e)
         {
@@ -404,6 +424,50 @@ public class QCDBHelper extends SQLiteOpenHelper {
             return failed;
         }finally {
             db.endTransaction();
+            db.close();
+        }
+
+        return success;
+    }
+
+    public int insertSQLBatch() {
+        //Log.e("raw :",data);
+
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Environment.getExternalStorageDirectory().toString()
+                + File.separator + FILE_DIR
+                + File.separator + DATABASE_NAME,null);
+
+        String sdcard = Environment.getExternalStorageDirectory()+ File.separator + FILE_DIR;
+        File file = new File(sdcard,"summarecon.txt");
+
+        db.beginTransaction();
+        try
+        {
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                Log.e("line",line);
+                try{
+                    db.execSQL(line);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+            db.setTransactionSuccessful();
+
+        }
+        catch (Exception e)
+        {
+            Log.e("error_batch", e.toString());
+            Toast.makeText(con,"Syncronize data Via SDcard gagal!!",Toast.LENGTH_SHORT).show();
+            return failed;
+        }finally {
+            db.endTransaction();
+            db.close();
         }
 
         return success;
@@ -2647,33 +2711,55 @@ public class QCDBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public String checkdatabase(){
-
+    public boolean checkisidatabase(){
         //SQLiteDatabase db = this.getWritableDatabase();
-        //Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER", null);
-        //String path =Environment.getExternalStorageDirectory().toString()
-        //        + File.separator + FILE_DIR
-        //        + File.separator +DATABASE_NAME;
 
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Environment.getExternalStorageDirectory().toString()
                 + File.separator + FILE_DIR
                 + File.separator +DATABASE_NAME,null);
 
-        /*
-        if (db != null)
-        {
+        Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER", null);
+
+        if (cursor.getCount() > 0) {
+                /* Baca data pebugasan secara lokal*/
+            db.close();
             return true;
-        }else
-            {
-                return false;
-            }
-        */
 
-        return db.toString();
-
-        //db.openDatabase(String path, SQLiteDatabase.CursorFactory factory, int flags, DatabaseErrorHandler errorHandler)
+        }else {
+            db.close();
+            return false;
+                /* Check file penugasan.txt */
+        }
 
 
     }
 
-  }
+    public boolean checkuserlogin(String nik, String password){
+        Log.e("parsing nik : ", nik);
+        Log.e("parsing pass : ", password);
+        //String kondisi="";
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Environment.getExternalStorageDirectory().toString()
+                + File.separator + FILE_DIR
+                + File.separator +DATABASE_NAME,null);
+
+        //if (nik!=""){
+        //    kondisi =" WHERE NO_INDUK="+nik;
+        //}
+
+        //Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER"+kondisi, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER WHERE NO_INDUK='"+nik+"' AND PASSWORD='"+password+"'", null);
+        //Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER WHERE NO_INDUK='"+nik+"'", null);
+        if (cursor.getCount() > 0) {
+            db.close();
+            return true;    /* Login Sukses*/
+
+        }else {
+            db.close();
+            return false;   /* Login Gagal*/
+        }
+
+    }
+
+
+
+}

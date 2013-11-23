@@ -2,14 +2,13 @@ package com.summarecon.qcapp;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -22,31 +21,40 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.summarecon.qcapp.db.QCDBHelper;
+import com.summarecon.qcapp.db.SQII_USER;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 public class LoginActivity extends Activity {
     //**Deklarasi variable Global
-    CheckLoginData checklogin;
     String response;
-    EditText edt_username,edt_password;
+    EditText edt_nik,edt_password;
     Button btn_login;
-    ImageView img_logo;
+    ImageView img_logo,img_sync;
     String server_ip;
     LinearLayout layout_user_input;
 
+    private static String FILE_DIR = "SummareconQC";
+    private static String DATABASE_NAME = "summarecon.txt";
 
-    //database
+    ArrayList<SQII_USER> data_user;
+
+    //init checkwifi
+    CheckWifiConnection CheckWifi;
+
+    //inisialisasi variable bertipe database
     QCDBHelper db;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -55,38 +63,21 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        db = new QCDBHelper(this);
-        /*
-        if (db.checkdatabase()== true){
-            Toast.makeText(getApplicationContext(),"Database ada di Handphone anda!!",Toast.LENGTH_SHORT).show();
-        }else
-            {
-                Toast.makeText(getApplicationContext(),"Database Tidak ada di Handphone anda!!",Toast.LENGTH_SHORT).show();
-            }
-        */
-        Toast.makeText(getApplicationContext(),db.checkdatabase(),Toast.LENGTH_SHORT).show();
+        /* Check ada setting/tidak ( kalau ada load dan pakai nilai setting tersebut ) */
+        CheckSetting();
 
-        SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (mySharedPreferences.getString("edittext_preference", "") != ""){
-            server_ip = mySharedPreferences.getString("edittext_preference", "");
-        }else
-            {
-                server_ip="192.168.100.106";
-            }
-        Toast.makeText(getApplicationContext(),"IP Server : "+server_ip,Toast.LENGTH_SHORT).show();
+        /* inisialisasi  QCDHelper*/
+        db = new QCDBHelper(this); //Buat database kosong klo belum ada/ pertama jalanin applikasi
 
-        //** Check koneksi internet
-        CheckWifiConnection check = new CheckWifiConnection();
-        check.execute();
-
-        //**initialisasi
-        checklogin = new CheckLoginData();
+        /*initialisasi check via wifi*/
+        //checkloginwifi = new CheckLoginDataViaWifi();
 
         //**inisialisasi EditText, Button, ImageView, Layout yg mau di gerakin (Logo, username, password)
-        edt_username = (EditText) findViewById(R.id.edt_username);
+        edt_nik = (EditText) findViewById(R.id.edt_nik);
         edt_password = (EditText) findViewById(R.id.edt_password);
         btn_login = (Button) findViewById(R.id.btn_login);
         img_logo =(ImageView) findViewById(R.id.img_logo);
+        img_sync =(ImageView) findViewById(R.id.img_setting);
         layout_user_input = (LinearLayout) findViewById(R.id.user_input_layout);
 
         //**inisialisasi animasi yg akan digunakan
@@ -100,28 +91,35 @@ public class LoginActivity extends Activity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //**Upload data login user untuk dicheck di server (VALID/INVALID)
-                //Di Non-Aktifkan sementara untuk testing
-                //checklogin = new CheckLoginData();
-                //checklogin.execute();
+                /* check isi dari database lokal*/
+                CheckIsiDatabaseLocal();
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                LoginActivity.this.finish();
+                /*login bypass loncat ke main menu*/
+                //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                //startActivity(intent);
+                //LoginActivity.this.finish();
+
+            }
+        });
+
+        img_sync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!db.checkisidatabase()){
+                    Toast.makeText(getApplicationContext(),"Syncronize Data...",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),edt_nik.getText().toString(),Toast.LENGTH_SHORT).show();
+                    db.insertSQLBatch();
+                }else
+                    {
+                        Toast.makeText(getApplicationContext(),"Data telah di Syncronize",Toast.LENGTH_SHORT).show();
+                    }
             }
         });
 
     }
 
-    class CheckDatabaseLocal {
-    }
-
-    class BacaDatabaseLocal {
-    }
-
-
-    //**class berisi fungsi upload data login user ke server untuk dicheck di server
-    class CheckLoginData extends AsyncTask<Void, Void, Void> {
+    //**class berisi fungsi download database user dan penugasan dari server untuk diinsert ke db lokal
+    class DownloadData extends AsyncTask<Void, Void, Void> {
         ProgressDialog loading;
 
         @Override
@@ -136,19 +134,20 @@ public class LoginActivity extends Activity {
         @Override
         protected Void doInBackground(Void... Void) {
             HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("http://"+server_ip+"/login/list.php");
+            HttpPost request = new HttpPost("http://"+server_ip+"/sqii/ext-lib/agung_qc/get-penugasan.php");
             try {
                 // Add Multipart Post Data
-                MultipartEntity entity = new MultipartEntity();
-                entity.addPart("username", new StringBody(edt_username.getText().toString()));
-                entity.addPart("password", new StringBody(edt_password.getText().toString()));
-                request.setEntity(entity);
+                //MultipartEntity entity = new MultipartEntity();
+                //entity.addPart("username", new StringBody(edt_username.getText().toString()));
+                //entity.addPart("password", new StringBody(edt_password.getText().toString()));
+                //request.setEntity(entity);
 
                 // Get response from server
                 HttpResponse httpResponse = client.execute(request);
                 response = EntityUtils.toString(httpResponse.getEntity());
 
                 Log.e("MainActivity", "Response Text : " + response);
+
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -162,29 +161,13 @@ public class LoginActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void returnValue) {
+            db.insertSQLBatchWifi(response);
             loading.dismiss();
 
-            if(response != null){
-                if (response.equals("VALID")){
-                    Toast.makeText(getApplicationContext(), "Login Sukses", Toast.LENGTH_SHORT).show();
-                    //panggil ulang task (buat refresh pengecekan biar bisa dipanggil ulang)
-                    Intent intent_main_menu = new Intent(LoginActivity.this, MainActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("username",edt_username.getText().toString());
-                    bundle.putString("password",edt_password.getText().toString());
-                    intent_main_menu.putExtra("bundle",bundle);
-                    startActivity(intent_main_menu);
-                }
-                if (response.equals("INVALID")){
-                    Toast.makeText(getApplicationContext(),"Login Gagal",Toast.LENGTH_SHORT).show();
-                }
-            }else{
-                Toast.makeText(getApplicationContext(),"Login Gagal",Toast.LENGTH_SHORT).show();
-            }
-
+             /* Check Login lwt database lokal */
+            CheckUserLogin();
         }
     }
-
     //**Class dengan fungsi check koneksi internet
     class CheckWifiConnection extends AsyncTask<Void, Void, Boolean> {
         ProgressDialog progressDialog;
@@ -194,7 +177,7 @@ public class LoginActivity extends Activity {
 
             try {
                 HttpURLConnection.setFollowRedirects(false);
-                HttpURLConnection con = (HttpURLConnection) new URL("http://"+server_ip+"/login/list.php").openConnection();
+                HttpURLConnection con = (HttpURLConnection) new URL("http://"+server_ip+"/sqii/ext-lib/agung_qc/get-penugasan.php").openConnection();
                 con.setRequestMethod("HEAD");
 
                 con.setConnectTimeout(5000); //set timeout to 5 seconds
@@ -213,7 +196,10 @@ public class LoginActivity extends Activity {
             super.onPostExecute(result);
             if (result == true){
                 Toast.makeText(getApplicationContext(),"Koneksi ke server Berhasil!",Toast.LENGTH_SHORT).show();
-            }else {
+                /* panggil fungsi downloaddata*/
+                    DownloadData ddata = new DownloadData();
+                    ddata.execute();
+            }else if (result == false){
                 Toast.makeText(getApplicationContext(),"Koneksi ke server Gagal!",Toast.LENGTH_SHORT).show();
             }
 
@@ -225,4 +211,111 @@ public class LoginActivity extends Activity {
             super.onPreExecute();
         }
     }
+
+
+   /* Fungsi Check variabel Setting*/
+   public void CheckSetting(){
+       SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+       if (mySharedPreferences.getString("edittext_preference", "") != ""){
+           server_ip = mySharedPreferences.getString("edittext_preference", "");
+       }else
+       {
+           server_ip="172.19.17.19";
+       }
+       //Toast.makeText(getApplicationContext(),"IP Server : "+server_ip,Toast.LENGTH_SHORT).show();
+   }
+
+    /* Fungsi Check database local*/
+    public void CheckIsiDatabaseLocal(){
+        /* Check isi database lokal (ada isi/engga)*/
+        if (db.checkisidatabase()){
+            /* Kalau ada ada datanya check login dari database lokal */
+            CheckUserLogin();
+        }
+        else if (!CheckFileLokal())
+         {
+             /* Initialisasi CheckWifiConnection*/
+             CheckWifi = new CheckWifiConnection();
+            /* Jalankan Check koneksi internet untuk download data*/
+             CheckWifi.execute();
+         }else
+            {
+                db.insertSQLBatch();
+                CheckUserLogin();
+            }
+
+
+    }
+
+    /* Check apa ada file Summarecon.txt di scdard*/
+    public boolean CheckFileLokal(){
+        String file_path = Environment.getExternalStorageDirectory().toString()
+                + File.separator + FILE_DIR
+                + File.separator;
+
+        File file = new File(file_path,"summarecon.txt");
+
+        if(file.exists()){
+            Toast.makeText(getApplicationContext(),"ada file summarecon.txt di sdcard",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Baca data dari sdcard",Toast.LENGTH_SHORT).show();
+
+            return true;
+        }else
+            {
+                Toast.makeText(getApplicationContext(),"tidak ada file summarecon.txt di sdcard",Toast.LENGTH_SHORT).show();
+            }
+        return false;
+    }
+
+    public void CheckUserLogin(){
+        if ((!String.valueOf(edt_nik.getText()).equals("")) && (!String.valueOf(edt_password.getText()).equals(""))){
+            if (db.checkuserlogin(String.valueOf(edt_nik.getText()),md5(String.valueOf(edt_password.getText()))))
+            {
+                Toast.makeText(getApplicationContext(),"Login Berhasil",Toast.LENGTH_SHORT).show();
+
+                /* Init intent*/
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                /* init bundle dan bawa nilai username dan password ke aktivity lain*/
+                Bundle bundle = new Bundle();
+                bundle.putString("nik",edt_nik.getText().toString());
+                bundle.putString("password",edt_password.getText().toString());
+                intent.putExtra("bundle",bundle);
+
+                startActivity(intent);
+
+                LoginActivity.this.finish();
+            }else {
+                Toast.makeText(getApplicationContext(),"Login Gagal",Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(getApplicationContext(),"Isi Nik dan Password",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /* Generate MD5 */
+    public static final String md5(final String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i = 0; i < messageDigest.length; i++) {
+                String h = Integer.toHexString(0xFF & messageDigest[i]);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 }

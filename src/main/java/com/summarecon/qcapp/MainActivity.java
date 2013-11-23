@@ -22,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.summarecon.qcapp.adapter.NavDrawerAdapter;
 import com.summarecon.qcapp.fragment.AboutFragment;
@@ -157,15 +156,15 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        Toast.makeText(this, mFragment.toString(), Toast.LENGTH_LONG).show();
-        if(mFragment != new DashboardFragment()){
-            fragmentCall(new DashboardFragment());
-        }else{
-            this.finish();
-        }
-    }
+    //@Override
+    //public void onBackPressed() {
+    //    Toast.makeText(this, mFragment.toString(), Toast.LENGTH_LONG).show();
+    //    if(mFragment != new DashboardFragment()){
+    //        fragmentCall(new DashboardFragment());
+    //    }else{
+    //        this.finish();
+    //    }
+    //}
 
     public void populateNavDrawerSection(int arr_icon_res, int arr_lbl_res, int layout_res, ListView listView, String header) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -403,7 +402,7 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(getApplicationContext(), "username: " + username + " " + "Password: " + password, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "username: " + username + " " + "Password: " + password, Toast.LENGTH_SHORT).show();
             lbl_user.setText("Welcome, "+username);
         }
     }
