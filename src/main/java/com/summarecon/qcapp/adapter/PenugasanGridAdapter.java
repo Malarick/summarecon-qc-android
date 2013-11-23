@@ -64,7 +64,7 @@ public class PenugasanGridAdapter extends BaseAdapter {
             Bitmap photoThumbnail = createThumbnail(item, 8);
             imgItem.setImageBitmap(photoThumbnail);
         }else{
-            imgItem.setBackgroundColor(item.getRes());
+            imgItem.setImageResource(item.getRes());
         }
 
         return view;

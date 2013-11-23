@@ -28,6 +28,7 @@ import java.io.IOException;
 public class TakePictureActivity extends Activity {
 
     final static String LOG_TAG = "TakePictureActivity";
+    final static String PHOTO_URL = "PHOTO_URL";
     final static int ZOOM_IN_INCREMENT = 2;
     final static int ZOOM_OUT_INCREMENT = -2;
     private Camera camera;
@@ -198,7 +199,7 @@ public class TakePictureActivity extends Activity {
 
     public void previewPhoto(String filePath){
         Intent intent = new Intent(this, MarkPictureActivity.class);
-        intent.putExtra("PHOTO_URL", filePath);
+        intent.putExtra(PHOTO_URL, filePath);
         this.startActivity(intent);
     }
 }

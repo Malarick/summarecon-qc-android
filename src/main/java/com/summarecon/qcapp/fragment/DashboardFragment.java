@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.adapter.NotificationsAdapter;
 import com.summarecon.qcapp.db.QCDBHelper;
-import com.summarecon.qcapp.db.SQII_USER;
 import com.summarecon.qcapp.item.NotificationsItem;
 
 import java.util.ArrayList;
@@ -23,8 +21,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class DashboardFragment extends Fragment {
-    private String nik;
-    private String password;
     private ListView mListView;
     private NotificationsAdapter mNotificationsAdapter;
     private Fragment mFragment;
@@ -32,14 +28,10 @@ public class DashboardFragment extends Fragment {
     private FragmentTransaction mFragmentTransaction;
     private Bundle fragmentArgs;
 
+    //DB
+    private QCDBHelper db;
+
     private CharSequence mTitle;
-
-    private Bundle bundle = new Bundle();
-
-    //Init database
-    QCDBHelper db = new QCDBHelper(getActivity());
-
-    TextView txt_profile_name,txt_profile_nik,txt_profile_jabatan;
 
     public DashboardFragment() {
     }
@@ -48,24 +40,12 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
+        //Init the DB
+        db = new QCDBHelper(getActivity());
+
         mTitle = getActivity().getTitle();
         mListView = (ListView) rootView.findViewById(R.id.list_notifications);
         populateNotifications(mListView);
-
-        txt_profile_name = (TextView) rootView.findViewById(R.id.txt_profile_name);
-        txt_profile_nik = (TextView) rootView.findViewById(R.id.txt_profile_nik);
-        txt_profile_jabatan = (TextView) rootView.findViewById(R.id.txt_profile_position);
-
-        bundle = getActivity().getIntent().getBundleExtra("bundle");
-        if(bundle != null){
-            nik = bundle.getString("nik");
-            password = bundle.getString("password");
-            Toast.makeText(getActivity().getApplicationContext(),nik,Toast.LENGTH_SHORT).show();
-            Toast.makeText(getActivity().getApplicationContext(),password,Toast.LENGTH_SHORT).show();
-
-            DataUserProfile(nik);
-        }
-
 
         return rootView;
     }
@@ -83,7 +63,11 @@ public class DashboardFragment extends Fragment {
             //Assign icon kecuali pada label yang tidak memiliki icon alias "null"
             if(iconList.get(c) != "null"){
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", getActivity().getPackageName());
-                itemList.add(new NotificationsItem(s, id_icon));
+                if(s.equals("Penugasan Baru")){
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", "B").size(), id_icon));
+                }else{
+                    itemList.add(new NotificationsItem(s, id_icon));
+                }
             }else{
                 itemList.add(new NotificationsItem(s));
             }
@@ -104,6 +88,7 @@ public class DashboardFragment extends Fragment {
 
     public void fragmentPenugasan(Fragment fragment, CharSequence jenisPenugasan){
         mFragment = fragment;
+        MainActivity.mFragment = mFragment;
         fragmentArgs = new Bundle();
 
         fragmentArgs.putCharSequence(PenugasanFragment.ARGS_PENUGASAN, jenisPenugasan);
@@ -119,28 +104,5 @@ public class DashboardFragment extends Fragment {
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
             selectItem(adapterView, view, position);
         }
-    }
-
-    public void DataUserProfile(String no_induk){
-        ArrayList<SQII_USER> user_profile;
-        user_profile = (ArrayList<SQII_USER>) db.getUser(no_induk);
-        //user_profile.get(0).getNAMA();
-
-        if ((user_profile.get(0).getFLAG_PETUGAS_ADMIN()).equals("Y"))
-        {
-            txt_profile_jabatan.setText("ADMIN QC");
-        }else if ((user_profile.get(0).getFLAG_SM()).equals( "Y"))
-        {
-            txt_profile_jabatan.setText("SITE MANAGER");
-        }else if ((user_profile.get(0).getFLAG_PENGAWAS()).equals("Y"))
-        {
-            txt_profile_jabatan.setText("PENGAWAS QC");
-        }else if ((user_profile.get(0).getFLAG_PETUGAS_QC()).equals("Y"))
-        {
-            txt_profile_jabatan.setText("PETUGAS QC");
-        }
-
-        txt_profile_name.setText(user_profile.get(0).getNAMA());
-        txt_profile_nik.setText(user_profile.get(0).getNO_INDUK());
     }
 }

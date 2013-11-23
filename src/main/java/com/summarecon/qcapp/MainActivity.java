@@ -22,8 +22,10 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.summarecon.qcapp.adapter.NavDrawerAdapter;
+import com.summarecon.qcapp.db.QCDBHelper;
 import com.summarecon.qcapp.fragment.AboutFragment;
 import com.summarecon.qcapp.fragment.DashboardFragment;
 import com.summarecon.qcapp.fragment.PenugasanFragment;
@@ -48,6 +50,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends Activity {
+    private static final String LOG_TAG = "MainActivity";
     private String username;
     private String password;
     private String response;
@@ -64,10 +67,13 @@ public class MainActivity extends Activity {
     private ListView mListSectionEtc;
 
     //Fragment
-    private Fragment mFragment;
+    public static Fragment mFragment;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private Bundle fragmentArgs;
+
+    //DB
+    private QCDBHelper db;
 
     private TextView lbl_user;
     private Bundle bundle = new Bundle();
@@ -77,6 +83,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //DB setup
+        db = new QCDBHelper(this);
 
         //SETUP THE ACTION BARS
         setupActionBar();
@@ -100,6 +109,22 @@ public class MainActivity extends Activity {
                 , R.string.desc_drawer_close
         );
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
+        try {
+            Field mDragger = mDrawerLayout.getClass().getDeclaredField("mLeftDragger"); //mRightDragger for right dragger
+            mDragger.setAccessible(true);
+            ViewDragHelper dragHelper = (ViewDragHelper) mDragger.get(mDrawerLayout);
+            Field mEdgeSize = dragHelper.getClass().getDeclaredField("mEdgeSize");
+            mEdgeSize.setAccessible(true);
+            int edge = mEdgeSize.getInt(dragHelper);
+            mEdgeSize.setInt(dragHelper, edge * 5); //may set any constant in DP
+        } catch (NoSuchFieldException e) {
+            Log.e(LOG_TAG, e.getMessage());
+        } catch (IllegalAccessException e){
+            Log.e(LOG_TAG, e.getMessage());
+        } catch (Exception e){
+            Log.e(LOG_TAG, e.getMessage());
+        }
 
         //POPULATE MASING-MASING LISTVIEW
         mListSectionDashboard = (ListView) findViewById(R.id.list_section_dashboard);
@@ -156,15 +181,15 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    //@Override
-    //public void onBackPressed() {
-    //    Toast.makeText(this, mFragment.toString(), Toast.LENGTH_LONG).show();
-    //    if(mFragment != new DashboardFragment()){
-    //        fragmentCall(new DashboardFragment());
-    //    }else{
-    //        this.finish();
-    //    }
-    //}
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, mFragment.toString(), Toast.LENGTH_LONG).show();
+        if(mFragment != new DashboardFragment()){
+            fragmentCall(new DashboardFragment());
+        }else{
+            this.finish();
+        }
+    }
 
     public void populateNavDrawerSection(int arr_icon_res, int arr_lbl_res, int layout_res, ListView listView, String header) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -402,7 +427,7 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            //Toast.makeText(getApplicationContext(), "username: " + username + " " + "Password: " + password, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "username: " + username + " " + "Password: " + password, Toast.LENGTH_SHORT).show();
             lbl_user.setText("Welcome, "+username);
         }
     }

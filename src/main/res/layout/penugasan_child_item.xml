@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"/>
 
     <GridView
         android:id="@+id/grid_penugasan_child"
         android:layout_height="150dp"
         android:layout_width="match_parent"
+        android:layout_centerVertical="true"
         android:columnWidth="40dp"
         android:numColumns="auto_fit"
         android:verticalSpacing="10dp"
@@ -16,4 +22,4 @@
         android:stretchMode="columnWidth"
         android:gravity="center"/>
 
-</LinearLayout>
+</RelativeLayout>

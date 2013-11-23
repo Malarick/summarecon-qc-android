@@ -1,6 +1,7 @@
 package com.summarecon.qcapp.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,13 @@ public class NotificationsAdapter extends BaseAdapter {
         imgView_icon = (ImageView) view.findViewById(R.id.notifications_item_icon);
         imgView_icon.setImageResource(item.getItemIcon());
 
+        if(item.counterExist){
+            TextView textView_counter = (TextView) view.findViewById(R.id.notifications_item_counter);
+            textView_counter.setText(String.valueOf(item.getItemCounter()));
+            textView_counter.setBackgroundResource(R.drawable.rectangle);
+        }
+
+        Log.e("NOTIF", item.getItemLabel() + " = " + item.counterExist.toString());
 
         return view;
     }

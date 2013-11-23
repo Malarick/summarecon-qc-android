@@ -30,12 +30,15 @@ public class PenugasanFragment extends Fragment {
 
     private ExpandableListView mExpListPenugasan;
     private PenugasanExpListAdapter mAdapter;
+    private String jenisPenugasan;
+    private int lastGroupPosition;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_penugasan, container, false);
         TextView textView = (TextView) rootView.findViewById(R.id.lbl_test);
-        textView.setText(getArguments().getCharSequence(ARGS_PENUGASAN, "PENUGASAN"));
+        jenisPenugasan = getArguments().getCharSequence(ARGS_PENUGASAN, "PENUGASAN").toString();
+        textView.setText(jenisPenugasan);
 
         mExpListPenugasan = (ExpandableListView) rootView.findViewById(R.id.exp_list_penugasan);
         alignExpIndicatorToRight();
@@ -71,6 +74,16 @@ public class PenugasanFragment extends Fragment {
 
         mAdapter = new PenugasanExpListAdapter(getActivity(), R.layout.penugasan_parent_item, R.layout.penugasan_child_item, parentItemsList);
         mExpListPenugasan.setAdapter(mAdapter);
+        mExpListPenugasan.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if(groupPosition != lastGroupPosition){
+                    mExpListPenugasan.collapseGroup(lastGroupPosition);
+                }
+
+                lastGroupPosition = groupPosition;
+            }
+        });
     }
 
     public void alignExpIndicatorToRight(){
