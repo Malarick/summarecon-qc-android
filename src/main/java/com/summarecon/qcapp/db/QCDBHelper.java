@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 10/19/13.
+ * Created by Wahyu Wibisana on 10/19/13.
  */
 
 public class QCDBHelper extends SQLiteOpenHelper {
@@ -43,17 +43,18 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        /*Table SQII_CATATAN*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_CATATAN (" +
-                "KD_CATATAN DECIMAL(18,0), " +
-                "KD_ITEM_DEFECT DECIMAL(18,0), " +
-                "DESKRIPSI VARCHAR(255), " +
+
+        /*Table SQII_KAWASAN*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_KAWASAN (" +
+                "KD_KAWASAN CHAR(3), " +
+                "NM_KAWASAN VARCHAR(50), " +
+                "KONEKSI VARCHAR(50), " +
                 "FLAG_AKTIF CHAR(1), " +
                 "USER_ENTRY VARCHAR(50), " +
                 "TGL_ENTRY DATETIME, " +
                 "USER_UPDATE VARCHAR(50), " +
                 "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_CATATAN))"
+                "PRIMARY KEY (KD_KAWASAN))"
         );
 
         /*Table SQII_CLUSTER*/
@@ -66,29 +67,92 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "TGL_ENTRY DATETIME, " +
                 "USER_UPDATE VARCHAR(50), " +
                 "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_CLUSTER, KD_KAWASAN))"
+                "PRIMARY KEY (KD_CLUSTER, KD_KAWASAN)" +
+                "FOREIGN KEY (KD_KAWASAN) REFERENCES SQII_KAWASAN (KD_KAWASAN))"
         );
 
-        /*Table SQII_HISTORY_UPLOAD*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_HISTORY_UPLOAD (" +
-                "ROWID DECIMAL(18,0), " +
-                "NO_PENUGASAN VARCHAR(50), " +
-                "KD_KAWASAN CHAR(3), " +
-                "BLOK VARCHAR(50), " +
-                "NOMOR VARCHAR(50), " +
+        /*Table SQII_JENIS_BANGUNAN*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_JENIS_BANGUNAN (" +
                 "KD_JENIS VARCHAR(50), " +
-                "KD_TIPE VARCHAR(50), " +
-                "KD_ITEM_DEFECT DECIMAL(18,0), " +
-                "KD_LANTAI DECIMAL(18,0), " +
-                "URUT_PELAKSANAAN DECIMAL(18,0), " +
-                "URUT_FOTO DECIMAL(18,0), " +
-                "TGL_UPLOAD DATETIME, " +
-                "CATATAN VARCHAR(255), " +
+                "NM_JENIS VARCHAR(50), " +
+                "FLAG_AKTIF CHAR(1), " +
                 "USER_ENTRY VARCHAR(50), " +
                 "TGL_ENTRY DATETIME, " +
                 "USER_UPDATE VARCHAR(50), " +
                 "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (ROWID))"
+                "PRIMARY KEY (KD_JENIS))"
+        );
+
+        /*Table SQII_TIPE_RUMAH*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_TIPE_RUMAH (" +
+                "KD_JENIS VARCHAR(50), " +
+                "KD_TIPE VARCHAR(50), " +
+                "KD_KAWASAN CHAR(3), " +
+                "KD_CLUSTER VARCHAR(50), " +
+                "NM_TIPE VARCHAR(50), " +
+                "FLAG_AKTIF CHAR(1), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (KD_JENIS, KD_TIPE, KD_KAWASAN)" +
+                "FOREIGN KEY (KD_JENIS) REFERENCES SQII_JENIS_BANGUNAN (KD_JENIS)" +
+                "FOREIGN KEY (KD_KAWASAN) REFERENCES SQII_KAWASAN (KD_KAWASAN))"
+        );
+
+        /*Table SQII_LANTAI*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_LANTAI (" +
+                "KD_LANTAI DECIMAL(18,0), " +
+                "NM_LANTAI VARCHAR(50), " +
+                "FLAG_AKTIF CHAR(1), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (KD_LANTAI))"
+        );
+
+        /*Table SQII_USER*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_USER (" +
+                "NO_INDUK VARCHAR(50), " +
+                "NAMA VARCHAR(50), " +
+                "PASSWORD VARCHAR(255), " +
+                "FLAG_PETUGAS_ADMIN CHAR(1), " +
+                "FLAG_SM CHAR(1), " +
+                "FLAG_PETUGAS_QC CHAR(1), " +
+                "FLAG_PENGAWAS CHAR(1), " +
+                "FLAG_AKTIF CHAR(1), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (NO_INDUK))"
+        );
+
+        /*Table SQII_KAWASAN_USER*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_KAWASAN_USER (" +
+                "NO_INDUK VARCHAR(50), " +
+                "KD_KAWASAN CHAR(3), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (NO_INDUK, KD_KAWASAN)" +
+                "FOREIGN KEY (KD_KAWASAN) REFERENCES SQII_KAWASAN (KD_KAWASAN))"
+        );
+
+        /*Table SQII_KATEGORI_DEFECT*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_KATEGORI_DEFECT (" +
+                "KD_KATEGORI_DEFECT DECIMAL(18,0), " +
+                "NM_KATEGORI_DEFECT VARCHAR(50), " +
+                "DESKRIPSI VARCHAR(255), " +
+                "TIPE_DENAH CHAR(1), " +
+                "FLAG_AKTIF CHAR(1), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (KD_KATEGORI_DEFECT))"
         );
 
         /*Table SQII_ITEM_DEFECT*/
@@ -101,7 +165,138 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "TGL_ENTRY DATETIME, " +
                 "USER_UPDATE VARCHAR(50), " +
                 "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_ITEM_DEFECT))"
+                "PRIMARY KEY (KD_ITEM_DEFECT)" +
+                "FOREIGN KEY (KD_KATEGORI_DEFECT) REFERENCES SQII_KATEGORI_DEFECT (KD_KATEGORI_DEFECT))"
+        );
+
+        /*Table SQII_ITEM_DEFECT_TIPE_RUMAH*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_ITEM_DEFECT_TIPE_RUMAH (" +
+                "KD_JENIS VARCHAR(50), " +
+                "KD_TIPE VARCHAR(50), " +
+                "KD_KAWASAN CHAR(3), " +
+                "KD_ITEM_DEFECT DECIMAL(18,0), " +
+                "KD_LANTAI DECIMAL(18,0), " +
+                "JML_KUOTA_FOTO DECIMAL(18,0), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (KD_JENIS, KD_TIPE, KD_KAWASAN, KD_ITEM_DEFECT, KD_LANTAI)" +
+                "FOREIGN KEY (KD_ITEM_DEFECT) REFERENCES SQII_ITEM_DEFECT (KD_ITEM_DEFECT)" +
+                "FOREIGN KEY (KD_LANTAI) REFERENCES SQII_LANTAI (KD_LANTAI)" +
+                "FOREIGN KEY (KD_JENIS, KD_TIPE, KD_KAWASAN) REFERENCES SQII_TIPE_RUMAH (KD_JENIS, KD_TIPE, KD_KAWASAN))"
+        );
+
+        /*Table SQII_KONTRAKTOR*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_KONTRAKTOR (" +
+                "KD_KONTRAKTOR DECIMAL(18,0), " +
+                "KD_KAWASAN CHAR(3), " +
+                "KODE_KONTRAKTOR VARCHAR(50), " +
+                "NM_KONTRAKTOR VARCHAR(255), " +
+                "FLAG_AKTIF CHAR(1), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (KD_KONTRAKTOR)" +
+                "FOREIGN KEY (KD_KAWASAN) REFERENCES SQII_KAWASAN (KD_KAWASAN))"
+        );
+
+        /*Table SQII_LANTAI_TIPE_RUMAH*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_LANTAI_TIPE_RUMAH (" +
+                "KD_LANTAI DECIMAL(18,0), " +
+                "KD_JENIS VARCHAR(50), " +
+                "KD_TIPE VARCHAR(50), " +
+                "KD_KAWASAN CHAR(3), " +
+                "PATH_FOTO_DENAH VARCHAR(255), " +
+                "SRC_FOTO_DENAH VARCHAR(255), " +
+                "PATH_FOTO_DENAH_2 VARCHAR(255), " +
+                "SRC_FOTO_DENAH_2 VARCHAR(255), " +
+                "KETERANGAN VARCHAR(255), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (KD_LANTAI, KD_JENIS, KD_TIPE, KD_KAWASAN)" +
+                "FOREIGN KEY (KD_LANTAI) REFERENCES SQII_LANTAI (KD_LANTAI)" +
+                "FOREIGN KEY (KD_JENIS, KD_TIPE, KD_KAWASAN) REFERENCES SQII_TIPE_RUMAH (KD_JENIS, KD_TIPE, KD_KAWASAN))"
+        );
+
+        /*Table SQII_CATATAN*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_CATATAN (" +
+                "KD_CATATAN DECIMAL(18,0), " +
+                "KD_ITEM_DEFECT DECIMAL(18,0), " +
+                "DESKRIPSI VARCHAR(255), " +
+                "FLAG_AKTIF CHAR(1), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (KD_CATATAN)" +
+                "FOREIGN KEY (KD_ITEM_DEFECT) REFERENCES SQII_ITEM_DEFECT (KD_ITEM_DEFECT))"
+        );
+
+        /*Table SQII_STOK*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_STOK (" +
+                "KD_KAWASAN CHAR(3), " +
+                "BLOK VARCHAR(50), " +
+                "NOMOR VARCHAR(50), " +
+                "KD_CLUSTER VARCHAR(50), " +
+                "STOK_ID NUMERIC(18,0), " +
+                "KD_KONTRAKTOR DECIMAL(18,0), " +
+                "KD_JENIS VARCHAR(50), " +
+                "KD_TIPE VARCHAR(50), " +
+                "PENGAWAS VARCHAR(50), " +
+                "SM VARCHAR(50), " +
+                "PETUGAS_QC VARCHAR(50), " +
+                "DESKRIPSI VARCHAR(255), " +
+                "FLAG_AKTIF CHAR(1), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (KD_KAWASAN, BLOK, NOMOR)" +
+                "FOREIGN KEY (KD_CLUSTER, KD_KAWASAN) REFERENCES SQII_CLUSTER (KD_CLUSTER, KD_KAWASAN)" +
+                "FOREIGN KEY (KD_KONTRAKTOR) REFERENCES SQII_KONTRAKTOR (KD_KONTRAKTOR)" +
+                "FOREIGN KEY (KD_JENIS, KD_TIPE, KD_KAWASAN) REFERENCES SQII_TIPE_RUMAH (KD_JENIS, KD_TIPE, KD_KAWASAN))"
+        );
+
+        /*Table SQII_PENUGASAN*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_PENUGASAN (" +
+                "NO_PENUGASAN VARCHAR(50), " +
+                "TGL_PENUGASAN DATETIME, " +
+                "KD_KAWASAN CHAR(3), " +
+                "KD_CLUSTER VARCHAR(50), " +
+                "PETUGAS_QC VARCHAR(50), " +
+                "DESKRIPSI VARCHAR(255), " +
+                "STATUS_SELESAI CHAR(1), " +
+                "FLAG_AKTIF CHAR(1), " +
+                "FLAG_BATAL CHAR(1), " +
+                "USER_BATAL VARCHAR(50), " +
+                "TGL_BATAL DATETIME, " +
+                "ALASAN_BATAL VARCHAR(255), " +
+                "USER_ENTRY VARCHAR(50), " +
+                "TGL_ENTRY DATETIME, " +
+                "USER_UPDATE VARCHAR(50), " +
+                "TGL_UPDATE DATETIME, " +
+                "PRIMARY KEY (NO_PENUGASAN)" +
+                "FOREIGN KEY (KD_KAWASAN) REFERENCES SQII_KAWASAN (KD_KAWASAN)" +
+                "FOREIGN KEY (KD_CLUSTER, KD_KAWASAN) REFERENCES SQII_CLUSTER (KD_CLUSTER, KD_KAWASAN))"
+        );
+
+        /*Table SQII_PENUGASAN_DETIL*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_PENUGASAN_DETIL (" +
+                "NO_PENUGASAN VARCHAR(50), " +
+                "KD_KAWASAN CHAR(3), " +
+                "BLOK VARCHAR(50), " +
+                "NOMOR VARCHAR(50), " +
+                "KD_CLUSTER VARCHAR(50), " +
+                "PENGAWAS VARCHAR(50), " +
+                "SM VARCHAR(50), " +
+                "PRIMARY KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR)" +
+                "FOREIGN KEY (NO_PENUGASAN) REFERENCES SQII_PENUGASAN (NO_PENUGASAN)" +
+                "FOREIGN KEY (KD_CLUSTER, KD_KAWASAN) REFERENCES SQII_CLUSTER (KD_CLUSTER, KD_KAWASAN)" +
+                "FOREIGN KEY (KD_KAWASAN, BLOK, NOMOR) REFERENCES SQII_STOK (KD_KAWASAN, BLOK, NOMOR))"
         );
 
         /*Table SQII_ITEM_DEFECT_PENUGASAN*/
@@ -126,116 +321,10 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "TGL_ENTRY DATETIME, " +
                 "USER_UPDATE VARCHAR(50), " +
                 "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI))"
-        );
-
-        /*Table SQII_ITEM_DEFECT_TIPE_RUMAH*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_ITEM_DEFECT_TIPE_RUMAH (" +
-                "KD_JENIS VARCHAR(50), " +
-                "KD_TIPE VARCHAR(50), " +
-                "KD_KAWASAN CHAR(3), " +
-                "KD_ITEM_DEFECT DECIMAL(18,0), " +
-                "KD_LANTAI DECIMAL(18,0), " +
-                "JML_KUOTA_FOTO DECIMAL(18,0), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_JENIS, KD_TIPE, KD_KAWASAN, KD_ITEM_DEFECT, KD_LANTAI))"
-        );
-
-        /*Table SQII_JENIS_BANGUNAN*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_JENIS_BANGUNAN (" +
-                "KD_JENIS VARCHAR(50), " +
-                "NM_JENIS VARCHAR(50), " +
-                "FLAG_AKTIF CHAR(1), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_JENIS))"
-        );
-
-        /*Table SQII_KATEGORI_DEFECT*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_KATEGORI_DEFECT (" +
-                "KD_KATEGORI_DEFECT DECIMAL(18,0), " +
-                "NM_KATEGORI_DEFECT VARCHAR(50), " +
-                "DESKRIPSI VARCHAR(255), " +
-                "TIPE_DENAH CHAR(1), " +
-                "FLAG_AKTIF CHAR(1), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_KATEGORI_DEFECT))"
-        );
-
-        /*Table SQII_KAWASAN*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_KAWASAN (" +
-                "KD_KAWASAN CHAR(3), " +
-                "NM_KAWASAN VARCHAR(50), " +
-                "KONEKSI VARCHAR(50), " +
-                "FLAG_AKTIF CHAR(1), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_KAWASAN))"
-        );
-
-        /*Table SQII_KAWASAN_USER*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_KAWASAN_USER (" +
-                "NO_INDUK VARCHAR(50), " +
-                "KD_KAWASAN CHAR(3), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (NO_INDUK, KD_KAWASAN))"
-        );
-
-        /*Table SQII_KONTRAKTOR*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_KONTRAKTOR (" +
-                "KD_KONTRAKTOR DECIMAL(18,0), " +
-                "KD_KAWASAN CHAR(3), " +
-                "KODE_KONTRAKTOR VARCHAR(50), " +
-                "NM_KONTRAKTOR VARCHAR(255), " +
-                "FLAG_AKTIF CHAR(1), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_KONTRAKTOR))"
-        );
-
-        /*Table SQII_LANTAI*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_LANTAI (" +
-                "KD_LANTAI DECIMAL(18,0), " +
-                "NM_LANTAI VARCHAR(50), " +
-                "FLAG_AKTIF CHAR(1), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_LANTAI))"
-        );
-
-        /*Table SQII_LANTAI_TIPE_RUMAH*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_LANTAI_TIPE_RUMAH (" +
-                "KD_LANTAI DECIMAL(18,0), " +
-                "KD_JENIS VARCHAR(50), " +
-                "KD_TIPE VARCHAR(50), " +
-                "KD_KAWASAN CHAR(3), " +
-                "PATH_FOTO_DENAH VARCHAR(255), " +
-                "SRC_FOTO_DENAH VARCHAR(255), " +
-                "PATH_FOTO_DENAH_2 VARCHAR(255), " +
-                "SRC_FOTO_DENAH_2 VARCHAR(255), " +
-                "KETERANGAN VARCHAR(255), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_LANTAI, KD_JENIS, KD_TIPE, KD_KAWASAN))"
+                "PRIMARY KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI)" +
+                "FOREIGN KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR) REFERENCES SQII_PENUGASAN_DETIL (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR)" +
+                "FOREIGN KEY (KD_JENIS, KD_TIPE, KD_KAWASAN, KD_ITEM_DEFECT, KD_LANTAI) REFERENCES SQII_ITEM_DEFECT_TIPE_RUMAH (KD_JENIS, KD_TIPE, KD_KAWASAN, KD_ITEM_DEFECT, KD_LANTAI)" +
+                "FOREIGN KEY (KD_CLUSTER, KD_KAWASAN) REFERENCES SQII_CLUSTER (KD_CLUSTER, KD_KAWASAN))"
         );
 
         /*Table SQII_PELAKSANAAN*/
@@ -282,94 +371,31 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "TGL_UPDATE DATETIME, " +
                 "PARENT_ROWID DECIMAL(18,0), " +
                 "ROWID DECIMAL(18,0), " +
-                "PRIMARY KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI, URUT_PELAKSANAAN, URUT_FOTO))"
+                "PRIMARY KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI, URUT_PELAKSANAAN, URUT_FOTO)" +
+                "FOREIGN KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI) REFERENCES SQII_ITEM_DEFECT_PENUGASAN (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI))"
         );
 
-        /*Table SQII_PENUGASAN*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_PENUGASAN (" +
-                "NO_PENUGASAN VARCHAR(50), " +
-                "TGL_PENUGASAN DATETIME, " +
-                "KD_KAWASAN CHAR(3), " +
-                "KD_CLUSTER VARCHAR(50), " +
-                "PETUGAS_QC VARCHAR(50), " +
-                "DESKRIPSI VARCHAR(255), " +
-                "STATUS_SELESAI CHAR(1), " +
-                "FLAG_AKTIF CHAR(1), " +
-                "FLAG_BATAL CHAR(1), " +
-                "USER_BATAL VARCHAR(50), " +
-                "TGL_BATAL DATETIME, " +
-                "ALASAN_BATAL VARCHAR(255), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (NO_PENUGASAN))"
-        );
-
-        /*Table SQII_PENUGASAN_DETIL*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_PENUGASAN_DETIL (" +
+        /*Table SQII_HISTORY_UPLOAD*/
+        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_HISTORY_UPLOAD (" +
+                "ROWID DECIMAL(18,0), " +
                 "NO_PENUGASAN VARCHAR(50), " +
                 "KD_KAWASAN CHAR(3), " +
                 "BLOK VARCHAR(50), " +
                 "NOMOR VARCHAR(50), " +
-                "KD_CLUSTER VARCHAR(50), " +
-                "PENGAWAS VARCHAR(50), " +
-                "SM VARCHAR(50), " +
-                "PRIMARY KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR))"
-        );
-
-        /*Table SQII_STOK*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_STOK (" +
-                "KD_KAWASAN CHAR(3), " +
-                "BLOK VARCHAR(50), " +
-                "NOMOR VARCHAR(50), " +
-                "KD_CLUSTER VARCHAR(50), " +
-                "STOK_ID NUMERIC(18,0), " +
-                "KD_KONTRAKTOR DECIMAL(18,0), " +
                 "KD_JENIS VARCHAR(50), " +
                 "KD_TIPE VARCHAR(50), " +
-                "PENGAWAS VARCHAR(50), " +
-                "SM VARCHAR(50), " +
-                "PETUGAS_QC VARCHAR(50), " +
-                "DESKRIPSI VARCHAR(255), " +
-                "FLAG_AKTIF CHAR(1), " +
+                "KD_ITEM_DEFECT DECIMAL(18,0), " +
+                "KD_LANTAI DECIMAL(18,0), " +
+                "URUT_PELAKSANAAN DECIMAL(18,0), " +
+                "URUT_FOTO DECIMAL(18,0), " +
+                "TGL_UPLOAD DATETIME, " +
+                "CATATAN VARCHAR(255), " +
                 "USER_ENTRY VARCHAR(50), " +
                 "TGL_ENTRY DATETIME, " +
                 "USER_UPDATE VARCHAR(50), " +
                 "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_KAWASAN, BLOK, NOMOR))"
-        );
-
-        /*Table SQII_TIPE_RUMAH*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_TIPE_RUMAH (" +
-                "KD_JENIS VARCHAR(50), " +
-                "KD_TIPE VARCHAR(50), " +
-                "KD_KAWASAN CHAR(3), " +
-                "KD_CLUSTER VARCHAR(50), " +
-                "NM_TIPE VARCHAR(50), " +
-                "FLAG_AKTIF CHAR(1), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (KD_JENIS, KD_TIPE, KD_KAWASAN))"
-        );
-
-        /*Table SQII_USER*/
-        db.execSQL("CREATE TABLE IF NOT EXISTS SQII_USER (" +
-                "NO_INDUK VARCHAR(50), " +
-                "NAMA VARCHAR(50), " +
-                "PASSWORD VARCHAR(255), " +
-                "FLAG_PETUGAS_ADMIN CHAR(1), " +
-                "FLAG_SM CHAR(1), " +
-                "FLAG_PETUGAS_QC CHAR(1), " +
-                "FLAG_PENGAWAS CHAR(1), " +
-                "FLAG_AKTIF CHAR(1), " +
-                "USER_ENTRY VARCHAR(50), " +
-                "TGL_ENTRY DATETIME, " +
-                "USER_UPDATE VARCHAR(50), " +
-                "TGL_UPDATE DATETIME, " +
-                "PRIMARY KEY (NO_INDUK))"
+                "PRIMARY KEY (ROWID)" +
+                "FOREIGN KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI, URUT_PELAKSANAAN, URUT_FOTO) REFERENCES SQII_ITEM_DEFECT_PENUGASAN (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI, URUT_PELAKSANAAN, URUT_FOTO))"
         );
 
         db.close();
@@ -892,8 +918,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 item.setKD_ITEM_DEFECT(cursor.getFloat(6));
                 item.setKD_LANTAI(cursor.getFloat(7));
                 item.setKD_CLUSTER(cursor.getString(8));
-                item.setJML_FOTO_PENUGASAN(cursor.getString(9));
-                item.setJML_FOTO_REALISASI(cursor.getString(10));
+                item.setJML_FOTO_PENUGASAN(cursor.getFloat(9));
+                item.setJML_FOTO_REALISASI(cursor.getFloat(10));
                 item.setFLAG_AKTIF(cursor.getString(11));
                 item.setFLAG_BATAL(cursor.getString(12));
                 item.setUSER_BATAL(cursor.getString(13));
@@ -903,6 +929,55 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 item.setTGL_ENTRY(cursor.getString(17));
                 item.setUSER_UPDATE(cursor.getString(18));
                 item.setTGL_UPDATE(cursor.getString(19));
+
+                listData.add(item);
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return listData;
+    }
+
+    public List<SQII_ITEM_DEFECT_PENUGASAN> getAllItemDefectPenugasanFoto() {
+        String query;
+
+        List<SQII_ITEM_DEFECT_PENUGASAN> listData = new ArrayList<SQII_ITEM_DEFECT_PENUGASAN>();
+        /*SQLiteDatabase db = this.getReadableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Environment.getExternalStorageDirectory().toString()
+                + File.separator + FILE_DIR
+                + File.separator +DATABASE_NAME,null);
+
+        query = "SELECT  SQII_CLUSTER.NM_CLUSTER, \n" +
+                "        SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER, \n" +
+                "        SQII_ITEM_DEFECT_PENUGASAN.BLOK, \n" +
+                "        SQII_ITEM_DEFECT_PENUGASAN.NOMOR, \n" +
+                "        SQII_ITEM_DEFECT_PENUGASAN.NO_PENUGASAN,\n" +
+                "        SQII_PENUGASAN.TGL_PENUGASAN, \n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0)\n" +
+                "FROM    SQII_ITEM_DEFECT_PENUGASAN\n" +
+                "        \n" +
+                "        INNER JOIN SQII_CLUSTER\n" +
+                "        ON  SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER = SQII_CLUSTER.KD_CLUSTER AND\n" +
+                "            SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN = SQII_CLUSTER.KD_KAWASAN\n" +
+                "        \n" +
+                "        INNER JOIN SQII_PENUGASAN\n" +
+                "        ON  SQII_ITEM_DEFECT_PENUGASAN.NO_PENUGASAN = SQII_PENUGASAN.NO_PENUGASAN";
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                SQII_ITEM_DEFECT_PENUGASAN item = new SQII_ITEM_DEFECT_PENUGASAN();
+
+                item.setNM_CLUSTER(cursor.getString(0));
+                item.setKD_CLUSTER(cursor.getString(1));
+                item.setBLOK(cursor.getString(2));
+                item.setNOMOR(cursor.getString(3));
+                item.setNO_PENUGASAN(cursor.getString(4));
+                item.setTGL_PENUGASAN(cursor.getString(5));
+                item.setJML_FOTO_PENUGASAN(cursor.getFloat(6));
+                item.setJML_FOTO_REALISASI(cursor.getFloat(7));
 
                 listData.add(item);
             }
@@ -1898,6 +1973,41 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
+    public List<SQII_PELAKSANAAN> getAllPelaksanaan(String kdCluster, String kdKawasan, String blok, String nomor, String tglPenugasan) {
+        String query;
+
+        List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
+        /*SQLiteDatabase db = this.getReadableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Environment.getExternalStorageDirectory().toString()
+                + File.separator + FILE_DIR
+                + File.separator +DATABASE_NAME,null);
+
+        query = "SELECT  SQII_PELAKSANAAN.PATH_FOTO_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT\n" +
+                "FROM    SQII_PELAKSANAAN\n" +
+                "WHERE   KD_CLUSTER = '" + kdCluster + "'\n" +
+                "        KD_KAWASAN = '" + kdKawasan + "'\n" +
+                "        BLOK = '" + blok + "'\n" +
+                "        NOMOR = '" + nomor + "'\n" +
+                "        TANGGAL_PENUGASAN = '" + tglPenugasan + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                SQII_PELAKSANAAN item = new SQII_PELAKSANAAN();
+
+                item.setPATH_FOTO_DEFECT(cursor.getString(0));
+                item.setSRC_FOTO_DEFECT(cursor.getString(1));
+
+                listData.add(item);
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return listData;
+    }
+
     public List<SQII_PELAKSANAAN> getAllPelaksanaan(String petugasQC, String jenisPenugasan) {
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
@@ -1905,6 +2015,74 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 + File.separator + FILE_DIR
                 + File.separator +DATABASE_NAME,null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_PELAKSANAAN WHERE PETUGAS_QC = '" + petugasQC + "' AND JENIS_PENUGASAN = '" + jenisPenugasan + "'", null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                SQII_PELAKSANAAN item = new SQII_PELAKSANAAN();
+
+                item.setNO_PENUGASAN(cursor.getString(0));
+                item.setKD_KAWASAN(cursor.getString(1));
+                item.setBLOK(cursor.getString(2));
+                item.setNOMOR(cursor.getString(3));
+                item.setKD_JENIS(cursor.getString(4));
+                item.setKD_TIPE(cursor.getString(5));
+                item.setKD_ITEM_DEFECT(cursor.getFloat(6));
+                item.setKD_LANTAI(cursor.getFloat(7));
+                item.setURUT_PELAKSANAAN(cursor.getFloat(8));
+                item.setURUT_FOTO(cursor.getFloat(9));
+                item.setJENIS_PENUGASAN(cursor.getString(10));
+                item.setTGL_PELAKSANAAN(cursor.getString(11));
+                item.setPETUGAS_QC(cursor.getString(12));
+                item.setPENGAWAS(cursor.getString(13));
+                item.setSM(cursor.getString(14));
+                item.setSTATUS_DEFECT(cursor.getString(15));
+                item.setSTATUS_PEKERJAAN(cursor.getString(16));
+                item.setCATATAN(cursor.getString(17));
+                item.setFLAG_UPLOAD(cursor.getString(18));
+                item.setTGL_UPLOAD(cursor.getString(19));
+                item.setPATH_FOTO_DENAH(cursor.getString(20));
+                item.setSRC_FOTO_DENAH(cursor.getString(21));
+                item.setPATH_FOTO_DEFECT(cursor.getString(22));
+                item.setSRC_FOTO_DEFECT(cursor.getString(23));
+                item.setLAMA_PERBAIKAN(cursor.getFloat(24));
+                item.setTGL_ENTRY_LAMA_PERBAIKAN(cursor.getString(25));
+                item.setTGL_JATUH_TEMPO_PERBAIKAN(cursor.getString(26));
+                item.setFLAG_AKTIF(cursor.getString(27));
+                item.setUSER_AKTIF(cursor.getString(28));
+                item.setTGL_AKTIF(cursor.getString(29));
+                item.setALASAN_AKTIF(cursor.getString(30));
+                item.setFLAG_BATAL(cursor.getString(31));
+                item.setUSER_BATAL(cursor.getString(32));
+                item.setTGL_BATAL(cursor.getString(33));
+                item.setALASAN_BATAL(cursor.getString(34));
+                item.setSTATUS_SIMPAN(cursor.getString(35));
+                item.setUSER_ENTRY(cursor.getString(36));
+                item.setTGL_ENTRY(cursor.getString(37));
+                item.setUSER_UPDATE(cursor.getString(38));
+                item.setTGL_UPDATE(cursor.getString(39));
+                item.setPARENT_ROWID(cursor.getFloat(40));
+                item.setROWID(cursor.getFloat(41));
+
+                listData.add(item);
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return listData;
+    }
+
+    public List<SQII_PELAKSANAAN> getAllPelaksanaanPenugasan(String tglPenugasan, String petugasQC) {
+        String query;
+
+        List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
+        /*SQLiteDatabase db = this.getReadableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Environment.getExternalStorageDirectory().toString()
+                + File.separator + FILE_DIR
+                + File.separator +DATABASE_NAME,null);
+
+        query = "SELECT * FROM SQII_PELAKSANAAN WHERE TGL_PENUGASAN = '" + tglPenugasan + "' AND PETUGAS_QC = '" + petugasQC + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 SQII_PELAKSANAAN item = new SQII_PELAKSANAAN();

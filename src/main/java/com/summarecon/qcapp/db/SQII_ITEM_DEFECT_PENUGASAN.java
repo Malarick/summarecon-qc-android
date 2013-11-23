@@ -13,8 +13,8 @@ public class SQII_ITEM_DEFECT_PENUGASAN {
     private Float KD_ITEM_DEFECT;
     private Float KD_LANTAI;
     private String KD_CLUSTER;
-    private String JML_FOTO_PENUGASAN;
-    private String JML_FOTO_REALISASI;
+    private Float JML_FOTO_PENUGASAN;
+    private Float JML_FOTO_REALISASI;
     private String FLAG_AKTIF;
     private String FLAG_BATAL;
     private String USER_BATAL;
@@ -24,6 +24,25 @@ public class SQII_ITEM_DEFECT_PENUGASAN {
     private String TGL_ENTRY;
     private String USER_UPDATE;
     private String TGL_UPDATE;
+
+    private String NM_CLUSTER;
+    private String TGL_PENUGASAN;
+
+    public String getNM_CLUSTER() {
+        return NM_CLUSTER;
+    }
+
+    public void setNM_CLUSTER(String NM_CLUSTER) {
+        this.NM_CLUSTER = NM_CLUSTER;
+    }
+
+    public String getTGL_PENUGASAN() {
+        return TGL_PENUGASAN;
+    }
+
+    public void setTGL_PENUGASAN(String TGL_PENUGASAN) {
+        this.TGL_PENUGASAN = TGL_PENUGASAN;
+    }
 
     public String getNO_PENUGASAN() {
         return NO_PENUGASAN;
@@ -97,19 +116,19 @@ public class SQII_ITEM_DEFECT_PENUGASAN {
         this.KD_CLUSTER = KD_CLUSTER;
     }
 
-    public String getJML_FOTO_PENUGASAN() {
+    public Float getJML_FOTO_PENUGASAN() {
         return JML_FOTO_PENUGASAN;
     }
 
-    public void setJML_FOTO_PENUGASAN(String JML_FOTO_PENUGASAN) {
+    public void setJML_FOTO_PENUGASAN(Float JML_FOTO_PENUGASAN) {
         this.JML_FOTO_PENUGASAN = JML_FOTO_PENUGASAN;
     }
 
-    public String getJML_FOTO_REALISASI() {
+    public Float getJML_FOTO_REALISASI() {
         return JML_FOTO_REALISASI;
     }
 
-    public void setJML_FOTO_REALISASI(String JML_FOTO_REALISASI) {
+    public void setJML_FOTO_REALISASI(Float JML_FOTO_REALISASI) {
         this.JML_FOTO_REALISASI = JML_FOTO_REALISASI;
     }
 
