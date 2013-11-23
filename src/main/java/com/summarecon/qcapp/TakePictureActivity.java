@@ -31,6 +31,7 @@ public class TakePictureActivity extends Activity {
     final static String PHOTO_URL = "PHOTO_URL";
     final static int ZOOM_IN_INCREMENT = 2;
     final static int ZOOM_OUT_INCREMENT = -2;
+    FrameLayout cameraLayout;
     private Camera camera;
     private CameraPreview cameraPreview;
     private Camera.Parameters parameters;
@@ -41,14 +42,7 @@ public class TakePictureActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_picture);
 
-        //initialize the camera
-        cameraPreview = new CameraPreview(this);
-        camera = cameraPreview.getCamera();
-        parameters = camera.getParameters();
-
-        //Tampilkan camera pada FrameLayout
-        FrameLayout cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
-        cameraLayout.addView(cameraPreview);
+        cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
 
         //Handle listener untuk zoomControl
         setZoomControlListener();
@@ -60,6 +54,26 @@ public class TakePictureActivity extends Activity {
                 takePicture();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        //initialize the camera
+        cameraPreview = new CameraPreview(this);
+        camera = cameraPreview.getCamera();
+        Log.e(LOG_TAG, camera.toString());
+        parameters = camera.getParameters();
+
+        //Tampilkan camera pada FrameLayout
+        cameraLayout.addView(cameraPreview);
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cameraLayout.removeAllViews();
     }
 
     @Override

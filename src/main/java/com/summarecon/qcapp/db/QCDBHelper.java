@@ -424,7 +424,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 try {
                     db.execSQL(line);
                 } catch (Exception e) {
-
+                    Log.e("ERROR_BATCH_READLINE", e.toString());
                 }
             }
             db.setTransactionSuccessful();

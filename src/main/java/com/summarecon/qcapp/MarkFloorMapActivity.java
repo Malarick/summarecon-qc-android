@@ -43,7 +43,7 @@ public class MarkFloorMapActivity extends Activity {
         intent = getIntent();
         mapPreview = (ImageView) findViewById(R.id.img_map_preview);
         loadMap();
-        populateSpinner(R.id.ddl_lantai);
+        //populateSpinner(R.id.ddl_lantai);
 
         mapPreview.setOnTouchListener(new DrawingListener());
     }

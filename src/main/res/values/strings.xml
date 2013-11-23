@@ -15,6 +15,8 @@
 
     <string name="hint_send_message">Enter your text here...</string>
     <string name="hint_note">Note</string>
+    <string name="hint_status_defect">Status Defect</string>
+    <string name="hint_status_pekerjaan">Status Pekerjaan</string>
 
     <string name="btn_send">Send</string>
     <string name="btn_camera">Take Picture</string>
@@ -33,5 +35,13 @@
     <string name="lbl_parent_blok">Blok: A3/4</string>
     <string name="lbl_parent_total_images">Foto defects: 8/10</string>
 
+    <!-- referensi arr_lbl_jenis_defect -->
+    <string name="N">No Defect</string>
+    <string name="S">Sedang</string>
+    <string name="B">Berat</string>
+
+    <!-- referensi arr_lbl_staus -->
+    <string name="P">Pending</string>
+    <string name="F">Finish</string>
 
 </resources>
