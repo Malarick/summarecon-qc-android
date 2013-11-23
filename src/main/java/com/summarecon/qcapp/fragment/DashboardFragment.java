@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.summarecon.qcapp.MainActivity;
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.adapter.NotificationsAdapter;
 import com.summarecon.qcapp.db.QCDBHelper;

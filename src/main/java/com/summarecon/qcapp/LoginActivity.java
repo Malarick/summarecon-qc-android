@@ -2,9 +2,7 @@ package com.summarecon.qcapp;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -83,7 +81,7 @@ public class LoginActivity extends Activity {
         checklogin = new CheckLoginData();
 
         //**inisialisasi EditText, Button, ImageView, Layout yg mau di gerakin (Logo, username, password)
-        edt_username = (EditText) findViewById(R.id.edt_username);
+        edt_username = (EditText) findViewById(R.id.edt_nik);
         edt_password = (EditText) findViewById(R.id.edt_password);
         btn_login = (Button) findViewById(R.id.btn_login);
         img_logo =(ImageView) findViewById(R.id.img_logo);
