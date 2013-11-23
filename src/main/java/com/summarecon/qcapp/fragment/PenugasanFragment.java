@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.adapter.PenugasanExpListAdapter;
+import com.summarecon.qcapp.db.QCDBHelper;
+import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.item.PenugasanChildItem;
 import com.summarecon.qcapp.item.PenugasanParentItem;
 
@@ -32,10 +34,14 @@ public class PenugasanFragment extends Fragment {
     private PenugasanExpListAdapter mAdapter;
     private String jenisPenugasan;
     private int lastGroupPosition;
+    private QCDBHelper db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_penugasan, container, false);
+
+        db = new QCDBHelper(getActivity());
+
         TextView textView = (TextView) rootView.findViewById(R.id.lbl_test);
         jenisPenugasan = getArguments().getCharSequence(ARGS_PENUGASAN, "PENUGASAN").toString();
         textView.setText(jenisPenugasan);
@@ -48,6 +54,7 @@ public class PenugasanFragment extends Fragment {
     }
 
     public void populateExpListPenugasan(){
+        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan("201005469", "B");
         List<String> parentLblList = new ArrayList<String>();
         //List<String> childLblList = new ArrayList<String>();
         List<PenugasanParentItem> parentItemsList = new ArrayList<PenugasanParentItem>();
@@ -56,13 +63,14 @@ public class PenugasanFragment extends Fragment {
         //Collections.addAll(childLblList, getResources().getStringArray(R.array.arr_lbl_child_items));
 
         int c = 0;
-        for(String sParent : parentLblList){
+        int row_id = 1;
+        for(SQII_PELAKSANAAN sParent : parentList){
             PenugasanParentItem parentItem = new PenugasanParentItem(
-                    sParent
-                    , getString(R.string.lbl_parent_tgl)
-                    , getString(R.string.lbl_parent_blok)
-                    , getString(R.string.lbl_parent_total_images));
-            if(c == 1){
+                    row_id + ". " + sParent.getKD_KAWASAN()
+                    , sParent.getTGL_PELAKSANAAN()
+                    , "Blok: " + sParent.getBLOK()
+                    , "Target foto: " + sParent.getURUT_FOTO().toString());
+            if((c % 2) == 0){
                 parentItem.getChildItemList().add(new PenugasanChildItem(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()
                         + File.separator + "Camera" + File.separator));
             }else{
@@ -70,6 +78,7 @@ public class PenugasanFragment extends Fragment {
             }
             parentItemsList.add(parentItem);
             c++;
+            row_id++;
         }
 
         mAdapter = new PenugasanExpListAdapter(getActivity(), R.layout.penugasan_parent_item, R.layout.penugasan_child_item, parentItemsList);

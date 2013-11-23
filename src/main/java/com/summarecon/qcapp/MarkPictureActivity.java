@@ -13,11 +13,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.summarecon.qcapp.adapter.SpinnerListAdapter;
+import com.summarecon.qcapp.customview.CustomScrollView;
+import com.summarecon.qcapp.db.QCDBHelper;
+import com.summarecon.qcapp.db.SQII_ITEM_DEFECT;
+import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.item.SpinnerListItem;
 
 import java.io.ByteArrayOutputStream;
@@ -42,9 +49,19 @@ public class MarkPictureActivity extends Activity {
     private Canvas canvas;
     private SpinnerListAdapter adapter;
 
+    private EditText mNote;
+    private CustomScrollView rootScrollView;
+
+    private QCDBHelper db;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mark_picture);
+
+        db = new QCDBHelper(this);
+
+        rootScrollView = (CustomScrollView) findViewById(R.id.root_scroll_view);
+        mNote = (EditText) findViewById(R.id.edt_note);
 
         //get Intent
         intent = getIntent();
@@ -133,13 +150,28 @@ public class MarkPictureActivity extends Activity {
         photoPreview.setImageBitmap(photoBitmap);
     }
 
+    private void populateSpinner(int res_spinner){
+        List<SQII_PELAKSANAAN> listPelaksanaan = db.getAllPelaksanaan();
+        List<SpinnerListItem> spinnerListItems = new ArrayList<SpinnerListItem>();
+
+        for(SQII_PELAKSANAAN s : listPelaksanaan){
+            spinnerListItems.add(new SpinnerListItem(s.getSTATUS_PEKERJAAN()));
+        }
+
+        adapter = new SpinnerListAdapter(this, R.layout.spinner_item, spinnerListItems);
+
+        Spinner spinner = (Spinner) findViewById(res_spinner);
+        spinner.setAdapter(adapter);
+    }
+
     private void populateSpinner(int res_arr, int res_spinner){
         List<String> stringArrayList = new ArrayList<String>();
         List<SpinnerListItem> spinnerListItems = new ArrayList<SpinnerListItem>();
 
         Collections.addAll(stringArrayList, getResources().getStringArray(res_arr));
-        for(String s:stringArrayList){
-            spinnerListItems.add(new SpinnerListItem(s));
+        for(String key : stringArrayList){
+            String value = getString(getResources().getIdentifier(key, "string", this.getPackageName()));
+            spinnerListItems.add(new SpinnerListItem(value));
         }
 
         adapter = new SpinnerListAdapter(this, R.layout.spinner_item, spinnerListItems);
@@ -157,6 +189,7 @@ public class MarkPictureActivity extends Activity {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             switch (motionEvent.getAction() & MotionEvent.ACTION_MASK){
                 case MotionEvent.ACTION_DOWN:
+                    rootScrollView.setScrollAble(false);
                     startX = motionEvent.getX();
                     startY = motionEvent.getY();
                     break;
@@ -166,6 +199,9 @@ public class MarkPictureActivity extends Activity {
                     drawLineOnCanvas();
                     startX = motionEvent.getX();
                     startY = motionEvent.getY();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    rootScrollView.setScrollAble(true);
                     break;
             }
 

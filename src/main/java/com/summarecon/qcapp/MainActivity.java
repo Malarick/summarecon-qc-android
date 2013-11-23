@@ -311,7 +311,6 @@ public class MainActivity extends Activity {
             HttpPost request = new HttpPost("http://192.168.100.127/login/list.php");
             //HttpResponse response = null;
 
-
             try {
                 //response = client.execute(request);
                 //text = EntityUtils.toString(response.getEntity());

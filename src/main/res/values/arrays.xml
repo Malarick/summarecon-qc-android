@@ -56,17 +56,14 @@
 
 
     <string-array name="arr_lbl_jenis_defect">
-        <item>Retak</item>
-        <item>Bocor</item>
-        <item>Miring</item>
-        <item>Tidak simetris</item>
-        <item>Patah</item>
+        <item>N</item>
+        <item>S</item>
+        <item>B</item>
     </string-array>
 
     <string-array name="arr_lbl_status">
-        <item>New</item>
-        <item>Finished</item>
-        <item>Pending</item>
+        <item>P</item>
+        <item>F</item>
     </string-array>
 
     <string-array name="arr_lbl_lantai">
