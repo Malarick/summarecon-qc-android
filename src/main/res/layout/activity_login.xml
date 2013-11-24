@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFF"
     tools:context=".SplashScreenActivity">
 
     <LinearLayout
@@ -24,6 +23,7 @@
         <EditText
             android:id="@+id/edt_nik"
             android:hint="Nik"
+            android:text="201005469"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:paddingLeft="30dp"
@@ -72,21 +72,14 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
-    <ImageView
-        android:id="@+id/img_setting"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_sync"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"/>
-    <!-- android:src="@drawable/ic_settings_dark" -->
-
     <TextView
         android:id="@+id/lbl_footer"
         android:layout_alignParentBottom="true"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
         android:text="\u00a9 2013 PT.Summarecon Tbk."/>
 
 </RelativeLayout>

@@ -15,15 +15,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.summarecon.qcapp.adapter.SpinnerListAdapter;
 import com.summarecon.qcapp.customview.CustomScrollView;
 import com.summarecon.qcapp.db.QCDBHelper;
-import com.summarecon.qcapp.db.SQII_ITEM_DEFECT;
 import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.item.SpinnerListItem;
 
@@ -58,7 +55,7 @@ public class MarkPictureActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mark_picture);
 
-        db = new QCDBHelper(this);
+        db = QCDBHelper.getInstance(this);
 
         rootScrollView = (CustomScrollView) findViewById(R.id.root_scroll_view);
         mNote = (EditText) findViewById(R.id.edt_note);

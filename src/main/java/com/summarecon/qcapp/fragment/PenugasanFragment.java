@@ -1,7 +1,7 @@
 package com.summarecon.qcapp.fragment;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.adapter.PenugasanExpListAdapter;
@@ -21,7 +20,6 @@ import com.summarecon.qcapp.item.PenugasanChildItem;
 import com.summarecon.qcapp.item.PenugasanParentItem;
 
 import java.io.File;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +38,7 @@ public class PenugasanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_penugasan, container, false);
 
-        db = new QCDBHelper(getActivity());
+        db = QCDBHelper.getInstance(getActivity());
 
         TextView textView = (TextView) rootView.findViewById(R.id.lbl_test);
         jenisPenugasan = getArguments().getCharSequence(ARGS_PENUGASAN, "PENUGASAN").toString();

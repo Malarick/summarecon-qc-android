@@ -12,9 +12,25 @@
         -->
     </style>
 
-    <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:windowBackground">@drawable/window_background</item>
+        <item name="android:listViewStyle">@style/TransparentListView</item>
+        <item name="android:expandableListViewStyle">@style/TransparentExpandableListView</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppThemeNoTitle" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <!-- ListView Hack to prevent going Black while scrolling -->
+    <style name="TransparentListView" parent="@android:style/Widget.ListView">
+        <item name="android:cacheColorHint">@android:color/transparent</item>
+    </style>
+
+    <style name="TransparentExpandableListView" parent="@android:style/Widget.ExpandableListView">
+        <item name="android:cacheColorHint">@android:color/transparent</item>
     </style>
 
 </resources>
