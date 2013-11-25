@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.summarecon.qcapp.MainActivity;
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.adapter.NotificationsAdapter;
-import com.summarecon.qcapp.core.Configuration;
+import com.summarecon.qcapp.core.QCConfig;
 import com.summarecon.qcapp.db.QCDBHelper;
 import com.summarecon.qcapp.db.SQII_USER;
 import com.summarecon.qcapp.item.NotificationsItem;
@@ -99,12 +99,12 @@ public class DashboardFragment extends Fragment {
             //Assign icon kecuali pada label yang tidak memiliki icon alias "null"
             if (iconList.get(c) != "null") {
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", getActivity().getPackageName());
-                if (s.equals(Configuration.JENIS_PENUGASAN_SISA)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", Configuration.KD_PENUGASAN_SISA).size(), id_icon));
-                } else if (s.equals(Configuration.JENIS_PENUGASAN_ULANG)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", Configuration.KD_PENUGASAN_ULANG).size(), id_icon));
-                } else if (s.equals(Configuration.JENIS_PENUGASAN_BARU)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", Configuration.KD_PENUGASAN_BARU).size(), id_icon));
+                if (s.equals(QCConfig.JENIS_PENUGASAN_SISA)) {
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_SISA).size(), id_icon));
+                } else if (s.equals(QCConfig.JENIS_PENUGASAN_ULANG)) {
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_ULANG).size(), id_icon));
+                } else if (s.equals(QCConfig.JENIS_PENUGASAN_BARU)) {
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_BARU).size(), id_icon));
                 } else {
                     itemList.add(new NotificationsItem(s, id_icon));
                 }

@@ -4,12 +4,12 @@ import android.app.Application;
 
 public class SummareconQCApplication extends Application {
 
-    private Configuration config;
+    private QCConfig config;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        config = new Configuration(this);
+        config = new QCConfig(this);
     }
 
 }

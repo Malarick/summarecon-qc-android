@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 import java.io.File;
 
-public class Configuration {
+public class QCConfig {
 
     //PENUGASAN
     public static String JENIS_PENUGASAN_SISA = "Penugasan Sisa";
@@ -25,7 +25,7 @@ public class Configuration {
     public static String DATABASE_SCRIPT_NAME = "summareconqc.sql";
     private static SharedPreferences sharedPreferences;
 
-    public Configuration(Context context) {
+    public QCConfig(Context context) {
         APP_EXTERNAL_IMAGES_DIRECTORY = context.getExternalFilesDir("images").getAbsolutePath();
         APP_EXTERNAL_CACHE_DIRECTORY = context.getExternalCacheDir().getAbsolutePath();
         APP_EXTERNAL_TEMP_DIRECTORY = context.getExternalFilesDir("tmp").getAbsolutePath();

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.summarecon.qcapp.core.Configuration;
+import com.summarecon.qcapp.core.QCConfig;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +24,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     private static int failed = -1;
 
     private QCDBHelper(Context context) {
-        super(context, Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null, DB_VERSION);
+        super(context, QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null, DB_VERSION);
         getReadableDatabase();
     }
 
@@ -399,8 +399,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
     }
 
     public int executeSQLScriptFile() {
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
-        File dbScriptFile = new File(Configuration.APP_EXTERNAL_DATABASE_SCRIPT_DIRECTORY);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        File dbScriptFile = new File(QCConfig.APP_EXTERNAL_DATABASE_SCRIPT_DIRECTORY);
 
         db.beginTransaction();
         try {
@@ -432,7 +432,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_CATATAN> getAllCatatan() {
         List<SQII_CATATAN> listData = new ArrayList<SQII_CATATAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_CATATAN", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -458,7 +458,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertCatatan(SQII_CATATAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_CATATAN", item.getKD_CATATAN());
@@ -478,7 +478,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateCatatan(SQII_CATATAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_CATATAN", item.getKD_CATATAN());
@@ -524,7 +524,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_CLUSTER> getAllCluster() {
         List<SQII_CLUSTER> listData = new ArrayList<SQII_CLUSTER>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_CLUSTER", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -550,7 +550,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertCluster(SQII_CLUSTER item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
         values.put("KD_CLUSTER", item.getKD_CLUSTER());
         values.put("KD_KAWASAN", item.getKD_KAWASAN());
@@ -569,7 +569,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateCluster(SQII_CLUSTER item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
         values.put("KD_CLUSTER", item.getKD_CLUSTER());
         values.put("KD_KAWASAN", item.getKD_KAWASAN());
@@ -616,7 +616,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_HISTORY_UPLOAD> getAllHistoryUpload() {
         List<SQII_HISTORY_UPLOAD> listData = new ArrayList<SQII_HISTORY_UPLOAD>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_HISTORY_UPLOAD", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -651,7 +651,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertHistoryUpload(SQII_HISTORY_UPLOAD item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("ROWID", item.getROWID());
@@ -680,7 +680,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateHistoryUpload(SQII_HISTORY_UPLOAD item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("ROWID", item.getROWID());
@@ -737,7 +737,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_ITEM_DEFECT> getAllItemDefect() {
         List<SQII_ITEM_DEFECT> listData = new ArrayList<SQII_ITEM_DEFECT>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_ITEM_DEFECT", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -763,7 +763,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertItemDefect(SQII_ITEM_DEFECT item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_ITEM_DEFECT", item.getKD_ITEM_DEFECT());
@@ -783,7 +783,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateCatatan(SQII_ITEM_DEFECT item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
         values.put("KD_ITEM_DEFECT", item.getKD_ITEM_DEFECT());
         values.put("NM_ITEM_DEFECT", item.getNM_ITEM_DEFECT());
@@ -828,7 +828,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_ITEM_DEFECT_PENUGASAN> getAllItemDefectPenugasan() {
         List<SQII_ITEM_DEFECT_PENUGASAN> listData = new ArrayList<SQII_ITEM_DEFECT_PENUGASAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_ITEM_DEFECT_PENUGASAN", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -869,7 +869,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
         List<SQII_ITEM_DEFECT_PENUGASAN> listData = new ArrayList<SQII_ITEM_DEFECT_PENUGASAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
 
         query = "SELECT  SQII_CLUSTER.NM_CLUSTER, \n" +
                 "        SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER, \n" +
@@ -913,7 +913,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertItemDefectPenugasan(SQII_ITEM_DEFECT_PENUGASAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
@@ -945,7 +945,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateItemDefectPenugasan(SQII_ITEM_DEFECT_PENUGASAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
@@ -1017,7 +1017,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_ITEM_DEFECT_TIPE_RUMAH> getAllItemDefectTipeRumah() {
         List<SQII_ITEM_DEFECT_TIPE_RUMAH> listData = new ArrayList<SQII_ITEM_DEFECT_TIPE_RUMAH>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_ITEM_DEFECT_TIPE_RUMAH", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -1045,7 +1045,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertItemDefectTipeRumah(SQII_ITEM_DEFECT_TIPE_RUMAH item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_JENIS", item.getKD_JENIS());
@@ -1067,7 +1067,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateItemDefectTipeRumah(SQII_ITEM_DEFECT_TIPE_RUMAH item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_JENIS", item.getKD_JENIS());
@@ -1123,7 +1123,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_JENIS_BANGUNAN> getAllJenisBangunan() {
         List<SQII_JENIS_BANGUNAN> listData = new ArrayList<SQII_JENIS_BANGUNAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_JENIS_BANGUNAN", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -1148,7 +1148,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertJenisBangunan(SQII_JENIS_BANGUNAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_JENIS", item.getKD_JENIS());
@@ -1167,7 +1167,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateJenisBangunan(SQII_JENIS_BANGUNAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_JENIS", item.getKD_JENIS());
@@ -1212,7 +1212,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_KATEGORI_DEFECT> getAllKategoriDefect() {
         List<SQII_KATEGORI_DEFECT> listData = new ArrayList<SQII_KATEGORI_DEFECT>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_KATEGORI_DEFECT", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -1239,7 +1239,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertKategoriDefect(SQII_KATEGORI_DEFECT item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_KATEGORI_DEFECT", item.getKD_KATEGORI_DEFECT());
@@ -1260,7 +1260,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateKategoriDefect(SQII_KATEGORI_DEFECT item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_KATEGORI_DEFECT", item.getKD_KATEGORI_DEFECT());
@@ -1307,7 +1307,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_KAWASAN> getAllKawasan() {
         List<SQII_KAWASAN> listData = new ArrayList<SQII_KAWASAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_KAWASAN", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -1333,7 +1333,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertKawasan(SQII_KAWASAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_KAWASAN", item.getKD_KAWASAN());
@@ -1353,7 +1353,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateKawasan(SQII_KAWASAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_KAWASAN", item.getKD_KAWASAN());
@@ -1399,7 +1399,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_KAWASAN_USER> getAllKawasanUser() {
         List<SQII_KAWASAN_USER> listData = new ArrayList<SQII_KAWASAN_USER>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_KAWASAN_USER", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -1423,7 +1423,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertKawasanUser(SQII_KAWASAN_USER item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_INDUK", item.getNO_INDUK());
@@ -1441,7 +1441,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateKawasanUser(SQII_KAWASAN_USER item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_INDUK", item.getNO_INDUK());
@@ -1487,7 +1487,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_KONTRAKTOR> getAllKontraktor() {
         List<SQII_KONTRAKTOR> listData = new ArrayList<SQII_KONTRAKTOR>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_KONTRAKTOR", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -1514,7 +1514,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertKontraktor(SQII_KONTRAKTOR item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_KONTRAKTOR", item.getKD_KONTRAKTOR());
@@ -1535,7 +1535,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateKontraktor(SQII_KONTRAKTOR item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_KONTRAKTOR", item.getKD_KONTRAKTOR());
@@ -1582,7 +1582,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_LANTAI> getAllLantai() {
         List<SQII_LANTAI> listData = new ArrayList<SQII_LANTAI>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_LANTAI", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -1607,7 +1607,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertLantai(SQII_LANTAI item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_LANTAI", item.getKD_LANTAI());
@@ -1626,7 +1626,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateLantai(SQII_LANTAI item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_LANTAI", item.getKD_LANTAI());
@@ -1671,7 +1671,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_LANTAI_TIPE_RUMAH> getAllLantaiTipeRumah() {
         List<SQII_LANTAI_TIPE_RUMAH> listData = new ArrayList<SQII_LANTAI_TIPE_RUMAH>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_LANTAI_TIPE_RUMAH", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -1702,7 +1702,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertLantaiTipeRumah(SQII_LANTAI_TIPE_RUMAH item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_LANTAI", item.getKD_LANTAI());
@@ -1727,7 +1727,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateLantaiTipeRumah(SQII_LANTAI_TIPE_RUMAH item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_LANTAI", item.getKD_LANTAI());
@@ -1784,7 +1784,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_PELAKSANAAN> getAllPelaksanaan() {
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_PELAKSANAAN", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -1847,7 +1847,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
 
         query = "SELECT  SQII_PELAKSANAAN.PATH_FOTO_DEFECT,\n" +
                 "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT\n" +
@@ -1879,7 +1879,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
         /*tes*/
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_PELAKSANAAN WHERE PETUGAS_QC = '" + petugasQC + "' AND JENIS_PENUGASAN = '" + jenisPenugasan + "'", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -1942,7 +1942,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
 
         query = "SELECT * FROM SQII_PELAKSANAAN WHERE TGL_PENUGASAN = '" + tglPenugasan + "' AND PETUGAS_QC = '" + petugasQC + "'";
 
@@ -2005,7 +2005,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertPelaksanaan(SQII_PELAKSANAAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
@@ -2059,7 +2059,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updatePelaksanaan(SQII_PELAKSANAAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
@@ -2157,7 +2157,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_PENUGASAN> getAllPenugasan() {
         List<SQII_PENUGASAN> listData = new ArrayList<SQII_PENUGASAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_PENUGASAN", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -2191,7 +2191,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertPenugasan(SQII_PENUGASAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
@@ -2219,7 +2219,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updatePenugasan(SQII_PENUGASAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
@@ -2273,7 +2273,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_PENUGASAN_DETIL> getAllPenugasanDetil() {
         List<SQII_PENUGASAN_DETIL> listData = new ArrayList<SQII_PENUGASAN_DETIL>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_PENUGASAN_DETIL", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -2298,7 +2298,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertPenugasanDetil(SQII_PENUGASAN_DETIL item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
@@ -2317,7 +2317,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updatePenugasanDetil(SQII_PENUGASAN_DETIL item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
@@ -2368,7 +2368,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_STOK> getAllStok() {
         List<SQII_STOK> listData = new ArrayList<SQII_STOK>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_STOK", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -2403,7 +2403,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertStok(SQII_STOK item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_KAWASAN", item.getKD_KAWASAN());
@@ -2432,7 +2432,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateStok(SQII_STOK item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_KAWASAN", item.getKD_KAWASAN());
@@ -2491,7 +2491,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_TIPE_RUMAH> getAllTipeRumah() {
         List<SQII_TIPE_RUMAH> listData = new ArrayList<SQII_TIPE_RUMAH>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_TIPE_RUMAH", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -2519,7 +2519,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertTipeRumah(SQII_TIPE_RUMAH item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_JENIS", item.getKD_JENIS());
@@ -2541,7 +2541,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateTipeRumah(SQII_TIPE_RUMAH item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("KD_JENIS", item.getKD_JENIS());
@@ -2593,7 +2593,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_USER> getUser(String nik) {
         List<SQII_USER> listData = new ArrayList<SQII_USER>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER WHERE NO_INDUK LIKE '%" + nik + "%'", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -2624,7 +2624,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     public List<SQII_USER> getAllUser() {
         List<SQII_USER> listData = new ArrayList<SQII_USER>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -2654,7 +2654,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public long insertUser(SQII_USER item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_INDUK", item.getNO_INDUK());
@@ -2678,7 +2678,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
     public boolean updateUser(SQII_USER item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
         values.put("NO_INDUK", item.getNO_INDUK());
@@ -2722,7 +2722,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     }
 
     public boolean checkTabelPenugasan() {
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER", null);
         if (cursor.getCount() > 0) {
             db.close();
@@ -2734,7 +2734,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     }
 
     public boolean checkLogin(String nik, String password) {
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(Configuration.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER WHERE NO_INDUK='" + nik + "' AND PASSWORD='" + password + "'", null);
         if (cursor.getCount() > 0) {
             db.close();

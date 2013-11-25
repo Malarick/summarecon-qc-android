@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.summarecon.qcapp.core.Configuration;
+import com.summarecon.qcapp.core.QCConfig;
 import com.summarecon.qcapp.db.QCDBHelper;
 import com.summarecon.qcapp.utils.MD5Hash;
 
@@ -46,7 +46,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        server_ip = Configuration.getSharedPreferences().getString("edittext_preference", "192.168.100.106");
+        server_ip = QCConfig.getSharedPreferences().getString("edittext_preference", "192.168.100.106");
 
         //**inisialisasi EditText, Button, ImageView, Layout yg mau di gerakin (Logo, username, password)
         edt_nik = (EditText) findViewById(R.id.edt_nik);
@@ -100,7 +100,7 @@ public class LoginActivity extends Activity {
     }
 
     private boolean checkFileSQLPenugasan() {
-        File file = new File(Configuration.APP_EXTERNAL_DATABASE_SCRIPT_DIRECTORY);
+        File file = new File(QCConfig.APP_EXTERNAL_DATABASE_SCRIPT_DIRECTORY);
         if (file.exists()) {
             Log.e(LOG_TAG, "ada file penugasan...");
             return true;
@@ -158,7 +158,7 @@ public class LoginActivity extends Activity {
                 // Write response to script file
                 PrintStream out = null;
                 try {
-                    out = new PrintStream(new FileOutputStream(Configuration.APP_EXTERNAL_DATABASE_SCRIPT_DIRECTORY));
+                    out = new PrintStream(new FileOutputStream(QCConfig.APP_EXTERNAL_DATABASE_SCRIPT_DIRECTORY));
                     out.print(response);
                 } finally {
                     if (out != null) out.close();
