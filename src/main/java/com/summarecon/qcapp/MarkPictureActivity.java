@@ -70,8 +70,8 @@ public class MarkPictureActivity extends Activity {
         //On Touch Listener
         photoPreview.setOnTouchListener(new DrawingListener());
 
-        populateSpinner(R.array.arr_lbl_jenis_defect, R.id.ddl_jenis_defect);
-        populateSpinner(R.array.arr_lbl_status, R.id.ddl_status);
+        populateSpinner(R.array.arr_lbl_status_defect, R.id.ddl_status_defect);
+        populateSpinner(R.array.arr_lbl_status_pekerjaan, R.id.ddl_status_pekerjaan);
     }
 
     @Override

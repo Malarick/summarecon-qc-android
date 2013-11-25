@@ -8,13 +8,13 @@
     </string-array>
 
     <string-array name="arr_lbl_section_penugasan">
-        <item>Penugasan Lama</item>
+        <item>Penugasan Sisa</item>
         <item>Penugasan Ulang</item>
         <item>Penugasan Baru</item>
         <item>Schedule</item>
     </string-array>
     <string-array name="arr_icon_section_penugasan">
-        <item>ic_penugasan_lama</item>
+        <item>ic_penugasan_sisa</item>
         <item>ic_penugasan_ulang</item>
         <item>ic_penugasan_baru</item>
         <item>ic_schedule</item>
@@ -32,7 +32,7 @@
     </string-array>
 
     <string-array name="arr_lbl_section_notifications">
-        <item>Penugasan Lama</item>
+        <item>Penugasan Sisa</item>
         <item>Penugasan Ulang</item>
         <item>Penugasan Baru</item>
     </string-array>
@@ -55,13 +55,13 @@
     </string-array>
 
 
-    <string-array name="arr_lbl_jenis_defect">
+    <string-array name="arr_lbl_status_defect">
         <item>N</item>
         <item>S</item>
         <item>B</item>
     </string-array>
 
-    <string-array name="arr_lbl_status">
+    <string-array name="arr_lbl_status_pekerjaan">
         <item>P</item>
         <item>F</item>
     </string-array>

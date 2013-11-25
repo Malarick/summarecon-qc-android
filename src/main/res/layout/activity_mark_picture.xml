@@ -29,13 +29,13 @@
             android:layout_marginTop="10dp">
 
             <Spinner
-                android:id="@+id/ddl_jenis_defect"
+                android:id="@+id/ddl_status_defect"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"/>
 
             <Spinner
-                android:id="@+id/ddl_status"
+                android:id="@+id/ddl_status_pekerjaan"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"

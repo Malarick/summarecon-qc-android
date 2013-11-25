@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.summarecon.qcapp.MainActivity;
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.adapter.NotificationsAdapter;
+import com.summarecon.qcapp.core.Configuration;
 import com.summarecon.qcapp.db.QCDBHelper;
 import com.summarecon.qcapp.db.SQII_USER;
 import com.summarecon.qcapp.item.NotificationsItem;
@@ -23,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class DashboardFragment extends Fragment {
+
     private QCDBHelper db;
     private TextView txt_profile_name, txt_profile_nik, txt_profile_jabatan;
     private ListView mListView;
@@ -97,8 +99,12 @@ public class DashboardFragment extends Fragment {
             //Assign icon kecuali pada label yang tidak memiliki icon alias "null"
             if (iconList.get(c) != "null") {
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", getActivity().getPackageName());
-                if (s.equals("Penugasan Baru")) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", "B").size(), id_icon));
+                if (s.equals(Configuration.JENIS_PENUGASAN_SISA)) {
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", Configuration.KD_PENUGASAN_SISA).size(), id_icon));
+                } else if (s.equals(Configuration.JENIS_PENUGASAN_ULANG)) {
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", Configuration.KD_PENUGASAN_ULANG).size(), id_icon));
+                } else if (s.equals(Configuration.JENIS_PENUGASAN_BARU)) {
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", Configuration.KD_PENUGASAN_BARU).size(), id_icon));
                 } else {
                     itemList.add(new NotificationsItem(s, id_icon));
                 }
@@ -115,6 +121,9 @@ public class DashboardFragment extends Fragment {
 
     public void selectItem(AdapterView adapterView, View view, int position) {
         CharSequence lblItem = ((TextView) view.findViewById(R.id.notifications_item_label)).getText();
+        if(lblItem.equals("Pengetahuan")){
+
+        }
         fragmentPenugasan(new PenugasanFragment(), lblItem);
         mTitle = lblItem;
         getActivity().setTitle(mTitle);

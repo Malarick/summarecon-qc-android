@@ -8,6 +8,14 @@ import java.io.File;
 
 public class Configuration {
 
+    //PENUGASAN
+    public static String JENIS_PENUGASAN_SISA = "Penugasan Sisa";
+    public static String JENIS_PENUGASAN_ULANG = "Penugasan Ulang";
+    public static String JENIS_PENUGASAN_BARU = "Penugasan Baru";
+    public static String KD_PENUGASAN_SISA = "S";
+    public static String KD_PENUGASAN_ULANG = "U";
+    public static String KD_PENUGASAN_BARU = "B";
+
     public static String APP_EXTERNAL_IMAGES_DIRECTORY;
     public static String APP_EXTERNAL_DATABASE_DIRECTORY;
     public static String APP_EXTERNAL_CACHE_DIRECTORY;

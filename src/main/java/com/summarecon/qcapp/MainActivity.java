@@ -186,7 +186,13 @@ public class MainActivity extends Activity {
             //Assign icon kecuali pada label yang tidak memiliki icon alias "null"
             if (iconList.get(c) != "null") {
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", this.getPackageName());
-                if (s.equals("Penugasan Baru")) {
+                if (s.equals("Penugasan Sisa")) {
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", "S").size()));
+                    Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
+                } else if (s.equals("Penugasan Ulang")) {
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", "U").size()));
+                    Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
+                } else if (s.equals("Penugasan Baru")) {
                     itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", "B").size()));
                     Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
                 } else {
