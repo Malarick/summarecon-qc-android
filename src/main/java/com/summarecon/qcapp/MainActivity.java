@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.summarecon.qcapp.adapter.NavDrawerAdapter;
+import com.summarecon.qcapp.core.QCConfig;
 import com.summarecon.qcapp.db.QCDBHelper;
 import com.summarecon.qcapp.fragment.AboutFragment;
 import com.summarecon.qcapp.fragment.DashboardFragment;
@@ -186,14 +187,14 @@ public class MainActivity extends Activity {
             //Assign icon kecuali pada label yang tidak memiliki icon alias "null"
             if (iconList.get(c) != "null") {
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", this.getPackageName());
-                if (s.equals("Penugasan Sisa")) {
-                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", "S").size()));
+                if (s.equals(QCConfig.JENIS_PENUGASAN_SISA)) {
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_SISA).size()));
                     Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
-                } else if (s.equals("Penugasan Ulang")) {
-                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", "U").size()));
+                } else if (s.equals(QCConfig.JENIS_PENUGASAN_ULANG)) {
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_ULANG).size()));
                     Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
-                } else if (s.equals("Penugasan Baru")) {
-                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", "B").size()));
+                } else if (s.equals(QCConfig.JENIS_PENUGASAN_BARU)) {
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_BARU).size()));
                     Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
                 } else {
                     itemList.add(new NavDrawerItem(id_icon, s));
@@ -229,7 +230,15 @@ public class MainActivity extends Activity {
                     if (lblItem.equals("Schedule")) {
                         fragmentCall(new ScheduleFragment());
                     } else {
-                        fragmentCallPenugasan(new PenugasanFragment(), lblItem);
+                        String jenisPenugasan = null;
+                        if(lblItem.equals(QCConfig.JENIS_PENUGASAN_SISA)){
+                            jenisPenugasan = QCConfig.KD_PENUGASAN_SISA;
+                        } else if(lblItem.equals(QCConfig.JENIS_PENUGASAN_ULANG)){
+                            jenisPenugasan = QCConfig.KD_PENUGASAN_ULANG;
+                        } else if(lblItem.equals(QCConfig.JENIS_PENUGASAN_BARU)){
+                            jenisPenugasan = QCConfig.KD_PENUGASAN_BARU;
+                        }
+                        fragmentCallPenugasan(new PenugasanFragment(), jenisPenugasan);
                     }
                     break;
                 case R.id.list_section_etc:
@@ -266,11 +275,11 @@ public class MainActivity extends Activity {
     }
 
 
-    public void fragmentCallPenugasan(Fragment fragment, CharSequence jenisPenugasan) {
+    public void fragmentCallPenugasan(Fragment fragment, String jenisPenugasan) {
         mFragment = fragment;
         fragmentArgs = new Bundle();
 
-        fragmentArgs.putCharSequence(PenugasanFragment.ARGS_PENUGASAN, jenisPenugasan);
+        fragmentArgs.putString(PenugasanFragment.ARGS_PENUGASAN, jenisPenugasan);
         mFragment.setArguments(fragmentArgs);
 
         mFragmentManager = getFragmentManager();

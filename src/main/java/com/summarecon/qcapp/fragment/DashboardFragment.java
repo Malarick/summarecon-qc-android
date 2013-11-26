@@ -121,20 +121,25 @@ public class DashboardFragment extends Fragment {
 
     public void selectItem(AdapterView adapterView, View view, int position) {
         CharSequence lblItem = ((TextView) view.findViewById(R.id.notifications_item_label)).getText();
-        if(lblItem.equals("Pengetahuan")){
-
+        String jenisPenugasan = null;
+        if(lblItem.equals(QCConfig.JENIS_PENUGASAN_SISA)){
+            jenisPenugasan = QCConfig.KD_PENUGASAN_SISA;
+        } else if(lblItem.equals(QCConfig.JENIS_PENUGASAN_ULANG)){
+            jenisPenugasan = QCConfig.KD_PENUGASAN_ULANG;
+        } else if(lblItem.equals(QCConfig.JENIS_PENUGASAN_BARU)){
+            jenisPenugasan = QCConfig.KD_PENUGASAN_BARU;
         }
-        fragmentPenugasan(new PenugasanFragment(), lblItem);
+        fragmentCallPenugasan(new PenugasanFragment(), jenisPenugasan);
         mTitle = lblItem;
         getActivity().setTitle(mTitle);
     }
 
-    public void fragmentPenugasan(Fragment fragment, CharSequence jenisPenugasan) {
+    public void fragmentCallPenugasan(Fragment fragment, String jenisPenugasan) {
         mFragment = fragment;
         MainActivity.mFragment = mFragment;
         fragmentArgs = new Bundle();
 
-        fragmentArgs.putCharSequence(PenugasanFragment.ARGS_PENUGASAN, jenisPenugasan);
+        fragmentArgs.putString(PenugasanFragment.ARGS_PENUGASAN, jenisPenugasan);
         mFragment.setArguments(fragmentArgs);
 
         mFragmentManager = getFragmentManager();
