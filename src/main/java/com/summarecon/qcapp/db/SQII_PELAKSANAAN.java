@@ -47,6 +47,61 @@ public class SQII_PELAKSANAAN {
     private Float PARENT_ROWID;
     private Float ROWID;
 
+    private String KD_CLUSTER;
+    private String NM_CLUSTER;
+    private String NM_ITEM_DEFECT;
+    private String TGL_PENUGASAN;
+    private Float JML_FOTO_PENUGASAN;
+    private Float JML_FOTO_REALISASI;
+
+    public String getKD_CLUSTER() {
+        return KD_CLUSTER;
+    }
+
+    public void setKD_CLUSTER(String KD_CLUSTER) {
+        this.KD_CLUSTER = KD_CLUSTER;
+    }
+
+    public String getNM_CLUSTER() {
+        return NM_CLUSTER;
+    }
+
+    public void setNM_CLUSTER(String NM_CLUSTER) {
+        this.NM_CLUSTER = NM_CLUSTER;
+    }
+
+    public String getNM_ITEM_DEFECT() {
+        return NM_ITEM_DEFECT;
+    }
+
+    public void setNM_ITEM_DEFECT(String NM_ITEM_DEFECT) {
+        this.NM_ITEM_DEFECT = NM_ITEM_DEFECT;
+    }
+
+    public String getTGL_PENUGASAN() {
+        return TGL_PENUGASAN;
+    }
+
+    public void setTGL_PENUGASAN(String TGL_PENUGASAN) {
+        this.TGL_PENUGASAN = TGL_PENUGASAN;
+    }
+
+    public Float getJML_FOTO_PENUGASAN() {
+        return JML_FOTO_PENUGASAN;
+    }
+
+    public void setJML_FOTO_PENUGASAN(Float JML_FOTO_PENUGASAN) {
+        this.JML_FOTO_PENUGASAN = JML_FOTO_PENUGASAN;
+    }
+
+    public Float getJML_FOTO_REALISASI() {
+        return JML_FOTO_REALISASI;
+    }
+
+    public void setJML_FOTO_REALISASI(Float JML_FOTO_REALISASI) {
+        this.JML_FOTO_REALISASI = JML_FOTO_REALISASI;
+    }
+
     public String getNO_PENUGASAN() {
         return NO_PENUGASAN;
     }
