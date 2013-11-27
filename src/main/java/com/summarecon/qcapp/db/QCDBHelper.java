@@ -864,53 +864,6 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public List<SQII_ITEM_DEFECT_PENUGASAN> getAllItemDefectPenugasanFoto() {
-        String query;
-
-        List<SQII_ITEM_DEFECT_PENUGASAN> listData = new ArrayList<SQII_ITEM_DEFECT_PENUGASAN>();
-        /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
-
-        query = "SELECT  SQII_CLUSTER.NM_CLUSTER, \n" +
-                "        SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER, \n" +
-                "        SQII_ITEM_DEFECT_PENUGASAN.BLOK, \n" +
-                "        SQII_ITEM_DEFECT_PENUGASAN.NOMOR, \n" +
-                "        SQII_ITEM_DEFECT_PENUGASAN.NO_PENUGASAN,\n" +
-                "        SQII_PENUGASAN.TGL_PENUGASAN, \n" +
-                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
-                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0)\n" +
-                "FROM    SQII_ITEM_DEFECT_PENUGASAN\n" +
-                "        \n" +
-                "        INNER JOIN SQII_CLUSTER\n" +
-                "        ON  SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER = SQII_CLUSTER.KD_CLUSTER AND\n" +
-                "            SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN = SQII_CLUSTER.KD_KAWASAN\n" +
-                "        \n" +
-                "        INNER JOIN SQII_PENUGASAN\n" +
-                "        ON  SQII_ITEM_DEFECT_PENUGASAN.NO_PENUGASAN = SQII_PENUGASAN.NO_PENUGASAN";
-
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                SQII_ITEM_DEFECT_PENUGASAN item = new SQII_ITEM_DEFECT_PENUGASAN();
-
-                item.setNM_CLUSTER(cursor.getString(0));
-                item.setKD_CLUSTER(cursor.getString(1));
-                item.setBLOK(cursor.getString(2));
-                item.setNOMOR(cursor.getString(3));
-                item.setNO_PENUGASAN(cursor.getString(4));
-                item.setTGL_PENUGASAN(cursor.getString(5));
-                item.setJML_FOTO_PENUGASAN(cursor.getFloat(6));
-                item.setJML_FOTO_REALISASI(cursor.getFloat(7));
-
-                listData.add(item);
-            }
-        }
-        cursor.close();
-        db.close();
-
-        return listData;
-    }
-
     public long insertItemDefectPenugasan(SQII_ITEM_DEFECT_PENUGASAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
@@ -1842,7 +1795,87 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public List<SQII_PELAKSANAAN> getAllPelaksanaan(String kdCluster, String kdKawasan, String blok, String nomor, String tglPenugasan) {
+    public List<SQII_PELAKSANAAN> getAllPelaksanaanFoto() {
+        String query;
+        List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
+        /*SQLiteDatabase db = this.getReadableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+
+        query = "SELECT  SQII_PELAKSANAAN.NO_PENUGASAN, \n" +
+                "        SQII_PENUGASAN.TGL_PENUGASAN,\n" +
+                "        SQII_PELAKSANAAN.KD_KAWASAN, \n" +
+                "        SQII_PELAKSANAAN.BLOK, \n" +
+                "        SQII_PELAKSANAAN.NOMOR, \n" +
+                "        SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER,\n" +
+                "        SQII_CLUSTER.NM_CLUSTER,\n" +
+                "        SQII_PELAKSANAAN.KD_JENIS, \n" +
+                "        SQII_PELAKSANAAN.KD_TIPE, \n" +
+                "        SQII_PELAKSANAAN.KD_ITEM_DEFECT, \n" +
+                "        SQII_ITEM_DEFECT.NM_ITEM_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.KD_LANTAI, \n" +
+                "        SQII_PELAKSANAAN.URUT_PELAKSANAAN, \n" +
+                "        SQII_PELAKSANAAN.URUT_FOTO, \n" +
+                "        SQII_PELAKSANAAN.PATH_FOTO_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT,\n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0)\n" +
+                "\n" +
+                "FROM    SQII_PELAKSANAAN\n" +
+                "\n" +
+                "        INNER JOIN SQII_ITEM_DEFECT_PENUGASAN\n" +
+                "        ON SQII_PELAKSANAAN.NO_PENUGASAN = SQII_ITEM_DEFECT_PENUGASAN.NO_PENUGASAN AND\n" +
+                "           SQII_PELAKSANAAN.KD_KAWASAN = SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN AND\n" +
+                "           SQII_PELAKSANAAN.BLOK = SQII_ITEM_DEFECT_PENUGASAN.BLOK AND\n" +
+                "           SQII_PELAKSANAAN.NOMOR = SQII_ITEM_DEFECT_PENUGASAN.NOMOR AND\n" +
+                "           SQII_PELAKSANAAN.KD_JENIS = SQII_ITEM_DEFECT_PENUGASAN.KD_JENIS AND\n" +
+                "           SQII_PELAKSANAAN.KD_TIPE = SQII_ITEM_DEFECT_PENUGASAN.KD_TIPE AND\n" +
+                "           SQII_PELAKSANAAN.KD_ITEM_DEFECT = SQII_ITEM_DEFECT_PENUGASAN.KD_ITEM_DEFECT AND\n" +
+                "           SQII_PELAKSANAAN.KD_LANTAI = SQII_ITEM_DEFECT_PENUGASAN.KD_LANTAI \n" +
+                "\n" +
+                "        INNER JOIN SQII_CLUSTER\n" +
+                "        ON SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN = SQII_CLUSTER.KD_KAWASAN AND\n" +
+                "           SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER = SQII_CLUSTER.KD_CLUSTER\n" +
+                "           \n" +
+                "        INNER JOIN SQII_ITEM_DEFECT\n" +
+                "        ON SQII_PELAKSANAAN.KD_ITEM_DEFECT = SQII_ITEM_DEFECT.KD_ITEM_DEFECT\n" +
+                "    \n" +
+                "        INNER JOIN SQII_PENUGASAN\n" +
+                "        ON SQII_PELAKSANAAN.NO_PENUGASAN = SQII_PENUGASAN.NO_PENUGASAN";
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                SQII_PELAKSANAAN item = new SQII_PELAKSANAAN();
+
+                item.setNO_PENUGASAN(cursor.getString(0));
+                item.setTGL_PENUGASAN(cursor.getString(1));
+                item.setKD_KAWASAN(cursor.getString(2));
+                item.setBLOK(cursor.getString(3));
+                item.setNOMOR(cursor.getString(4));
+                item.setKD_CLUSTER(cursor.getString(5));
+                item.setNM_CLUSTER(cursor.getString(6));
+                item.setKD_JENIS(cursor.getString(7));
+                item.setKD_TIPE(cursor.getString(8));
+                item.setKD_ITEM_DEFECT(cursor.getFloat(9));
+                item.setNM_ITEM_DEFECT(cursor.getString(10));
+                item.setKD_LANTAI(cursor.getFloat(11));
+                item.setURUT_PELAKSANAAN(cursor.getFloat(12));
+                item.setURUT_FOTO(cursor.getFloat(13));
+                item.setPATH_FOTO_DEFECT(cursor.getString(14));
+                item.setSRC_FOTO_DEFECT(cursor.getString(15));
+                item.setJML_FOTO_PENUGASAN(cursor.getFloat(16));
+                item.setJML_FOTO_REALISASI(cursor.getFloat(17));
+
+                listData.add(item);
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return listData;
+    }
+
+    public List<SQII_PELAKSANAAN> getAllPelaksanaan(String kdCluster, String kdKawasan, String blok, String nomor, String tglPelaksanaan) {
         String query;
 
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
@@ -1856,7 +1889,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        KD_KAWASAN = '" + kdKawasan + "'\n" +
                 "        BLOK = '" + blok + "'\n" +
                 "        NOMOR = '" + nomor + "'\n" +
-                "        TANGGAL_PENUGASAN = '" + tglPenugasan + "'";
+                "        TGL_PELAKSANAAN = '" + tglPelaksanaan + "'";
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
