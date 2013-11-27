@@ -62,7 +62,7 @@ public class NotificationsAdapter extends BaseAdapter {
         imgView_icon = (ImageView) view.findViewById(R.id.notifications_item_icon);
         imgView_icon.setImageResource(item.getItemIcon());
 
-        if(item.counterExist){
+        if(item.counterExist && item.getItemCounter() > 0){
             TextView textView_counter = (TextView) view.findViewById(R.id.notifications_item_counter);
             textView_counter.setText(String.valueOf(item.getItemCounter()));
             textView_counter.setBackgroundResource(R.drawable.rectangle);

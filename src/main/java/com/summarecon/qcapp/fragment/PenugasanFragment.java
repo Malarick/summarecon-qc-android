@@ -41,7 +41,7 @@ public class PenugasanFragment extends Fragment {
         db = QCDBHelper.getInstance(getActivity());
 
         TextView textView = (TextView) rootView.findViewById(R.id.lbl_test);
-        jenisPenugasan = getArguments().getCharSequence(ARGS_PENUGASAN, "PENUGASAN").toString();
+        jenisPenugasan = getArguments().getString(ARGS_PENUGASAN, "PENUGASAN");
         textView.setText(jenisPenugasan);
 
         mExpListPenugasan = (ExpandableListView) rootView.findViewById(R.id.exp_list_penugasan);
@@ -52,7 +52,8 @@ public class PenugasanFragment extends Fragment {
     }
 
     public void populateExpListPenugasan(){
-        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan("201005469", "B");
+        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan("201005469", jenisPenugasan);
+        //db.getAllPelaksanaan(String kdCluster, String kdKawasan, String blok, String nomor, String tglPenugasan)
         List<String> parentLblList = new ArrayList<String>();
         //List<String> childLblList = new ArrayList<String>();
         List<PenugasanParentItem> parentItemsList = new ArrayList<PenugasanParentItem>();
@@ -66,8 +67,8 @@ public class PenugasanFragment extends Fragment {
             PenugasanParentItem parentItem = new PenugasanParentItem(
                     row_id + ". " + sParent.getKD_KAWASAN()
                     , sParent.getTGL_PELAKSANAAN()
-                    , "Blok: " + sParent.getBLOK()
-                    , "Target foto: " + sParent.getURUT_FOTO().toString());
+                    , "Blok: " + sParent.getBLOK() + "/" + sParent.getNOMOR() + ", Lantai: " + sParent.getKD_LANTAI()
+                    , sParent.getKD_ITEM_DEFECT() + ": " + sParent.getURUT_FOTO().toString());
             if((c % 2) == 0){
                 parentItem.getChildItemList().add(new PenugasanChildItem(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()
                         + File.separator + "Camera" + File.separator));
