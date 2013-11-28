@@ -49,10 +49,19 @@ public class SQII_PELAKSANAAN {
 
     private String KD_CLUSTER;
     private String NM_CLUSTER;
+    private String NM_LANTAI;
     private String NM_ITEM_DEFECT;
     private String TGL_PENUGASAN;
     private Float JML_FOTO_PENUGASAN;
     private Float JML_FOTO_REALISASI;
+
+    public String getNM_LANTAI() {
+        return NM_LANTAI;
+    }
+
+    public void setNM_LANTAI(String NM_LANTAI) {
+        this.NM_LANTAI = NM_LANTAI;
+    }
 
     public String getKD_CLUSTER() {
         return KD_CLUSTER;
