@@ -187,6 +187,7 @@ public class TakePictureActivity extends Activity {
                 item.setPATH_FOTO_DEFECT(pictureFile.getAbsolutePath());
                 item.setSRC_FOTO_DEFECT(pictureFileName);
                 item.setURUT_FOTO(urutFoto);
+                Log.e("EXTRA_", item.getPATH_FOTO_DEFECT() + " || " + item.getSRC_FOTO_DEFECT() + " || " + item.getURUT_FOTO());
                 db.updatePelaksanaan(item);
 
                 //create directory if not exist

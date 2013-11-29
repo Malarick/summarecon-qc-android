@@ -101,11 +101,11 @@ public class DashboardFragment extends Fragment {
             if (iconList.get(c) != "null") {
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", getActivity().getPackageName());
                 if (s.equals(QCConfig.JENIS_PENUGASAN_SISA)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_SISA).size(), id_icon));
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_SISA), id_icon));
                 } else if (s.equals(QCConfig.JENIS_PENUGASAN_ULANG)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_ULANG).size(), id_icon));
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_ULANG), id_icon));
                 } else if (s.equals(QCConfig.JENIS_PENUGASAN_BARU)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_BARU).size(), id_icon));
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_BARU), id_icon));
                 } else {
                     itemList.add(new NotificationsItem(s, id_icon));
                 }

@@ -2000,7 +2000,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        SQII_LANTAI.NM_LANTAI,\n" +
                 "        SQII_PELAKSANAAN.URUT_PELAKSANAAN,\n" +
                 "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
-                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0),\n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0), \n" +
                 "        SQII_PELAKSANAAN.URUT_FOTO,\n" +
                 "        SQII_PELAKSANAAN.JENIS_PENUGASAN,\n" +
                 "        SQII_PELAKSANAAN.TGL_PELAKSANAAN,\n" +

@@ -188,13 +188,13 @@ public class MainActivity extends Activity {
             if (iconList.get(c) != "null") {
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", this.getPackageName());
                 if (s.equals(QCConfig.JENIS_PENUGASAN_SISA)) {
-                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_SISA).size()));
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_SISA)));
                     Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
                 } else if (s.equals(QCConfig.JENIS_PENUGASAN_ULANG)) {
-                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_ULANG).size()));
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_ULANG)));
                     Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
                 } else if (s.equals(QCConfig.JENIS_PENUGASAN_BARU)) {
-                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_BARU).size()));
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_BARU)));
                     Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
                 } else {
                     itemList.add(new NavDrawerItem(id_icon, s));

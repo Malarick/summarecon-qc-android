@@ -132,7 +132,7 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
 
         Log.e("EXPANDABLE", "Parent = " + parentPosition + "|||| Child = " + childPosition);
         Log.e("CHILD_COUNT", String.valueOf(getChildrenCount(parentPosition)));
-        Log.e("EXTRA_", penugasanChildItem.getList().get(0).getNM_LANTAI() + " AAA");
+        Log.e("EXTRA_", penugasanChildItem.getList().get(0).getKD_LANTAI() + " AAA");
 
         //Load image (using different thread to reduce lag)
         ImageLoader imageLoader = new ImageLoader(view, penugasanChildItem, penugasanParentItem.getReqImages());
@@ -144,11 +144,11 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
 
     //Open the Camera
     private void openCamera(SQII_PELAKSANAAN item, int position) {
-        Log.e("EXTRA_", item.getBLOK() + " || " + item.getNOMOR() + " || " + item.getNM_LANTAI());
-//        Intent openCameraIntent = new Intent(context, TakePictureActivity.class);
-//        openCameraIntent.putExtra(TakePictureActivity.ITEM_SQII_PELAKSANAAN, item);
-//        openCameraIntent.putExtra(TakePictureActivity.URUT_FOTO, position+1);
-//        context.startActivity(openCameraIntent);
+        Log.e("EXTRA_", item.getBLOK() + " || " + item.getNOMOR() + " || " + item.getKD_LANTAI());
+        Intent openCameraIntent = new Intent(context, TakePictureActivity.class);
+        openCameraIntent.putExtra(TakePictureActivity.ITEM_SQII_PELAKSANAAN, item);
+        openCameraIntent.putExtra(TakePictureActivity.URUT_FOTO, position + 1);
+        context.startActivity(openCameraIntent);
     }
 
     private class ImageLoader extends AsyncTask<Void, Void, PenugasanGridAdapter>{
