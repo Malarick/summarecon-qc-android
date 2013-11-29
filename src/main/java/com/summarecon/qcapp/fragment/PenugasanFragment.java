@@ -48,9 +48,14 @@ public class PenugasanFragment extends Fragment {
 
         mExpListPenugasan = (ExpandableListView) rootView.findViewById(R.id.exp_list_penugasan);
         alignExpIndicatorToRight();
-        populateExpListPenugasan();
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        populateExpListPenugasan();
+        super.onResume();
     }
 
     public void populateExpListPenugasan(){

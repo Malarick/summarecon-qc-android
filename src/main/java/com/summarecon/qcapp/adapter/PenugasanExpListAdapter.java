@@ -123,9 +123,7 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int parentPosition, int childPosition, boolean isLastChild, View view, ViewGroup viewGroup) {
-        if(view == null){
-            view = inflater.inflate(this.viewHolderChild, null);
-        }
+        view = inflater.inflate(this.viewHolderChild, null);
 
         PenugasanParentItem penugasanParentItem = getGroup(parentPosition);
         PenugasanChildItem penugasanChildItem = getChild(parentPosition, childPosition);
@@ -201,6 +199,7 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
 
             list = penugasanChildItem.getList();
             for(SQII_PELAKSANAAN pelaksanaan : list){
+                Log.e("EXTRA_", pelaksanaan.getPATH_FOTO_DEFECT() + " || " + pelaksanaan.getSRC_FOTO_DEFECT());
                 if(!pelaksanaan.getPATH_FOTO_DEFECT().equals("")){
                     File file = new File(pelaksanaan.getPATH_FOTO_DEFECT());
                     gridItems.add(new PenugasanGridItem(file));

@@ -13,9 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.summarecon.qcapp.adapter.SpinnerListAdapter;
@@ -37,6 +39,7 @@ public class MarkPictureActivity extends Activity {
 
     public static final String LOG_TAG = "MarkPictureActivity";
     public static final String PHOTO_URL = "PHOTO_URL";
+    public final static String ITEM_SQII_PELAKSANAAN = "ITEM_SQII_PELAKSANAAN";
     private Intent intent;
 
     private ImageView photoPreview;
@@ -49,7 +52,12 @@ public class MarkPictureActivity extends Activity {
     private EditText mNote;
     private CustomScrollView rootScrollView;
 
+    private Spinner spnStatusDefect;
+    private Spinner spnStatusPekerjaan;
+
     private QCDBHelper db;
+
+    private SQII_PELAKSANAAN item;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +78,24 @@ public class MarkPictureActivity extends Activity {
         //On Touch Listener
         photoPreview.setOnTouchListener(new DrawingListener());
 
-        populateSpinner(R.array.arr_lbl_status_defect, R.id.ddl_status_defect);
-        populateSpinner(R.array.arr_lbl_status_pekerjaan, R.id.ddl_status_pekerjaan);
+        spnStatusDefect = (Spinner) findViewById(R.id.ddl_status_defect);
+        spnStatusPekerjaan = (Spinner) findViewById(R.id.ddl_status_pekerjaan);
+        populateSpinner(R.array.arr_lbl_status_defect, spnStatusDefect);
+        populateSpinner(R.array.arr_lbl_status_pekerjaan, spnStatusPekerjaan);
+
+        Log.e("EXTRA_", spnStatusDefect.getSelectedItem().toString());
+        spnStatusDefect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView txt = (TextView) view.findViewById(R.id.spinner_item);
+                mNote.setText(txt.getText());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
@@ -105,10 +129,12 @@ public class MarkPictureActivity extends Activity {
     }
 
     private void loadPhoto() {
-        photoURL = intent.getStringExtra("PHOTO_URL");
+        photoURL = intent.getStringExtra(PHOTO_URL);
         photoBitmap = BitmapFactory.decodeFile(photoURL);
         oriPhotoBitmap = photoBitmap;
         photoPreview.setImageBitmap(photoBitmap);
+
+        item = (SQII_PELAKSANAAN) intent.getSerializableExtra(ITEM_SQII_PELAKSANAAN);
     }
 
     private boolean savePhoto(){
@@ -126,6 +152,9 @@ public class MarkPictureActivity extends Activity {
             fileOutputStream.write(final_data);
             fileOutputStream.flush();
             fileOutputStream.close();
+
+            //UPDATE DB
+            //item.setSTATUS_DEFECT(R.id);
             return true;
         }catch (FileNotFoundException e){
             Log.e(LOG_TAG, e.getMessage());
@@ -161,19 +190,18 @@ public class MarkPictureActivity extends Activity {
         spinner.setAdapter(adapter);
     }
 
-    private void populateSpinner(int res_arr, int res_spinner){
+    private void populateSpinner(int res_arr, Spinner spinner){
         List<String> stringArrayList = new ArrayList<String>();
         List<SpinnerListItem> spinnerListItems = new ArrayList<SpinnerListItem>();
 
         Collections.addAll(stringArrayList, getResources().getStringArray(res_arr));
         for(String key : stringArrayList){
             String value = getString(getResources().getIdentifier(key, "string", this.getPackageName()));
-            spinnerListItems.add(new SpinnerListItem(value));
+            spinnerListItems.add(new SpinnerListItem(key, value));
         }
 
         adapter = new SpinnerListAdapter(this, R.layout.spinner_item, spinnerListItems);
 
-        Spinner spinner = (Spinner) findViewById(res_spinner);
         spinner.setAdapter(adapter);
     }
 

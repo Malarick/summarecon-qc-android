@@ -184,12 +184,6 @@ public class TakePictureActivity extends Activity {
                 String pictureFileName = System.currentTimeMillis() + ".jpg";
                 File pictureFile = new File(pictureFileDir, pictureFileName);
 
-                item.setPATH_FOTO_DEFECT(pictureFile.getAbsolutePath());
-                item.setSRC_FOTO_DEFECT(pictureFileName);
-                item.setURUT_FOTO(urutFoto);
-                Log.e("EXTRA_", item.getPATH_FOTO_DEFECT() + " || " + item.getSRC_FOTO_DEFECT() + " || " + item.getURUT_FOTO());
-                db.updatePelaksanaan(item);
-
                 //create directory if not exist
                 if(!pictureFileDir.exists()){
                     pictureFileDir.mkdirs();
@@ -216,6 +210,13 @@ public class TakePictureActivity extends Activity {
                     fileOutputStream.write(final_data);
                     fileOutputStream.flush();
                     fileOutputStream.close();
+
+                    //UPDATE DB
+                    item.setPATH_FOTO_DEFECT(pictureFile.getAbsolutePath());
+                    item.setSRC_FOTO_DEFECT(pictureFileName);
+                    item.setURUT_FOTO(urutFoto);
+                    Log.e("EXTRA_", item.getPATH_FOTO_DEFECT() + " || " + item.getSRC_FOTO_DEFECT() + " || " + item.getURUT_FOTO());
+                    db.updatePelaksanaan(item);
                 }catch (FileNotFoundException e){
                     Log.e(LOG_TAG, e.getMessage());
                 }catch (IOException e){
@@ -232,7 +233,8 @@ public class TakePictureActivity extends Activity {
 
     public void previewPhoto(String filePath){
         Intent intent = new Intent(this, MarkPictureActivity.class);
-        intent.putExtra(PHOTO_URL, filePath);
+        intent.putExtra(MarkPictureActivity.PHOTO_URL, filePath);
+        intent.putExtra(MarkPictureActivity.ITEM_SQII_PELAKSANAAN, item);
         this.startActivity(intent);
     }
 }

@@ -32,13 +32,16 @@
                 android:id="@+id/ddl_status_defect"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:spinnerMode="dialog"
+                android:prompt="@string/hint_status_defect"/>
 
             <Spinner
                 android:id="@+id/ddl_status_pekerjaan"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:spinnerMode="dialog"
                 android:prompt="@string/hint_status_pekerjaan" />
         </LinearLayout>
 
