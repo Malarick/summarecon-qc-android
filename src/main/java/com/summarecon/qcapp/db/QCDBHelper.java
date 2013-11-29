@@ -1875,6 +1875,33 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
+    public Integer getAllPelaksanaanJumlahFoto(String petugasQC, String jenisPenugasan) {
+        String query;
+        Integer count = 0;
+
+        /*SQLiteDatabase db = this.getReadableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+
+        query = "SELECT  COUNT(SQII_PELAKSANAAN.NO_PENUGASAN) \n" +
+                "\n" +
+                "FROM    SQII_PELAKSANAAN\n" +
+                "\n" +
+                "WHERE   SQII_PELAKSANAAN.PETUGAS_QC = '" + petugasQC + "' AND\n" +
+                "        SQII_PELAKSANAAN.JENIS_PENUGASAN = '" + jenisPenugasan + "' \n" ;
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext())
+            {
+                count = Integer.valueOf(cursor.getString(0));
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return count;
+    }
+
     public List<SQII_PELAKSANAAN> getAllPelaksanaan(String noPenugasan, String kdKawasan, String blok, String nomor, String kdJenis, String kdTipe, Float kdItemDefect, Float kdLantai, Float urutPelaksanaan) {
         String query;
 
@@ -1882,8 +1909,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
         /*SQLiteDatabase db = this.getReadableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
 
-        query = "SELECT  SQII_PELAKSANAAN.PATH_FOTO_DEFECT,\n" +
-                "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT\n" +
+        query = "SELECT  *\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
                 "WHERE   NO_PENUGASAN = '" + noPenugasan + "' AND\n" +
                 "        KD_KAWASAN = '" + kdKawasan + "' AND\n" +
@@ -1900,8 +1926,48 @@ public class QCDBHelper extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 SQII_PELAKSANAAN item = new SQII_PELAKSANAAN();
 
-                item.setPATH_FOTO_DEFECT(cursor.getString(0));
-                item.setSRC_FOTO_DEFECT(cursor.getString(1));
+                item.setNO_PENUGASAN(cursor.getString(0));
+                item.setKD_KAWASAN(cursor.getString(1));
+                item.setBLOK(cursor.getString(2));
+                item.setNOMOR(cursor.getString(3));
+                item.setKD_JENIS(cursor.getString(4));
+                item.setKD_TIPE(cursor.getString(5));
+                item.setKD_ITEM_DEFECT(cursor.getFloat(6));
+                item.setKD_LANTAI(cursor.getFloat(7));
+                item.setURUT_PELAKSANAAN(cursor.getFloat(8));
+                item.setURUT_FOTO(cursor.getFloat(9));
+                item.setJENIS_PENUGASAN(cursor.getString(10));
+                item.setTGL_PELAKSANAAN(cursor.getString(11));
+                item.setPETUGAS_QC(cursor.getString(12));
+                item.setPENGAWAS(cursor.getString(13));
+                item.setSM(cursor.getString(14));
+                item.setSTATUS_DEFECT(cursor.getString(15));
+                item.setSTATUS_PEKERJAAN(cursor.getString(16));
+                item.setCATATAN(cursor.getString(17));
+                item.setFLAG_UPLOAD(cursor.getString(18));
+                item.setTGL_UPLOAD(cursor.getString(19));
+                item.setPATH_FOTO_DENAH(cursor.getString(20));
+                item.setSRC_FOTO_DENAH(cursor.getString(21));
+                item.setPATH_FOTO_DEFECT(cursor.getString(22));
+                item.setSRC_FOTO_DEFECT(cursor.getString(23));
+                item.setLAMA_PERBAIKAN(cursor.getFloat(24));
+                item.setTGL_ENTRY_LAMA_PERBAIKAN(cursor.getString(25));
+                item.setTGL_JATUH_TEMPO_PERBAIKAN(cursor.getString(26));
+                item.setFLAG_AKTIF(cursor.getString(27));
+                item.setUSER_AKTIF(cursor.getString(28));
+                item.setTGL_AKTIF(cursor.getString(29));
+                item.setALASAN_AKTIF(cursor.getString(30));
+                item.setFLAG_BATAL(cursor.getString(31));
+                item.setUSER_BATAL(cursor.getString(32));
+                item.setTGL_BATAL(cursor.getString(33));
+                item.setALASAN_BATAL(cursor.getString(34));
+                item.setSTATUS_SIMPAN(cursor.getString(35));
+                item.setUSER_ENTRY(cursor.getString(36));
+                item.setTGL_ENTRY(cursor.getString(37));
+                item.setUSER_UPDATE(cursor.getString(38));
+                item.setTGL_UPDATE(cursor.getString(39));
+                item.setPARENT_ROWID(cursor.getFloat(40));
+                item.setROWID(cursor.getFloat(41));
 
                 listData.add(item);
             }
@@ -1935,6 +2001,39 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        SQII_PELAKSANAAN.URUT_PELAKSANAAN,\n" +
                 "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
                 "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0)\n" +
+                "        SQII_PELAKSANAAN.URUT_FOTO,\n" +
+                "        SQII_PELAKSANAAN.JENIS_PENUGASAN,\n" +
+                "        SQII_PELAKSANAAN.TGL_PELAKSANAAN,\n" +
+                "        SQII_PELAKSANAAN.PETUGAS_QC,\n" +
+                "        SQII_PELAKSANAAN.PENGAWAS,\n" +
+                "        SQII_PELAKSANAAN.SM,\n" +
+                "        SQII_PELAKSANAAN.STATUS_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.STATUS_PEKERJAAN,\n" +
+                "        SQII_PELAKSANAAN.CATATAN,\n" +
+                "        SQII_PELAKSANAAN.FLAG_UPLOAD,\n" +
+                "        SQII_PELAKSANAAN.TGL_UPLOAD,\n" +
+                "        SQII_PELAKSANAAN.PATH_FOTO_DENAH,\n" +
+                "        SQII_PELAKSANAAN.SRC_FOTO_DENAH,\n" +
+                "        SQII_PELAKSANAAN.PATH_FOTO_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.LAMA_PERBAIKAN,\n" +
+                "        SQII_PELAKSANAAN.TGL_ENTRY_LAMA_PERBAIKAN,\n" +
+                "        SQII_PELAKSANAAN.TGL_JATUH_TEMPO_PERBAIKAN,\n" +
+                "        SQII_PELAKSANAAN.FLAG_AKTIF,\n" +
+                "        SQII_PELAKSANAAN.USER_AKTIF,\n" +
+                "        SQII_PELAKSANAAN.TGL_AKTIF,\n" +
+                "        SQII_PELAKSANAAN.ALASAN_AKTIF,\n" +
+                "        SQII_PELAKSANAAN.FLAG_BATAL,\n" +
+                "        SQII_PELAKSANAAN.USER_BATAL,\n" +
+                "        SQII_PELAKSANAAN.TGL_BATAL,\n" +
+                "        SQII_PELAKSANAAN.ALASAN_BATAL,\n" +
+                "        SQII_PELAKSANAAN.STATUS_SIMPAN,\n" +
+                "        SQII_PELAKSANAAN.USER_ENTRY,\n" +
+                "        SQII_PELAKSANAAN.TGL_ENTRY,\n" +
+                "        SQII_PELAKSANAAN.USER_UPDATE,\n" +
+                "        SQII_PELAKSANAAN.TGL_UPDATE,\n" +
+                "        SQII_PELAKSANAAN.PARENT_ROWID,\n" +
+                "        SQII_PELAKSANAAN.ROWID,\n" +
                 "\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
                 "\n" +
@@ -2002,6 +2101,39 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 item.setURUT_PELAKSANAAN(cursor.getFloat(13));
                 item.setJML_FOTO_PENUGASAN(cursor.getFloat(14));
                 item.setJML_FOTO_REALISASI(cursor.getFloat(15));
+                item.setURUT_FOTO(cursor.getFloat(16));
+                item.setJENIS_PENUGASAN(cursor.getString(17));
+                item.setTGL_PELAKSANAAN(cursor.getString(18));
+                item.setPETUGAS_QC(cursor.getString(19));
+                item.setPENGAWAS(cursor.getString(20));
+                item.setSM(cursor.getString(21));
+                item.setSTATUS_DEFECT(cursor.getString(22));
+                item.setSTATUS_PEKERJAAN(cursor.getString(23));
+                item.setCATATAN(cursor.getString(24));
+                item.setFLAG_UPLOAD(cursor.getString(25));
+                item.setTGL_UPLOAD(cursor.getString(26));
+                item.setPATH_FOTO_DENAH(cursor.getString(27));
+                item.setSRC_FOTO_DENAH(cursor.getString(28));
+                item.setPATH_FOTO_DEFECT(cursor.getString(29));
+                item.setSRC_FOTO_DEFECT(cursor.getString(30));
+                item.setLAMA_PERBAIKAN(cursor.getFloat(31));
+                item.setTGL_ENTRY_LAMA_PERBAIKAN(cursor.getString(32));
+                item.setTGL_JATUH_TEMPO_PERBAIKAN(cursor.getString(33));
+                item.setFLAG_AKTIF(cursor.getString(34));
+                item.setUSER_AKTIF(cursor.getString(35));
+                item.setTGL_AKTIF(cursor.getString(36));
+                item.setALASAN_AKTIF(cursor.getString(37));
+                item.setFLAG_BATAL(cursor.getString(38));
+                item.setUSER_BATAL(cursor.getString(39));
+                item.setTGL_BATAL(cursor.getString(40));
+                item.setALASAN_BATAL(cursor.getString(41));
+                item.setSTATUS_SIMPAN(cursor.getString(42));
+                item.setUSER_ENTRY(cursor.getString(43));
+                item.setTGL_ENTRY(cursor.getString(44));
+                item.setUSER_UPDATE(cursor.getString(45));
+                item.setTGL_UPDATE(cursor.getString(46));
+                item.setPARENT_ROWID(cursor.getFloat(47));
+                item.setROWID(cursor.getFloat(48));
 
                 listData.add(item);
             }
@@ -2137,48 +2269,48 @@ public class QCDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
-//        values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
-//        values.put("KD_KAWASAN", item.getKD_KAWASAN());
-//        values.put("BLOK", item.getBLOK());
-//        values.put("NOMOR", item.getNOMOR());
-//        values.put("KD_JENIS", item.getKD_JENIS());
-//        values.put("KD_TIPE", item.getKD_TIPE());
-//        values.put("KD_ITEM_DEFECT", item.getKD_ITEM_DEFECT());
-//        values.put("KD_LANTAI", item.getKD_LANTAI());
-//        values.put("URUT_PELAKSANAAN", item.getURUT_PELAKSANAAN());
+        values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
+        values.put("KD_KAWASAN", item.getKD_KAWASAN());
+        values.put("BLOK", item.getBLOK());
+        values.put("NOMOR", item.getNOMOR());
+        values.put("KD_JENIS", item.getKD_JENIS());
+        values.put("KD_TIPE", item.getKD_TIPE());
+        values.put("KD_ITEM_DEFECT", item.getKD_ITEM_DEFECT());
+        values.put("KD_LANTAI", item.getKD_LANTAI());
+        values.put("URUT_PELAKSANAAN", item.getURUT_PELAKSANAAN());
         values.put("URUT_FOTO", item.getURUT_FOTO());
-//        values.put("JENIS_PENUGASAN", item.getJENIS_PENUGASAN());
-//        values.put("TGL_PELAKSANAAN", item.getTGL_PELAKSANAAN());
-//        values.put("PETUGAS_QC", item.getPETUGAS_QC());
-//        values.put("PENGAWAS", item.getPENGAWAS());
-//        values.put("SM", item.getSM());
-//        values.put("STATUS_DEFECT", item.getSTATUS_DEFECT());
-//        values.put("STATUS_PEKERJAAN", item.getSTATUS_PEKERJAAN());
-//        values.put("CATATAN", item.getCATATAN());
-//        values.put("FLAG_UPLOAD", item.getFLAG_UPLOAD());
-//        values.put("TGL_UPLOAD", item.getTGL_UPLOAD());
-//        values.put("PATH_FOTO_DENAH", item.getPATH_FOTO_DENAH());
-//        values.put("SRC_FOTO_DENAH", item.getSRC_FOTO_DENAH());
+        values.put("JENIS_PENUGASAN", item.getJENIS_PENUGASAN());
+        values.put("TGL_PELAKSANAAN", item.getTGL_PELAKSANAAN());
+        values.put("PETUGAS_QC", item.getPETUGAS_QC());
+        values.put("PENGAWAS", item.getPENGAWAS());
+        values.put("SM", item.getSM());
+        values.put("STATUS_DEFECT", item.getSTATUS_DEFECT());
+        values.put("STATUS_PEKERJAAN", item.getSTATUS_PEKERJAAN());
+        values.put("CATATAN", item.getCATATAN());
+        values.put("FLAG_UPLOAD", item.getFLAG_UPLOAD());
+        values.put("TGL_UPLOAD", item.getTGL_UPLOAD());
+        values.put("PATH_FOTO_DENAH", item.getPATH_FOTO_DENAH());
+        values.put("SRC_FOTO_DENAH", item.getSRC_FOTO_DENAH());
         values.put("PATH_FOTO_DEFECT", item.getPATH_FOTO_DEFECT());
         values.put("SRC_FOTO_DEFECT", item.getSRC_FOTO_DEFECT());
-//        values.put("LAMA_PERBAIKAN", item.getLAMA_PERBAIKAN());
-//        values.put("TGL_ENTRY_LAMA_PERBAIKAN", item.getTGL_ENTRY_LAMA_PERBAIKAN());
-//        values.put("TGL_JATUH_TEMPO_PERBAIKAN", item.getTGL_JATUH_TEMPO_PERBAIKAN());
-//        values.put("FLAG_AKTIF", item.getFLAG_AKTIF());
-//        values.put("USER_AKTIF", item.getUSER_AKTIF());
-//        values.put("TGL_AKTIF", item.getTGL_AKTIF());
-//        values.put("ALASAN_AKTIF", item.getALASAN_AKTIF());
-//        values.put("FLAG_BATAL", item.getFLAG_BATAL());
-//        values.put("USER_BATAL", item.getUSER_BATAL());
-//        values.put("TGL_BATAL", item.getTGL_BATAL());
-//        values.put("ALASAN_BATAL", item.getALASAN_BATAL());
-//        values.put("STATUS_SIMPAN", item.getSTATUS_SIMPAN());
-//        values.put("USER_ENTRY", item.getUSER_ENTRY());
-//        values.put("TGL_ENTRY", item.getTGL_ENTRY());
-//        values.put("USER_UPDATE", item.getUSER_UPDATE());
-//        values.put("TGL_UPDATE", item.getTGL_UPDATE());
-//        values.put("PARENT_ROWID", item.getROWID());
-//        values.put("ROWID", item.getROWID());
+        values.put("LAMA_PERBAIKAN", item.getLAMA_PERBAIKAN());
+        values.put("TGL_ENTRY_LAMA_PERBAIKAN", item.getTGL_ENTRY_LAMA_PERBAIKAN());
+        values.put("TGL_JATUH_TEMPO_PERBAIKAN", item.getTGL_JATUH_TEMPO_PERBAIKAN());
+        values.put("FLAG_AKTIF", item.getFLAG_AKTIF());
+        values.put("USER_AKTIF", item.getUSER_AKTIF());
+        values.put("TGL_AKTIF", item.getTGL_AKTIF());
+        values.put("ALASAN_AKTIF", item.getALASAN_AKTIF());
+        values.put("FLAG_BATAL", item.getFLAG_BATAL());
+        values.put("USER_BATAL", item.getUSER_BATAL());
+        values.put("TGL_BATAL", item.getTGL_BATAL());
+        values.put("ALASAN_BATAL", item.getALASAN_BATAL());
+        values.put("STATUS_SIMPAN", item.getSTATUS_SIMPAN());
+        values.put("USER_ENTRY", item.getUSER_ENTRY());
+        values.put("TGL_ENTRY", item.getTGL_ENTRY());
+        values.put("USER_UPDATE", item.getUSER_UPDATE());
+        values.put("TGL_UPDATE", item.getTGL_UPDATE());
+        values.put("PARENT_ROWID", item.getROWID());
+        values.put("ROWID", item.getROWID());
 
         String filter = "NO_PENUGASAN = " + item.getNO_PENUGASAN() + " AND " +
                 "KD_KAWASAN =" + item.getKD_KAWASAN() + " AND " +
