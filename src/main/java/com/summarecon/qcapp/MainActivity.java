@@ -95,7 +95,7 @@ public class MainActivity extends Activity {
             Field mEdgeSize = dragHelper.getClass().getDeclaredField("mEdgeSize");
             mEdgeSize.setAccessible(true);
             int edge = mEdgeSize.getInt(dragHelper);
-            mEdgeSize.setInt(dragHelper, edge * 5); //may set any constant in DP
+            mEdgeSize.setInt(dragHelper, edge * 2); //may set any constant in DP
         } catch (NoSuchFieldException e) {
             Log.e(LOG_TAG, e.getMessage());
         } catch (IllegalAccessException e) {

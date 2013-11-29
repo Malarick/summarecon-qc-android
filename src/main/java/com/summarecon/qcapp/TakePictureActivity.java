@@ -1,7 +1,6 @@
 package com.summarecon.qcapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +8,6 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.media.MediaActionSound;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +16,10 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.widget.ZoomControls;
+
+import com.summarecon.qcapp.core.QCConfig;
+import com.summarecon.qcapp.db.QCDBHelper;
+import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,21 +30,32 @@ import java.io.IOException;
 public class TakePictureActivity extends Activity {
 
     final static String LOG_TAG = "TakePictureActivity";
+    public final static String ITEM_SQII_PELAKSANAAN = "ITEM_SQII_PELAKSANAAN";
+    public final static String URUT_FOTO = "URUT_FOTO";
     final static String PHOTO_URL = "PHOTO_URL";
     final static int ZOOM_IN_INCREMENT = 2;
     final static int ZOOM_OUT_INCREMENT = -2;
-    FrameLayout cameraLayout;
+    private FrameLayout cameraLayout;
     private Camera camera;
     private CameraPreview cameraPreview;
     private Camera.Parameters parameters;
     private ZoomControls zoomControls;
     private Button btnTakePicture;
 
+    private QCDBHelper db;
+    private SQII_PELAKSANAAN item;
+    private Float urutFoto;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_picture);
 
+        db = QCDBHelper.getInstance(this);
         cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
+
+        //GET ITEM FROM GRIDVIEW
+        item = (SQII_PELAKSANAAN) getIntent().getSerializableExtra(ITEM_SQII_PELAKSANAAN);
+        urutFoto = (float) getIntent().getIntExtra(URUT_FOTO, 1);
 
         //Handle listener untuk zoomControl
         setZoomControlListener();
@@ -167,9 +180,14 @@ public class TakePictureActivity extends Activity {
                 mediaActionSound.play(MediaActionSound.SHUTTER_CLICK);
 
                 //Setting path dan nama file
-                File pictureFileDir = new File(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath());
+                File pictureFileDir = new File(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY);
                 String pictureFileName = System.currentTimeMillis() + ".jpg";
                 File pictureFile = new File(pictureFileDir, pictureFileName);
+
+                item.setPATH_FOTO_DEFECT(pictureFile.getAbsolutePath());
+                item.setSRC_FOTO_DEFECT(pictureFileName);
+                item.setURUT_FOTO(urutFoto);
+                db.updatePelaksanaan(item);
 
                 //create directory if not exist
                 if(!pictureFileDir.exists()){

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,11 +22,13 @@ import android.widget.Toast;
 
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.TakePictureActivity;
+import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.item.PenugasanChildItem;
 import com.summarecon.qcapp.item.PenugasanGridItem;
 import com.summarecon.qcapp.item.PenugasanParentItem;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -124,12 +127,15 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
             view = inflater.inflate(this.viewHolderChild, null);
         }
 
+        PenugasanParentItem penugasanParentItem = getGroup(parentPosition);
         PenugasanChildItem penugasanChildItem = getChild(parentPosition, childPosition);
 
         Log.e("EXPANDABLE", "Parent = " + parentPosition + "|||| Child = " + childPosition);
+        Log.e("CHILD_COUNT", String.valueOf(getChildrenCount(parentPosition)));
+        Log.e("EXTRA_", penugasanChildItem.getList().get(0).getNM_LANTAI() + " AAA");
 
         //Load image (using different thread to reduce lag)
-        ImageLoader imageLoader = new ImageLoader(view, penugasanChildItem);
+        ImageLoader imageLoader = new ImageLoader(view, penugasanChildItem, penugasanParentItem.getReqImages());
         imageLoader.execute();
 
 
@@ -137,9 +143,12 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
     }
 
     //Open the Camera
-    private void openCamera() {
-        Intent openCameraIntent = new Intent(context, TakePictureActivity.class);
-        context.startActivity(openCameraIntent);
+    private void openCamera(SQII_PELAKSANAAN item, int position) {
+        Log.e("EXTRA_", item.getBLOK() + " || " + item.getNOMOR() + " || " + item.getNM_LANTAI());
+//        Intent openCameraIntent = new Intent(context, TakePictureActivity.class);
+//        openCameraIntent.putExtra(TakePictureActivity.ITEM_SQII_PELAKSANAAN, item);
+//        openCameraIntent.putExtra(TakePictureActivity.URUT_FOTO, position+1);
+//        context.startActivity(openCameraIntent);
     }
 
     private class ImageLoader extends AsyncTask<Void, Void, PenugasanGridAdapter>{
@@ -148,13 +157,17 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
         GridView gridView;
         View view;
 
+        Integer reqImg;
+
         PenugasanChildItem penugasanChildItem;
+        List<SQII_PELAKSANAAN> list;
         List<PenugasanGridItem> gridItems;
 
-        private ImageLoader(View view, PenugasanChildItem penugasanChildItem) {
+        private ImageLoader(View view, PenugasanChildItem penugasanChildItem, Integer reqImg) {
             this.gridView = gridView;
-            this.penugasanChildItem = penugasanChildItem;
             this.view = view;
+            this.penugasanChildItem = penugasanChildItem;
+            this.reqImg = reqImg;
         }
 
         @Override
@@ -183,19 +196,27 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
             }catch (Exception e){
                 Log.e("Error", e.getMessage());
             }
-            String path = penugasanChildItem.getPath();
-            File file = new File(path);
-            List<File> files = new ArrayList<File>();
-            int reqImg = 10;
-
-            //Insert all files inside the directory into a List
-            Collections.addAll(files, file.listFiles());
-
 
             gridItems = new ArrayList<PenugasanGridItem>();
-            for(File f : files){
-                gridItems.add(new PenugasanGridItem(f));
+
+            list = penugasanChildItem.getList();
+            for(SQII_PELAKSANAAN pelaksanaan : list){
+                if(!pelaksanaan.getPATH_FOTO_DEFECT().equals("")){
+                    File file = new File(pelaksanaan.getPATH_FOTO_DEFECT());
+                    gridItems.add(new PenugasanGridItem(file));
+                }
             }
+
+//            String path = penugasanChildItem.getPath();
+//            File file = new File(path);
+//            List<File> files = new ArrayList<File>();
+//
+//            //Insert all files inside the directory into a List
+//            Collections.addAll(files, file.listFiles());
+//
+//            for(File f : files){
+//                gridItems.add(new PenugasanGridItem(f));
+//            }
 
             while(gridItems.size() < reqImg){
                 gridItems.add(new PenugasanGridItem(R.drawable.ic_default_photo));
@@ -209,7 +230,7 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 if(!gridItems.get(position).getIsFile()){
-                    openCamera();
+                    openCamera(list.get(position), position);
                 }
             }
         }

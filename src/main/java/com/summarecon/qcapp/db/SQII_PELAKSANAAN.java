@@ -1,9 +1,11 @@
 package com.summarecon.qcapp.db;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 10/19/13.
  */
-public class SQII_PELAKSANAAN {
+public class SQII_PELAKSANAAN implements Serializable {
     private String NO_PENUGASAN;
     private String KD_KAWASAN;
     private String BLOK;

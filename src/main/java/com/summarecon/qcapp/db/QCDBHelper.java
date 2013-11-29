@@ -1884,7 +1884,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
         query = "SELECT  SQII_PELAKSANAAN.PATH_FOTO_DEFECT,\n" +
                 "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT\n" +
-                "FROM    SQII_PENUGASAN\n" +
+                "FROM    SQII_PELAKSANAAN\n" +
                 "WHERE   NO_PENUGASAN = '" + noPenugasan + "' AND\n" +
                 "        KD_KAWASAN = '" + kdKawasan + "' AND\n" +
                 "        BLOK = '" + blok + "' AND\n" +
@@ -1933,8 +1933,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        SQII_PELAKSANAAN.KD_LANTAI,\n" +
                 "        SQII_LANTAI.NM_LANTAI,\n" +
                 "        SQII_PELAKSANAAN.URUT_PELAKSANAAN,\n" +
-                "        ISNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
-                "        ISNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0)\n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0)\n" +
                 "\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
                 "\n" +
@@ -1950,7 +1950,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "\n" +
                 "        INNER JOIN SQII_CLUSTER\n" +
                 "        ON SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN = SQII_CLUSTER.KD_KAWASAN AND\n" +
-                "           SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER = SQII_CLUSTER.KD_CLUSTER\n" +
+                "           SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER = TRIM(SQII_CLUSTER.KD_CLUSTER)\n" +
                 "           \n" +
                 "        INNER JOIN SQII_ITEM_DEFECT\n" +
                 "        ON SQII_PELAKSANAAN.KD_ITEM_DEFECT = SQII_ITEM_DEFECT.KD_ITEM_DEFECT\n" +
@@ -2137,48 +2137,48 @@ public class QCDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
         ContentValues values = new ContentValues();
 
-        values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
-        values.put("KD_KAWASAN", item.getKD_KAWASAN());
-        values.put("BLOK", item.getBLOK());
-        values.put("NOMOR", item.getNOMOR());
-        values.put("KD_JENIS", item.getKD_JENIS());
-        values.put("KD_TIPE", item.getKD_TIPE());
-        values.put("KD_ITEM_DEFECT", item.getKD_ITEM_DEFECT());
-        values.put("KD_LANTAI", item.getKD_LANTAI());
-        values.put("URUT_PELAKSANAAN", item.getURUT_PELAKSANAAN());
+//        values.put("NO_PENUGASAN", item.getNO_PENUGASAN());
+//        values.put("KD_KAWASAN", item.getKD_KAWASAN());
+//        values.put("BLOK", item.getBLOK());
+//        values.put("NOMOR", item.getNOMOR());
+//        values.put("KD_JENIS", item.getKD_JENIS());
+//        values.put("KD_TIPE", item.getKD_TIPE());
+//        values.put("KD_ITEM_DEFECT", item.getKD_ITEM_DEFECT());
+//        values.put("KD_LANTAI", item.getKD_LANTAI());
+//        values.put("URUT_PELAKSANAAN", item.getURUT_PELAKSANAAN());
         values.put("URUT_FOTO", item.getURUT_FOTO());
-        values.put("JENIS_PENUGASAN", item.getJENIS_PENUGASAN());
-        values.put("TGL_PELAKSANAAN", item.getTGL_PELAKSANAAN());
-        values.put("PETUGAS_QC", item.getPETUGAS_QC());
-        values.put("PENGAWAS", item.getPENGAWAS());
-        values.put("SM", item.getSM());
-        values.put("STATUS_DEFECT", item.getSTATUS_DEFECT());
-        values.put("STATUS_PEKERJAAN", item.getSTATUS_PEKERJAAN());
-        values.put("CATATAN", item.getCATATAN());
-        values.put("FLAG_UPLOAD", item.getFLAG_UPLOAD());
-        values.put("TGL_UPLOAD", item.getTGL_UPLOAD());
-        values.put("PATH_FOTO_DENAH", item.getPATH_FOTO_DENAH());
-        values.put("SRC_FOTO_DENAH", item.getSRC_FOTO_DENAH());
+//        values.put("JENIS_PENUGASAN", item.getJENIS_PENUGASAN());
+//        values.put("TGL_PELAKSANAAN", item.getTGL_PELAKSANAAN());
+//        values.put("PETUGAS_QC", item.getPETUGAS_QC());
+//        values.put("PENGAWAS", item.getPENGAWAS());
+//        values.put("SM", item.getSM());
+//        values.put("STATUS_DEFECT", item.getSTATUS_DEFECT());
+//        values.put("STATUS_PEKERJAAN", item.getSTATUS_PEKERJAAN());
+//        values.put("CATATAN", item.getCATATAN());
+//        values.put("FLAG_UPLOAD", item.getFLAG_UPLOAD());
+//        values.put("TGL_UPLOAD", item.getTGL_UPLOAD());
+//        values.put("PATH_FOTO_DENAH", item.getPATH_FOTO_DENAH());
+//        values.put("SRC_FOTO_DENAH", item.getSRC_FOTO_DENAH());
         values.put("PATH_FOTO_DEFECT", item.getPATH_FOTO_DEFECT());
         values.put("SRC_FOTO_DEFECT", item.getSRC_FOTO_DEFECT());
-        values.put("LAMA_PERBAIKAN", item.getLAMA_PERBAIKAN());
-        values.put("TGL_ENTRY_LAMA_PERBAIKAN", item.getTGL_ENTRY_LAMA_PERBAIKAN());
-        values.put("TGL_JATUH_TEMPO_PERBAIKAN", item.getTGL_JATUH_TEMPO_PERBAIKAN());
-        values.put("FLAG_AKTIF", item.getFLAG_AKTIF());
-        values.put("USER_AKTIF", item.getUSER_AKTIF());
-        values.put("TGL_AKTIF", item.getTGL_AKTIF());
-        values.put("ALASAN_AKTIF", item.getALASAN_AKTIF());
-        values.put("FLAG_BATAL", item.getFLAG_BATAL());
-        values.put("USER_BATAL", item.getUSER_BATAL());
-        values.put("TGL_BATAL", item.getTGL_BATAL());
-        values.put("ALASAN_BATAL", item.getALASAN_BATAL());
-        values.put("STATUS_SIMPAN", item.getSTATUS_SIMPAN());
-        values.put("USER_ENTRY", item.getUSER_ENTRY());
-        values.put("TGL_ENTRY", item.getTGL_ENTRY());
-        values.put("USER_UPDATE", item.getUSER_UPDATE());
-        values.put("TGL_UPDATE", item.getTGL_UPDATE());
-        values.put("PARENT_ROWID", item.getROWID());
-        values.put("ROWID", item.getROWID());
+//        values.put("LAMA_PERBAIKAN", item.getLAMA_PERBAIKAN());
+//        values.put("TGL_ENTRY_LAMA_PERBAIKAN", item.getTGL_ENTRY_LAMA_PERBAIKAN());
+//        values.put("TGL_JATUH_TEMPO_PERBAIKAN", item.getTGL_JATUH_TEMPO_PERBAIKAN());
+//        values.put("FLAG_AKTIF", item.getFLAG_AKTIF());
+//        values.put("USER_AKTIF", item.getUSER_AKTIF());
+//        values.put("TGL_AKTIF", item.getTGL_AKTIF());
+//        values.put("ALASAN_AKTIF", item.getALASAN_AKTIF());
+//        values.put("FLAG_BATAL", item.getFLAG_BATAL());
+//        values.put("USER_BATAL", item.getUSER_BATAL());
+//        values.put("TGL_BATAL", item.getTGL_BATAL());
+//        values.put("ALASAN_BATAL", item.getALASAN_BATAL());
+//        values.put("STATUS_SIMPAN", item.getSTATUS_SIMPAN());
+//        values.put("USER_ENTRY", item.getUSER_ENTRY());
+//        values.put("TGL_ENTRY", item.getTGL_ENTRY());
+//        values.put("USER_UPDATE", item.getUSER_UPDATE());
+//        values.put("TGL_UPDATE", item.getTGL_UPDATE());
+//        values.put("PARENT_ROWID", item.getROWID());
+//        values.put("ROWID", item.getROWID());
 
         String filter = "NO_PENUGASAN = " + item.getNO_PENUGASAN() + " AND " +
                 "KD_KAWASAN =" + item.getKD_KAWASAN() + " AND " +
@@ -2186,7 +2186,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "NOMOR =" + item.getNOMOR() + " AND " +
                 "KD_JENIS =" + item.getKD_JENIS() + " AND " +
                 "KD_TIPE =" + item.getKD_TIPE() + " AND " +
-                "KD_IEM_DEFECT =" + item.getKD_ITEM_DEFECT() + " AND " +
+                "KD_ITEM_DEFECT =" + item.getKD_ITEM_DEFECT() + " AND " +
                 "KD_LANTAI =" + item.getKD_LANTAI() + " AND " +
                 "URUT_PELAKSANAAN =" + item.getURUT_PELAKSANAAN() + " AND " +
                 "URUT_FOTO =" + item.getURUT_FOTO();
