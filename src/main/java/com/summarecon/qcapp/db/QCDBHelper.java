@@ -2000,7 +2000,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        SQII_LANTAI.NM_LANTAI,\n" +
                 "        SQII_PELAKSANAAN.URUT_PELAKSANAAN,\n" +
                 "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
-                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0)\n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0),\n" +
                 "        SQII_PELAKSANAAN.URUT_FOTO,\n" +
                 "        SQII_PELAKSANAAN.JENIS_PENUGASAN,\n" +
                 "        SQII_PELAKSANAAN.TGL_PELAKSANAAN,\n" +
@@ -2033,7 +2033,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        SQII_PELAKSANAAN.USER_UPDATE,\n" +
                 "        SQII_PELAKSANAAN.TGL_UPDATE,\n" +
                 "        SQII_PELAKSANAAN.PARENT_ROWID,\n" +
-                "        SQII_PELAKSANAAN.ROWID,\n" +
+                "        SQII_PELAKSANAAN.ROWID\n" +
                 "\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
                 "\n" +
@@ -2312,16 +2312,16 @@ public class QCDBHelper extends SQLiteOpenHelper {
         values.put("PARENT_ROWID", item.getROWID());
         values.put("ROWID", item.getROWID());
 
-        String filter = "NO_PENUGASAN = " + item.getNO_PENUGASAN() + " AND " +
-                "KD_KAWASAN =" + item.getKD_KAWASAN() + " AND " +
-                "BLOK =" + item.getBLOK() + " AND " +
-                "NOMOR =" + item.getNOMOR() + " AND " +
-                "KD_JENIS =" + item.getKD_JENIS() + " AND " +
-                "KD_TIPE =" + item.getKD_TIPE() + " AND " +
-                "KD_ITEM_DEFECT =" + item.getKD_ITEM_DEFECT() + " AND " +
-                "KD_LANTAI =" + item.getKD_LANTAI() + " AND " +
-                "URUT_PELAKSANAAN =" + item.getURUT_PELAKSANAAN() + " AND " +
-                "URUT_FOTO =" + item.getURUT_FOTO();
+        String filter = "NO_PENUGASAN = '" + item.getNO_PENUGASAN() + "' AND " +
+                "KD_KAWASAN = '" + item.getKD_KAWASAN() + "' AND " +
+                "BLOK = '" + item.getBLOK() + "' AND " +
+                "NOMOR = '" + item.getNOMOR() + "' AND " +
+                "KD_JENIS = '" + item.getKD_JENIS() + "' AND " +
+                "KD_TIPE = '" + item.getKD_TIPE() + "' AND " +
+                "KD_ITEM_DEFECT = " + item.getKD_ITEM_DEFECT() + " AND " +
+                "KD_LANTAI = " + item.getKD_LANTAI() + " AND " +
+                "URUT_PELAKSANAAN = " + item.getURUT_PELAKSANAAN() + " AND " +
+                "URUT_FOTO = " + item.getURUT_FOTO();
 
         int affected_rows = db.update("SQII_PELAKSANAAN", values, filter, null);
         db.close();
