@@ -3,7 +3,6 @@ package com.summarecon.qcapp;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera;
-import android.media.MediaActionSound;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -22,7 +21,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private Camera camera;
     private DisplayMetrics displayMetrics;
     private Camera.Parameters parameters;
-    private MediaActionSound mediaActionSound;
+    //private MediaActionSound mediaActionSound;
 
     public CameraPreview(Context context) {
         super(context);
@@ -47,7 +46,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
 
         //MediaActionSound
-        mediaActionSound = new MediaActionSound();
+        //mediaActionSound = new MediaActionSound();
     }
 
     @Override

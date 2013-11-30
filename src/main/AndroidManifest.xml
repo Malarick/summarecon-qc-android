@@ -17,6 +17,7 @@
         android:name="com.summarecon.qcapp.core.SummareconQCApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
+        android:largeHeap="true"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 

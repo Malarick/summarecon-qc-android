@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.media.MediaActionSound;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -188,8 +187,8 @@ public class TakePictureActivity extends Activity {
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
                 //Play shutter sound
-                MediaActionSound mediaActionSound = new MediaActionSound();
-                mediaActionSound.play(MediaActionSound.SHUTTER_CLICK);
+                //MediaActionSound mediaActionSound = new MediaActionSound();
+                //mediaActionSound.play(MediaActionSound.SHUTTER_CLICK);
 
                 //Setting path dan nama file
                 File pictureFileDir = new File(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY);

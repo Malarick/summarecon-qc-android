@@ -12,6 +12,7 @@ import com.summarecon.qcapp.core.QCConfig;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -2170,7 +2171,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public List<SQII_PELAKSANAAN> getAllPelaksanaanPenugasan(String tglPenugasan, String petugasQC, String jenis_penugasan) {
+    public List<SQII_PELAKSANAAN> getAllPelaksanaanPenugasan(Date tglPenugasan, String petugasQC, String jenis_penugasan) {
         String query;
 
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
