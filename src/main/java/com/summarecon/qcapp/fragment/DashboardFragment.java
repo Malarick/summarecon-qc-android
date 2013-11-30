@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -182,11 +183,11 @@ public class DashboardFragment extends Fragment {
             if (iconList.get(c) != "null") {
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", getActivity().getPackageName());
                 if (s.equals(QCConfig.JENIS_PENUGASAN_SISA)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_SISA).size(), id_icon));
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_SISA), id_icon));
                 } else if (s.equals(QCConfig.JENIS_PENUGASAN_ULANG)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_ULANG).size(), id_icon));
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_ULANG), id_icon));
                 } else if (s.equals(QCConfig.JENIS_PENUGASAN_BARU)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaan("201005469", QCConfig.KD_PENUGASAN_BARU).size(), id_icon));
+                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_BARU), id_icon));
                 } else {
                     itemList.add(new NotificationsItem(s, id_icon));
                 }
@@ -203,20 +204,25 @@ public class DashboardFragment extends Fragment {
 
     public void selectItem(AdapterView adapterView, View view, int position) {
         CharSequence lblItem = ((TextView) view.findViewById(R.id.notifications_item_label)).getText();
-        if(lblItem.equals("Pengetahuan")){
-
+        String jenisPenugasan = null;
+        if(lblItem.equals(QCConfig.JENIS_PENUGASAN_SISA)){
+            jenisPenugasan = QCConfig.KD_PENUGASAN_SISA;
+        } else if(lblItem.equals(QCConfig.JENIS_PENUGASAN_ULANG)){
+            jenisPenugasan = QCConfig.KD_PENUGASAN_ULANG;
+        } else if(lblItem.equals(QCConfig.JENIS_PENUGASAN_BARU)){
+            jenisPenugasan = QCConfig.KD_PENUGASAN_BARU;
         }
-        fragmentPenugasan(new PenugasanFragment(), lblItem);
+        fragmentCallPenugasan(new PenugasanFragment(), jenisPenugasan);
         mTitle = lblItem;
         getActivity().setTitle(mTitle);
     }
 
-    public void fragmentPenugasan(Fragment fragment, CharSequence jenisPenugasan) {
+    public void fragmentCallPenugasan(Fragment fragment, String jenisPenugasan) {
         mFragment = fragment;
         MainActivity.mFragment = mFragment;
         fragmentArgs = new Bundle();
 
-        fragmentArgs.putCharSequence(PenugasanFragment.ARGS_PENUGASAN, jenisPenugasan);
+        fragmentArgs.putString(PenugasanFragment.ARGS_PENUGASAN, jenisPenugasan);
         mFragment.setArguments(fragmentArgs);
 
         mFragmentManager = getFragmentManager();

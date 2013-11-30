@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/img_grid_item"
-        android:layout_height="40dp"
-        android:layout_width="40dp"/>
+        android:layout_height="60dp"
+        android:layout_width="60dp"/>
 
 </LinearLayout>

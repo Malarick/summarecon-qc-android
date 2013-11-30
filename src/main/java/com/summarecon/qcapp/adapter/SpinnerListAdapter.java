@@ -4,9 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.summarecon.qcapp.R;
@@ -53,8 +51,11 @@ public class SpinnerListAdapter extends BaseAdapter {
             view = inflater.inflate(viewHolder, null);
         }
 
-        TextView spinnerTextView = (TextView) view.findViewById(R.id.spinner_item);
+        TextView spinnerTextView = (TextView) view.findViewById(R.id.spinner_item_value);
         spinnerTextView.setText(item.getLbl_item());
+
+        TextView spinnerTextKey = (TextView) view.findViewById(R.id.spinner_item_key);
+        spinnerTextKey.setText(item.getKey_item());
 
         return view;
     }

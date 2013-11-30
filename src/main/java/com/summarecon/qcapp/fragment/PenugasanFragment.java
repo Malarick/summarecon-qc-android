@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.summarecon.qcapp.R;
 import com.summarecon.qcapp.adapter.PenugasanExpListAdapter;
+import com.summarecon.qcapp.core.QCConfig;
 import com.summarecon.qcapp.db.QCDBHelper;
 import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.item.PenugasanChildItem;
@@ -41,39 +43,65 @@ public class PenugasanFragment extends Fragment {
         db = QCDBHelper.getInstance(getActivity());
 
         TextView textView = (TextView) rootView.findViewById(R.id.lbl_test);
-        jenisPenugasan = getArguments().getCharSequence(ARGS_PENUGASAN, "PENUGASAN").toString();
+        jenisPenugasan = getArguments().getString(ARGS_PENUGASAN, "PENUGASAN");
         textView.setText(jenisPenugasan);
 
         mExpListPenugasan = (ExpandableListView) rootView.findViewById(R.id.exp_list_penugasan);
         alignExpIndicatorToRight();
-        populateExpListPenugasan();
 
         return rootView;
     }
 
-    public void populateExpListPenugasan(){
-        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan("201005469", "B");
-        List<String> parentLblList = new ArrayList<String>();
-        //List<String> childLblList = new ArrayList<String>();
-        List<PenugasanParentItem> parentItemsList = new ArrayList<PenugasanParentItem>();
+    @Override
+    public void onResume() {
+        populateExpListPenugasan();
+        super.onResume();
+    }
 
-        Collections.addAll(parentLblList, getResources().getStringArray(R.array.arr_lbl_parent_items));
+    public void populateExpListPenugasan(){
+        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan("201005469", jenisPenugasan);
+        List<SQII_PELAKSANAAN> childList;
+
+        List<PenugasanParentItem> parentItemsList = new ArrayList<PenugasanParentItem>();
+        //List<String> parentLblList = new ArrayList<String>();
+        //List<String> childLblList = new ArrayList<String>();
+
+        //Collections.addAll(parentLblList, getResources().getStringArray(R.array.arr_lbl_parent_items));
         //Collections.addAll(childLblList, getResources().getStringArray(R.array.arr_lbl_child_items));
 
         int c = 0;
         int row_id = 1;
         for(SQII_PELAKSANAAN sParent : parentList){
             PenugasanParentItem parentItem = new PenugasanParentItem(
-                    row_id + ". " + sParent.getKD_KAWASAN()
-                    , sParent.getTGL_PELAKSANAAN()
-                    , "Blok: " + sParent.getBLOK()
-                    , "Target foto: " + sParent.getURUT_FOTO().toString());
-            if((c % 2) == 0){
-                parentItem.getChildItemList().add(new PenugasanChildItem(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()
-                        + File.separator + "Camera" + File.separator));
-            }else{
-                parentItem.getChildItemList().add(new PenugasanChildItem(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()));
-            }
+                    row_id + ". " + sParent.getNM_CLUSTER()
+                    , sParent.getTGL_PENUGASAN()
+                    , "Blok: " + sParent.getBLOK() + "/" + sParent.getNOMOR() + ", Lantai: " + sParent.getNM_LANTAI()
+                    , sParent.getNM_ITEM_DEFECT() + ": " + String.format("%.0f", sParent.getJML_FOTO_REALISASI()) + "/" + String.format("%.0f", sParent.getJML_FOTO_PENUGASAN())
+                    , sParent.getJML_FOTO_PENUGASAN()
+            );
+
+            childList = db.getAllPelaksanaan(
+                    sParent.getNO_PENUGASAN()
+                    , sParent.getKD_KAWASAN()
+                    , sParent.getBLOK()
+                    , sParent.getNOMOR()
+                    , sParent.getKD_JENIS()
+                    , sParent.getKD_TIPE()
+                    , sParent.getKD_ITEM_DEFECT()
+                    , sParent.getKD_LANTAI()
+                    , sParent.getURUT_PELAKSANAAN()
+            );
+
+            //parentItem.getChildItemList().add(new PenugasanChildItem(sChild.getPATH_FOTO_DEFECT()));
+            parentItem.getChildItemList().add(new PenugasanChildItem(sParent, childList));
+            //parentItem.getChildItemList().add(new PenugasanChildItem(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY));
+
+            //if((c % 2) == 0){
+            //    parentItem.getChildItemList().add(new PenugasanChildItem(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()
+            //            + File.separator + "Camera" + File.separator));
+            //}else{
+            //    parentItem.getChildItemList().add(new PenugasanChildItem(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()));
+            //}
             parentItemsList.add(parentItem);
             c++;
             row_id++;

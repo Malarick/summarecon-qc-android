@@ -13,7 +13,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class QCDBHelper extends SQLiteOpenHelper {
@@ -865,53 +864,6 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public List<SQII_ITEM_DEFECT_PENUGASAN> getAllItemDefectPenugasanFoto() {
-        String query;
-
-        List<SQII_ITEM_DEFECT_PENUGASAN> listData = new ArrayList<SQII_ITEM_DEFECT_PENUGASAN>();
-        /*SQLiteDatabase db = this.getReadableDatabase();*/
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
-
-        query = "SELECT  SQII_CLUSTER.NM_CLUSTER, \n" +
-                "        SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER, \n" +
-                "        SQII_ITEM_DEFECT_PENUGASAN.BLOK, \n" +
-                "        SQII_ITEM_DEFECT_PENUGASAN.NOMOR, \n" +
-                "        SQII_ITEM_DEFECT_PENUGASAN.NO_PENUGASAN,\n" +
-                "        SQII_PENUGASAN.TGL_PENUGASAN, \n" +
-                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
-                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0)\n" +
-                "FROM    SQII_ITEM_DEFECT_PENUGASAN\n" +
-                "        \n" +
-                "        INNER JOIN SQII_CLUSTER\n" +
-                "        ON  SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER = SQII_CLUSTER.KD_CLUSTER AND\n" +
-                "            SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN = SQII_CLUSTER.KD_KAWASAN\n" +
-                "        \n" +
-                "        INNER JOIN SQII_PENUGASAN\n" +
-                "        ON  SQII_ITEM_DEFECT_PENUGASAN.NO_PENUGASAN = SQII_PENUGASAN.NO_PENUGASAN";
-
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                SQII_ITEM_DEFECT_PENUGASAN item = new SQII_ITEM_DEFECT_PENUGASAN();
-
-                item.setNM_CLUSTER(cursor.getString(0));
-                item.setKD_CLUSTER(cursor.getString(1));
-                item.setBLOK(cursor.getString(2));
-                item.setNOMOR(cursor.getString(3));
-                item.setNO_PENUGASAN(cursor.getString(4));
-                item.setTGL_PENUGASAN(cursor.getString(5));
-                item.setJML_FOTO_PENUGASAN(cursor.getFloat(6));
-                item.setJML_FOTO_REALISASI(cursor.getFloat(7));
-
-                listData.add(item);
-            }
-        }
-        cursor.close();
-        db.close();
-
-        return listData;
-    }
-
     public long insertItemDefectPenugasan(SQII_ITEM_DEFECT_PENUGASAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
@@ -978,6 +930,32 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "KD_TIPE =" + item.getKD_TIPE() + " AND " +
                 "KD_IEM_DEFECT =" + item.getKD_ITEM_DEFECT() + " AND " +
                 "KD_LANTAI =" + item.getKD_LANTAI();
+
+        int affected_rows = db.update("SQII_ITEM_DEFECT_PENUGASAN", values, filter, null);
+        db.close();
+
+        if (affected_rows > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean updateItemDefectPenugasan(SQII_PELAKSANAAN item) {
+        /*SQLiteDatabase db = this.getWritableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        ContentValues values = new ContentValues();
+
+        values.put("JML_FOTO_REALISASI", item.getJML_FOTO_REALISASI());
+
+        String filter = "NO_PENUGASAN = '" + item.getNO_PENUGASAN() + "' AND " +
+                "KD_KAWASAN = '" + item.getKD_KAWASAN() + "' AND " +
+                "BLOK = '" + item.getBLOK() + "' AND " +
+                "NOMOR = '" + item.getNOMOR() + "' AND " +
+                "KD_JENIS = '" + item.getKD_JENIS() + "' AND " +
+                "KD_TIPE = '" + item.getKD_TIPE() + "' AND " +
+                "KD_ITEM_DEFECT = " + item.getKD_ITEM_DEFECT() + " AND " +
+                "KD_LANTAI = " + item.getKD_LANTAI();
 
         int affected_rows = db.update("SQII_ITEM_DEFECT_PENUGASAN", values, filter, null);
         db.close();
@@ -1843,29 +1821,76 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public List<SQII_PELAKSANAAN> getAllPelaksanaan(String kdCluster, String kdKawasan, String blok, String nomor, String tglPenugasan) {
+    public List<SQII_PELAKSANAAN> getAllPelaksanaanFoto() {
         String query;
-
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
 
-        query = "SELECT  SQII_PELAKSANAAN.PATH_FOTO_DEFECT,\n" +
-                "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT\n" +
+        query = "SELECT  SQII_PELAKSANAAN.NO_PENUGASAN, \n" +
+                "        SQII_PENUGASAN.TGL_PENUGASAN,\n" +
+                "        SQII_PELAKSANAAN.KD_KAWASAN, \n" +
+                "        SQII_PELAKSANAAN.BLOK, \n" +
+                "        SQII_PELAKSANAAN.NOMOR, \n" +
+                "        SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER,\n" +
+                "        SQII_CLUSTER.NM_CLUSTER,\n" +
+                "        SQII_PELAKSANAAN.KD_JENIS, \n" +
+                "        SQII_PELAKSANAAN.KD_TIPE, \n" +
+                "        SQII_PELAKSANAAN.KD_ITEM_DEFECT, \n" +
+                "        SQII_ITEM_DEFECT.NM_ITEM_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.KD_LANTAI, \n" +
+                "        SQII_PELAKSANAAN.URUT_PELAKSANAAN, \n" +
+                "        SQII_PELAKSANAAN.URUT_FOTO, \n" +
+                "        SQII_PELAKSANAAN.PATH_FOTO_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT,\n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0)\n" +
+                "\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
-                "WHERE   KD_CLUSTER = '" + kdCluster + "'\n" +
-                "        KD_KAWASAN = '" + kdKawasan + "'\n" +
-                "        BLOK = '" + blok + "'\n" +
-                "        NOMOR = '" + nomor + "'\n" +
-                "        TANGGAL_PENUGASAN = '" + tglPenugasan + "'";
+                "\n" +
+                "        INNER JOIN SQII_ITEM_DEFECT_PENUGASAN\n" +
+                "        ON SQII_PELAKSANAAN.NO_PENUGASAN = SQII_ITEM_DEFECT_PENUGASAN.NO_PENUGASAN AND\n" +
+                "           SQII_PELAKSANAAN.KD_KAWASAN = SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN AND\n" +
+                "           SQII_PELAKSANAAN.BLOK = SQII_ITEM_DEFECT_PENUGASAN.BLOK AND\n" +
+                "           SQII_PELAKSANAAN.NOMOR = SQII_ITEM_DEFECT_PENUGASAN.NOMOR AND\n" +
+                "           SQII_PELAKSANAAN.KD_JENIS = SQII_ITEM_DEFECT_PENUGASAN.KD_JENIS AND\n" +
+                "           SQII_PELAKSANAAN.KD_TIPE = SQII_ITEM_DEFECT_PENUGASAN.KD_TIPE AND\n" +
+                "           SQII_PELAKSANAAN.KD_ITEM_DEFECT = SQII_ITEM_DEFECT_PENUGASAN.KD_ITEM_DEFECT AND\n" +
+                "           SQII_PELAKSANAAN.KD_LANTAI = SQII_ITEM_DEFECT_PENUGASAN.KD_LANTAI \n" +
+                "\n" +
+                "        INNER JOIN SQII_CLUSTER\n" +
+                "        ON SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN = SQII_CLUSTER.KD_KAWASAN AND\n" +
+                "           SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER = SQII_CLUSTER.KD_CLUSTER\n" +
+                "           \n" +
+                "        INNER JOIN SQII_ITEM_DEFECT\n" +
+                "        ON SQII_PELAKSANAAN.KD_ITEM_DEFECT = SQII_ITEM_DEFECT.KD_ITEM_DEFECT\n" +
+                "    \n" +
+                "        INNER JOIN SQII_PENUGASAN\n" +
+                "        ON SQII_PELAKSANAAN.NO_PENUGASAN = SQII_PENUGASAN.NO_PENUGASAN";
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 SQII_PELAKSANAAN item = new SQII_PELAKSANAAN();
 
-                item.setPATH_FOTO_DEFECT(cursor.getString(0));
-                item.setSRC_FOTO_DEFECT(cursor.getString(1));
+                item.setNO_PENUGASAN(cursor.getString(0));
+                item.setTGL_PENUGASAN(cursor.getString(1));
+                item.setKD_KAWASAN(cursor.getString(2));
+                item.setBLOK(cursor.getString(3));
+                item.setNOMOR(cursor.getString(4));
+                item.setKD_CLUSTER(cursor.getString(5));
+                item.setNM_CLUSTER(cursor.getString(6));
+                item.setKD_JENIS(cursor.getString(7));
+                item.setKD_TIPE(cursor.getString(8));
+                item.setKD_ITEM_DEFECT(cursor.getFloat(9));
+                item.setNM_ITEM_DEFECT(cursor.getString(10));
+                item.setKD_LANTAI(cursor.getFloat(11));
+                item.setURUT_PELAKSANAAN(cursor.getFloat(12));
+                item.setURUT_FOTO(cursor.getFloat(13));
+                item.setPATH_FOTO_DEFECT(cursor.getString(14));
+                item.setSRC_FOTO_DEFECT(cursor.getString(15));
+                item.setJML_FOTO_PENUGASAN(cursor.getFloat(16));
+                item.setJML_FOTO_REALISASI(cursor.getFloat(17));
 
                 listData.add(item);
             }
@@ -1876,12 +1901,53 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public List<SQII_PELAKSANAAN> getAllPelaksanaan(String petugasQC, String jenisPenugasan) {
-        /*tes*/
+    public Integer getAllPelaksanaanJumlahFoto(String petugasQC, String jenisPenugasan) {
+        String query;
+        Integer count = 0;
+
+        /*SQLiteDatabase db = this.getReadableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+
+        query = "SELECT  COUNT(SQII_PELAKSANAAN.NO_PENUGASAN) \n" +
+                "\n" +
+                "FROM    SQII_PELAKSANAAN\n" +
+                "\n" +
+                "WHERE   SQII_PELAKSANAAN.PETUGAS_QC = '" + petugasQC + "' AND\n" +
+                "        SQII_PELAKSANAAN.JENIS_PENUGASAN = '" + jenisPenugasan + "' \n" ;
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext())
+            {
+                count = Integer.valueOf(cursor.getString(0));
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return count;
+    }
+
+    public List<SQII_PELAKSANAAN> getAllPelaksanaan(String noPenugasan, String kdKawasan, String blok, String nomor, String kdJenis, String kdTipe, Float kdItemDefect, Float kdLantai, Float urutPelaksanaan) {
+        String query;
+
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
-        Cursor cursor = db.rawQuery("SELECT * FROM SQII_PELAKSANAAN WHERE PETUGAS_QC = '" + petugasQC + "' AND JENIS_PENUGASAN = '" + jenisPenugasan + "'", null);
+
+        query = "SELECT  *\n" +
+                "FROM    SQII_PELAKSANAAN\n" +
+                "WHERE   NO_PENUGASAN = '" + noPenugasan + "' AND\n" +
+                "        KD_KAWASAN = '" + kdKawasan + "' AND\n" +
+                "        BLOK = '" + blok + "' AND\n" +
+                "        NOMOR = '" + nomor + "' AND\n" +
+                "        KD_JENIS = '" + kdJenis + "' AND\n" +
+                "        KD_TIPE = '" + kdTipe + "' AND\n" +
+                "        KD_ITEM_DEFECT = " + String.valueOf(kdItemDefect) + " AND\n" +
+                "        KD_LANTAI = " + String.valueOf(kdLantai) + " AND\n" +
+                "        URUT_PELAKSANAAN = " + String.valueOf(urutPelaksanaan) ;
+
+        Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 SQII_PELAKSANAAN item = new SQII_PELAKSANAAN();
@@ -1938,17 +2004,181 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public List<SQII_PELAKSANAAN> getAllPelaksanaanPenugasan(Date tglPenugasan, String petugasQC, String jenis_penugasan) {
+    public List<SQII_PELAKSANAAN> getAllPelaksanaan(String petugasQC, String jenisPenugasan) {
         String query;
 
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
 
-        //query = "SELECT * FROM SQII_PELAKSANAAN WHERE TGL_PENUGASAN = '" + tglPenugasan + "' AND PETUGAS_QC = '" + petugasQC + "'  AND JENIS_PENUGASAN = '" + jenis_penugasan + "'";
+        query = "SELECT  SQII_PELAKSANAAN.NO_PENUGASAN, \n" +
+                "        SQII_PENUGASAN.TGL_PENUGASAN,\n" +
+                "        SQII_PELAKSANAAN.KD_KAWASAN, \n" +
+                "        SQII_PELAKSANAAN.BLOK, \n" +
+                "        SQII_PELAKSANAAN.NOMOR, \n" +
+                "        SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER,\n" +
+                "        SQII_CLUSTER.NM_CLUSTER,\n" +
+                "        SQII_PELAKSANAAN.KD_JENIS, \n" +
+                "        SQII_PELAKSANAAN.KD_TIPE, \n" +
+                "        SQII_PELAKSANAAN.KD_ITEM_DEFECT, \n" +
+                "        SQII_ITEM_DEFECT.NM_ITEM_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.KD_LANTAI,\n" +
+                "        SQII_LANTAI.NM_LANTAI,\n" +
+                "        SQII_PELAKSANAAN.URUT_PELAKSANAAN,\n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
+                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0), \n" +
+                "        SQII_PELAKSANAAN.URUT_FOTO,\n" +
+                "        SQII_PELAKSANAAN.JENIS_PENUGASAN,\n" +
+                "        SQII_PELAKSANAAN.TGL_PELAKSANAAN,\n" +
+                "        SQII_PELAKSANAAN.PETUGAS_QC,\n" +
+                "        SQII_PELAKSANAAN.PENGAWAS,\n" +
+                "        SQII_PELAKSANAAN.SM,\n" +
+                "        SQII_PELAKSANAAN.STATUS_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.STATUS_PEKERJAAN,\n" +
+                "        SQII_PELAKSANAAN.CATATAN,\n" +
+                "        SQII_PELAKSANAAN.FLAG_UPLOAD,\n" +
+                "        SQII_PELAKSANAAN.TGL_UPLOAD,\n" +
+                "        SQII_PELAKSANAAN.PATH_FOTO_DENAH,\n" +
+                "        SQII_PELAKSANAAN.SRC_FOTO_DENAH,\n" +
+                "        SQII_PELAKSANAAN.PATH_FOTO_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.LAMA_PERBAIKAN,\n" +
+                "        SQII_PELAKSANAAN.TGL_ENTRY_LAMA_PERBAIKAN,\n" +
+                "        SQII_PELAKSANAAN.TGL_JATUH_TEMPO_PERBAIKAN,\n" +
+                "        SQII_PELAKSANAAN.FLAG_AKTIF,\n" +
+                "        SQII_PELAKSANAAN.USER_AKTIF,\n" +
+                "        SQII_PELAKSANAAN.TGL_AKTIF,\n" +
+                "        SQII_PELAKSANAAN.ALASAN_AKTIF,\n" +
+                "        SQII_PELAKSANAAN.FLAG_BATAL,\n" +
+                "        SQII_PELAKSANAAN.USER_BATAL,\n" +
+                "        SQII_PELAKSANAAN.TGL_BATAL,\n" +
+                "        SQII_PELAKSANAAN.ALASAN_BATAL,\n" +
+                "        SQII_PELAKSANAAN.STATUS_SIMPAN,\n" +
+                "        SQII_PELAKSANAAN.USER_ENTRY,\n" +
+                "        SQII_PELAKSANAAN.TGL_ENTRY,\n" +
+                "        SQII_PELAKSANAAN.USER_UPDATE,\n" +
+                "        SQII_PELAKSANAAN.TGL_UPDATE,\n" +
+                "        SQII_PELAKSANAAN.PARENT_ROWID,\n" +
+                "        SQII_PELAKSANAAN.ROWID\n" +
+                "\n" +
+                "FROM    SQII_PELAKSANAAN\n" +
+                "\n" +
+                "        INNER JOIN SQII_ITEM_DEFECT_PENUGASAN\n" +
+                "        ON SQII_PELAKSANAAN.NO_PENUGASAN = SQII_ITEM_DEFECT_PENUGASAN.NO_PENUGASAN AND\n" +
+                "           SQII_PELAKSANAAN.KD_KAWASAN = SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN AND\n" +
+                "           SQII_PELAKSANAAN.BLOK = SQII_ITEM_DEFECT_PENUGASAN.BLOK AND\n" +
+                "           SQII_PELAKSANAAN.NOMOR = SQII_ITEM_DEFECT_PENUGASAN.NOMOR AND\n" +
+                "           SQII_PELAKSANAAN.KD_JENIS = SQII_ITEM_DEFECT_PENUGASAN.KD_JENIS AND\n" +
+                "           SQII_PELAKSANAAN.KD_TIPE = SQII_ITEM_DEFECT_PENUGASAN.KD_TIPE AND\n" +
+                "           SQII_PELAKSANAAN.KD_ITEM_DEFECT = SQII_ITEM_DEFECT_PENUGASAN.KD_ITEM_DEFECT AND\n" +
+                "           SQII_PELAKSANAAN.KD_LANTAI = SQII_ITEM_DEFECT_PENUGASAN.KD_LANTAI \n" +
+                "\n" +
+                "        INNER JOIN SQII_CLUSTER\n" +
+                "        ON SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN = SQII_CLUSTER.KD_KAWASAN AND\n" +
+                "           SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER = TRIM(SQII_CLUSTER.KD_CLUSTER)\n" +
+                "           \n" +
+                "        INNER JOIN SQII_ITEM_DEFECT\n" +
+                "        ON SQII_PELAKSANAAN.KD_ITEM_DEFECT = SQII_ITEM_DEFECT.KD_ITEM_DEFECT\n" +
+                "    \n" +
+                "        INNER JOIN SQII_PENUGASAN\n" +
+                "        ON SQII_PELAKSANAAN.NO_PENUGASAN = SQII_PENUGASAN.NO_PENUGASAN\n" +
+                "        \n" +
+                "        INNER JOIN SQII_LANTAI\n" +
+                "        ON SQII_PELAKSANAAN.KD_LANTAI = SQII_LANTAI.KD_LANTAI\n" +
+                "        \n" +
+                "WHERE   SQII_PELAKSANAAN.PETUGAS_QC = '" + petugasQC + "' AND\n" +
+                "        SQII_PELAKSANAAN.JENIS_PENUGASAN = '" + jenisPenugasan + "' \n" +
+                "\n" +
+                "GROUP BY SQII_PELAKSANAAN.NO_PENUGASAN, \n" +
+                "        SQII_PENUGASAN.TGL_PENUGASAN,\n" +
+                "        SQII_PELAKSANAAN.KD_KAWASAN, \n" +
+                "        SQII_PELAKSANAAN.BLOK, \n" +
+                "        SQII_PELAKSANAAN.NOMOR, \n" +
+                "        SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER,\n" +
+                "        SQII_CLUSTER.NM_CLUSTER,\n" +
+                "        SQII_PELAKSANAAN.KD_JENIS, \n" +
+                "        SQII_PELAKSANAAN.KD_TIPE, \n" +
+                "        SQII_PELAKSANAAN.KD_ITEM_DEFECT, \n" +
+                "        SQII_ITEM_DEFECT.NM_ITEM_DEFECT,\n" +
+                "        SQII_PELAKSANAAN.KD_LANTAI,\n" +
+                "        SQII_LANTAI.NM_LANTAI,\n" +
+                "        SQII_PELAKSANAAN.URUT_PELAKSANAAN,\n" +
+                "        SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,\n" +
+                "        SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI";
 
-        query = "SELECT * FROM SQII_PELAKSANAAN WHERE TGL_PELAKSANAAN = '" + tglPenugasan + "' AND PETUGAS_QC = '" + petugasQC + "'  AND JENIS_PENUGASAN = '" + jenis_penugasan + "'";
-        Log.e("query : ",query);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                SQII_PELAKSANAAN item = new SQII_PELAKSANAAN();
+
+                item.setNO_PENUGASAN(cursor.getString(0));
+                item.setTGL_PENUGASAN(cursor.getString(1));
+                item.setKD_KAWASAN(cursor.getString(2));
+                item.setBLOK(cursor.getString(3));
+                item.setNOMOR(cursor.getString(4));
+                item.setKD_CLUSTER(cursor.getString(5));
+                item.setNM_CLUSTER(cursor.getString(6));
+                item.setKD_JENIS(cursor.getString(7));
+                item.setKD_TIPE(cursor.getString(8));
+                item.setKD_ITEM_DEFECT(cursor.getFloat(9));
+                item.setNM_ITEM_DEFECT(cursor.getString(10));
+                item.setKD_LANTAI(cursor.getFloat(11));
+                item.setNM_LANTAI(cursor.getString(12));
+                item.setURUT_PELAKSANAAN(cursor.getFloat(13));
+                item.setJML_FOTO_PENUGASAN(cursor.getFloat(14));
+                item.setJML_FOTO_REALISASI(cursor.getFloat(15));
+                item.setURUT_FOTO(cursor.getFloat(16));
+                item.setJENIS_PENUGASAN(cursor.getString(17));
+                item.setTGL_PELAKSANAAN(cursor.getString(18));
+                item.setPETUGAS_QC(cursor.getString(19));
+                item.setPENGAWAS(cursor.getString(20));
+                item.setSM(cursor.getString(21));
+                item.setSTATUS_DEFECT(cursor.getString(22));
+                item.setSTATUS_PEKERJAAN(cursor.getString(23));
+                item.setCATATAN(cursor.getString(24));
+                item.setFLAG_UPLOAD(cursor.getString(25));
+                item.setTGL_UPLOAD(cursor.getString(26));
+                item.setPATH_FOTO_DENAH(cursor.getString(27));
+                item.setSRC_FOTO_DENAH(cursor.getString(28));
+                item.setPATH_FOTO_DEFECT(cursor.getString(29));
+                item.setSRC_FOTO_DEFECT(cursor.getString(30));
+                item.setLAMA_PERBAIKAN(cursor.getFloat(31));
+                item.setTGL_ENTRY_LAMA_PERBAIKAN(cursor.getString(32));
+                item.setTGL_JATUH_TEMPO_PERBAIKAN(cursor.getString(33));
+                item.setFLAG_AKTIF(cursor.getString(34));
+                item.setUSER_AKTIF(cursor.getString(35));
+                item.setTGL_AKTIF(cursor.getString(36));
+                item.setALASAN_AKTIF(cursor.getString(37));
+                item.setFLAG_BATAL(cursor.getString(38));
+                item.setUSER_BATAL(cursor.getString(39));
+                item.setTGL_BATAL(cursor.getString(40));
+                item.setALASAN_BATAL(cursor.getString(41));
+                item.setSTATUS_SIMPAN(cursor.getString(42));
+                item.setUSER_ENTRY(cursor.getString(43));
+                item.setTGL_ENTRY(cursor.getString(44));
+                item.setUSER_UPDATE(cursor.getString(45));
+                item.setTGL_UPDATE(cursor.getString(46));
+                item.setPARENT_ROWID(cursor.getFloat(47));
+                item.setROWID(cursor.getFloat(48));
+
+                listData.add(item);
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return listData;
+    }
+
+    public List<SQII_PELAKSANAAN> getAllPelaksanaanPenugasan(String tglPenugasan, String petugasQC) {
+        String query;
+
+        List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
+        /*SQLiteDatabase db = this.getReadableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+
+        query = "SELECT * FROM SQII_PELAKSANAAN WHERE TGL_PENUGASAN = '" + tglPenugasan + "' AND PETUGAS_QC = '" + petugasQC + "'";
+
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -2108,16 +2338,16 @@ public class QCDBHelper extends SQLiteOpenHelper {
         values.put("PARENT_ROWID", item.getROWID());
         values.put("ROWID", item.getROWID());
 
-        String filter = "NO_PENUGASAN = " + item.getNO_PENUGASAN() + " AND " +
-                "KD_KAWASAN =" + item.getKD_KAWASAN() + " AND " +
-                "BLOK =" + item.getBLOK() + " AND " +
-                "NOMOR =" + item.getNOMOR() + " AND " +
-                "KD_JENIS =" + item.getKD_JENIS() + " AND " +
-                "KD_TIPE =" + item.getKD_TIPE() + " AND " +
-                "KD_IEM_DEFECT =" + item.getKD_ITEM_DEFECT() + " AND " +
-                "KD_LANTAI =" + item.getKD_LANTAI() + " AND " +
-                "URUT_PELAKSANAAN =" + item.getURUT_PELAKSANAAN() + " AND " +
-                "URUT_FOTO =" + item.getURUT_FOTO();
+        String filter = "NO_PENUGASAN = '" + item.getNO_PENUGASAN() + "' AND " +
+                "KD_KAWASAN = '" + item.getKD_KAWASAN() + "' AND " +
+                "BLOK = '" + item.getBLOK() + "' AND " +
+                "NOMOR = '" + item.getNOMOR() + "' AND " +
+                "KD_JENIS = '" + item.getKD_JENIS() + "' AND " +
+                "KD_TIPE = '" + item.getKD_TIPE() + "' AND " +
+                "KD_ITEM_DEFECT = " + item.getKD_ITEM_DEFECT() + " AND " +
+                "KD_LANTAI = " + item.getKD_LANTAI() + " AND " +
+                "URUT_PELAKSANAAN = " + item.getURUT_PELAKSANAAN() + " AND " +
+                "URUT_FOTO = " + item.getURUT_FOTO();
 
         int affected_rows = db.update("SQII_PELAKSANAAN", values, filter, null);
         db.close();

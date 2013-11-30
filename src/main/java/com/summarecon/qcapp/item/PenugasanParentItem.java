@@ -13,16 +13,20 @@ public class PenugasanParentItem {
     private String parentBlokLbl;
     private String parentTotalImagesLbl;
 
+    private Integer reqImages;
+
     public PenugasanParentItem(String parentItemLbl) {
         this.parentItemLbl = parentItemLbl;
         childItemList = new ArrayList<PenugasanChildItem>();
     }
 
-    public PenugasanParentItem(String parentItemLbl, String parentTglLbl, String parentBlokLbl, String parentTotalImagesLbl) {
+    public PenugasanParentItem(String parentItemLbl, String parentTglLbl, String parentBlokLbl, String parentTotalImagesLbl, Float reqImages) {
         this.parentItemLbl = parentItemLbl;
         this.parentTglLbl = parentTglLbl;
         this.parentBlokLbl = parentBlokLbl;
         this.parentTotalImagesLbl = parentTotalImagesLbl;
+        this.reqImages = Integer.valueOf(String.format("%.0f", reqImages));
+
         childItemList = new ArrayList<PenugasanChildItem>();
     }
 
@@ -40,6 +44,10 @@ public class PenugasanParentItem {
 
     public String getParentTotalImagesLbl() {
         return parentTotalImagesLbl;
+    }
+
+    public Integer getReqImages() {
+        return reqImages;
     }
 
     public List<PenugasanChildItem> getChildItemList() {

@@ -62,7 +62,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             //setup camera parameters
             parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);                      //Flashlight
-            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);       //auto-focus
+            if(parameters.getSupportedFocusModes().indexOf(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE) != -1){
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);       //auto-focus
+            }
             parameters.setPictureSize(1024, 768);
 
             //apply camera parameters

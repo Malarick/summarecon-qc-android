@@ -1,7 +1,6 @@
 package com.summarecon.qcapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +8,6 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.media.MediaActionSound;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +16,10 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.widget.ZoomControls;
+
+import com.summarecon.qcapp.core.QCConfig;
+import com.summarecon.qcapp.db.QCDBHelper;
+import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,21 +30,44 @@ import java.io.IOException;
 public class TakePictureActivity extends Activity {
 
     final static String LOG_TAG = "TakePictureActivity";
-    final static String PHOTO_URL = "PHOTO_URL";
+
     final static int ZOOM_IN_INCREMENT = 2;
     final static int ZOOM_OUT_INCREMENT = -2;
-    FrameLayout cameraLayout;
+
+    public final static String ACTIVITY = "PHOTO";
+    public final static String PARENT_ITEM_SQII_PELAKSANAAN = "PARENT_ITEM_SQII_PELAKSANAAN";
+    public final static String ITEM_SQII_PELAKSANAAN = "ITEM_SQII_PELAKSANAAN";
+    public final static String URUT_FOTO = "URUT_FOTO";
+    public final static String GRID_BUNDLE = "GRID_BUNDLE";
+    public final static String ACTION_REPLACE = "ACTION_REPLACE";
+
+    private FrameLayout cameraLayout;
     private Camera camera;
     private CameraPreview cameraPreview;
     private Camera.Parameters parameters;
     private ZoomControls zoomControls;
     private Button btnTakePicture;
 
+    private QCDBHelper db;
+    private SQII_PELAKSANAAN parent;
+    private SQII_PELAKSANAAN item;
+    private Float urutFoto;
+    private Boolean isReplace;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_picture);
 
+        db = QCDBHelper.getInstance(this);
         cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
+
+        //GET ITEM FROM GRIDVIEW
+        Bundle bundle = new Bundle();
+        bundle = getIntent().getBundleExtra(GRID_BUNDLE);
+        parent = (SQII_PELAKSANAAN) bundle.getSerializable(PARENT_ITEM_SQII_PELAKSANAAN);
+        item = (SQII_PELAKSANAAN) bundle.getSerializable(ITEM_SQII_PELAKSANAAN);
+        urutFoto = bundle.getFloat(URUT_FOTO, 1);
+        isReplace = bundle.getBoolean(ACTION_REPLACE);
 
         //Handle listener untuk zoomControl
         setZoomControlListener();
@@ -167,7 +192,7 @@ public class TakePictureActivity extends Activity {
                 mediaActionSound.play(MediaActionSound.SHUTTER_CLICK);
 
                 //Setting path dan nama file
-                File pictureFileDir = new File(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath());
+                File pictureFileDir = new File(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY);
                 String pictureFileName = System.currentTimeMillis() + ".jpg";
                 File pictureFile = new File(pictureFileDir, pictureFileName);
 
@@ -204,16 +229,28 @@ public class TakePictureActivity extends Activity {
                 }
 
                 //preview the photo by calling the markFloorActivity
-                previewPhoto(pictureFile.getAbsolutePath());
+                previewPhoto(pictureFile.getAbsolutePath(), pictureFileDir.getAbsolutePath(), pictureFileName);
             }
         };
 
         camera.takePicture(null, null, pictureCallback);
     }
 
-    public void previewPhoto(String filePath){
+    public void previewPhoto(String filePath, String fileDir, String fileName){
         Intent intent = new Intent(this, MarkPictureActivity.class);
-        intent.putExtra(PHOTO_URL, filePath);
+
+        //MASUKKAN SEMUA PARAMETER YANG DIPERLUKAN KE DALAM BUNDLE
+        Bundle bundle = new Bundle();
+        bundle.putString(MarkPictureActivity.PHOTO_URL, filePath);
+        bundle.putString(MarkPictureActivity.PHOTO_DIR, fileDir);
+        bundle.putString(MarkPictureActivity.PHOTO_NAME, fileName);
+        bundle.putFloat(MarkPictureActivity.URUT_FOTO, urutFoto);
+        bundle.putBoolean(MarkPictureActivity.ACTION_REPLACE, isReplace);
+        bundle.putSerializable(MarkPictureActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
+        bundle.putSerializable(MarkPictureActivity.ITEM_SQII_PELAKSANAAN, item);
+        bundle.putString(MarkPictureActivity.CALLING_ACTIVITY, ACTIVITY);
+
+        intent.putExtra(MarkPictureActivity.PHOTO_BUNDLE, bundle);
         this.startActivity(intent);
     }
 }

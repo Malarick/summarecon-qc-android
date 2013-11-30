@@ -23,6 +23,7 @@
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppThemeNoTitle"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             android:label="@string/app_name">
             <intent-filter>
@@ -34,22 +35,28 @@
         <activity
             android:name="com.summarecon.qcapp.MainActivity"
             android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" />
         <activity
             android:name=".TakePictureActivity"
             android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
             android:label="TakePictureActivity" />
         <activity
             android:name=".MarkPictureActivity"
             android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
             android:label="MarkPictureActivity" />
         <activity
             android:name=".MarkFloorMapActivity"
             android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
             android:label="MarkFloorMapActivity" />
         <activity
             android:name=".SettingActivity"
             android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
             android:label="SettingActivity" />
     </application>
 

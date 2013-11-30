@@ -61,7 +61,7 @@ public class NavDrawerAdapter extends BaseAdapter {
         TextView textView_lbl = (TextView) view.findViewById(R.id.drawer_item_label);
         textView_lbl.setText(item.getItemLabel());
 
-        if(item.counterExist){
+        if(item.counterExist && item.getItemCounter() > 0){
             TextView textView_counter = (TextView) view.findViewById(R.id.drawer_item_counter);
             textView_counter.setText(String.valueOf(item.getItemCounter()));
             textView_counter.setBackgroundResource(R.drawable.rectangle);

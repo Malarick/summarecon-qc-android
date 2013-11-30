@@ -51,11 +51,9 @@ public class PenugasanGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        PenugasanGridItem item = getItem(position);
+        view = inflater.inflate(viewHolder, null);
 
-        if(view == null){
-            view = inflater.inflate(viewHolder, null);
-        }
+        PenugasanGridItem item = getItem(position);
 
         imgItem = (ImageView) view.findViewById(R.id.img_grid_item);
 
