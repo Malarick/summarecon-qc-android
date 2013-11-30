@@ -1680,6 +1680,36 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
+    public SQII_LANTAI_TIPE_RUMAH getLantaiTipeRumah(String kdLantai, String kdJenis, String kdTipe, String kdKawasan) {
+        String query;
+
+        SQII_LANTAI_TIPE_RUMAH item = new SQII_LANTAI_TIPE_RUMAH();
+        /*SQLiteDatabase db = this.getReadableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+
+        query = "SELECT PATH_FOTO_DENAH,\n" +
+                "       SRC_FOTO_DENAH,\n" +
+                "       PATH_FOTO_DENAH_2,\n" +
+                "       SRC_FOTO_DENAH_2\n" +
+                "FROM   SQII_LANTAI_TIPE_RUMAH";
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+
+                item.setPATH_FOTO_DENAH(cursor.getString(0));
+                item.setSRC_FOTO_DENAH(cursor.getString(1));
+                item.setPATH_FOTO_DENAH_2(cursor.getString(2));
+                item.setSRC_FOTO_DENAH_2(cursor.getString(3));
+
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return item;
+    }
+
     public long insertLantaiTipeRumah(SQII_LANTAI_TIPE_RUMAH item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
@@ -1902,7 +1932,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public Integer getAllPelaksanaanJumlahFoto(String petugasQC, String jenisPenugasan) {
+    public Integer getPelaksanaanJumlahFoto(String petugasQC, String jenisPenugasan) {
         String query;
         Integer count = 0;
 

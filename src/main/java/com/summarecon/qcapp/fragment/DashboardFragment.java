@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -183,11 +182,11 @@ public class DashboardFragment extends Fragment {
             if (iconList.get(c) != "null") {
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", getActivity().getPackageName());
                 if (s.equals(QCConfig.JENIS_PENUGASAN_SISA)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_SISA), id_icon));
+                    itemList.add(new NotificationsItem(s, db.getPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_SISA), id_icon));
                 } else if (s.equals(QCConfig.JENIS_PENUGASAN_ULANG)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_ULANG), id_icon));
+                    itemList.add(new NotificationsItem(s, db.getPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_ULANG), id_icon));
                 } else if (s.equals(QCConfig.JENIS_PENUGASAN_BARU)) {
-                    itemList.add(new NotificationsItem(s, db.getAllPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_BARU), id_icon));
+                    itemList.add(new NotificationsItem(s, db.getPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_BARU), id_icon));
                 } else {
                     itemList.add(new NotificationsItem(s, id_icon));
                 }
