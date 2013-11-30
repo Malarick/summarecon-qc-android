@@ -2170,14 +2170,14 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public List<SQII_PELAKSANAAN> getAllPelaksanaanPenugasan(String tglPenugasan, String petugasQC) {
+    public List<SQII_PELAKSANAAN> getAllPelaksanaanPenugasan(String tglPenugasan, String petugasQC, String jenis_penugasan) {
         String query;
 
         List<SQII_PELAKSANAAN> listData = new ArrayList<SQII_PELAKSANAAN>();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
 
-        query = "SELECT * FROM SQII_PELAKSANAAN WHERE TGL_PENUGASAN = '" + tglPenugasan + "' AND PETUGAS_QC = '" + petugasQC + "'";
+        query = "SELECT * FROM SQII_PELAKSANAAN WHERE TGL_PENUGASAN = '" + tglPenugasan + "' AND PETUGAS_QC = '" + petugasQC + "' AND JENIS_PENUGASAN = '" + jenis_penugasan + "'";
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
