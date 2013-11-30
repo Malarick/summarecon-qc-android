@@ -120,7 +120,7 @@ public class LoginActivity extends Activity {
                 /* init bundle dan bawa nilai username dan password ke aktivity lain*/
             Bundle bundle = new Bundle();
             bundle.putString("nik", edt_nik.getText().toString());
-            bundle.putString("password", edt_password.getText().toString());
+            bundle.putString("password", MD5Hash.getMD5(edt_password.getText().toString()));
             intent.putExtra("bundle", bundle);
             startActivity(intent);
             LoginActivity.this.finish();
