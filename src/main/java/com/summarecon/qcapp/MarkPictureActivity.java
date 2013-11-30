@@ -228,8 +228,15 @@ public class MarkPictureActivity extends Activity {
 
     private void markFloorMap(){
         Intent intent = new Intent(this, MarkFloorMapActivity.class);
-        intent.putExtra(PHOTO_URL, photoURL);
+        Bundle bundle = new Bundle();
+
+        bundle.putBoolean(MarkFloorMapActivity.ACTION_REPLACE, isReplace);
+        bundle.putSerializable(MarkFloorMapActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
+        bundle.putSerializable(MarkFloorMapActivity.ITEM_SQII_PELAKSANAAN, item);
+
+        intent.putExtra(PHOTO_BUNDLE, bundle);
         this.startActivity(intent);
+        this.finish();
     }
 
     private void clearDrawing(){

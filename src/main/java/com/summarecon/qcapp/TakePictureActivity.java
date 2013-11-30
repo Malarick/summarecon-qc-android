@@ -174,9 +174,9 @@ public class TakePictureActivity extends Activity {
         }
 
         if(parameters.isSmoothZoomSupported()){
-            Toast.makeText(this, "SmoothZoom Supported", 100).show();
+            Toast.makeText(this, "SmoothZoom Supported", Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(this, "SmoothZoom Not Supported", 100).show();
+            Toast.makeText(this, "SmoothZoom Not Supported", Toast.LENGTH_SHORT).show();
         }
         parameters.setZoom(value);
         camera.setParameters(parameters);
@@ -193,6 +193,10 @@ public class TakePictureActivity extends Activity {
                 //Setting path dan nama file
                 File pictureFileDir = new File(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY);
                 String pictureFileName = System.currentTimeMillis() + ".jpg";
+                if(isReplace){
+                    pictureFileName = item.getSRC_FOTO_DEFECT();
+                }
+
                 File pictureFile = new File(pictureFileDir, pictureFileName);
 
                 //create directory if not exist
@@ -251,5 +255,6 @@ public class TakePictureActivity extends Activity {
 
         intent.putExtra(MarkPictureActivity.PHOTO_BUNDLE, bundle);
         this.startActivity(intent);
+        this.finish();
     }
 }

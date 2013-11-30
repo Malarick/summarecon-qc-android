@@ -159,6 +159,7 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
         bundle.putString(MarkPictureActivity.PHOTO_DIR, QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY);
         bundle.putString(MarkPictureActivity.PHOTO_NAME, item.getSRC_FOTO_DEFECT());
         bundle.putFloat(MarkPictureActivity.URUT_FOTO, item.getURUT_FOTO());
+        bundle.putBoolean(TakePictureActivity.ACTION_REPLACE, true);
         bundle.putSerializable(MarkPictureActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
         bundle.putSerializable(MarkPictureActivity.ITEM_SQII_PELAKSANAAN, item);
         bundle.putString(MarkPictureActivity.CALLING_ACTIVITY, ACTIVITY);
