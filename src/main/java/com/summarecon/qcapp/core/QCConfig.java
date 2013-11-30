@@ -18,9 +18,6 @@ public class QCConfig {
 
     // Files & Directory
     public static String APP_EXTERNAL_IMAGES_DIRECTORY;
-    public static String APP_EXTERNAL_PENUGASAN_IMAGES_DIRECTORY;
-    public static String APP_EXTERNAL_DENAH_PENUGASAN_IMAGES_DIRECTORY;
-    public static String APP_EXTERNAL_DENAH_IMAGES_DIRECTORY;
     public static String APP_EXTERNAL_DATABASE_DIRECTORY;
     public static String APP_EXTERNAL_CACHE_DIRECTORY;
     public static String APP_EXTERNAL_TEMP_DIRECTORY;
@@ -33,9 +30,6 @@ public class QCConfig {
 
     public QCConfig(Context context) {
         APP_EXTERNAL_IMAGES_DIRECTORY = context.getExternalFilesDir("images").getAbsolutePath();
-        APP_EXTERNAL_PENUGASAN_IMAGES_DIRECTORY = context.getExternalFilesDir("images/penugasan").getAbsolutePath();
-        APP_EXTERNAL_PENUGASAN_IMAGES_DIRECTORY = context.getExternalFilesDir("images/denah-penugasan").getAbsolutePath();
-        APP_EXTERNAL_DENAH_IMAGES_DIRECTORY = context.getExternalFilesDir("images/denah").getAbsolutePath();
         APP_EXTERNAL_CACHE_DIRECTORY = context.getExternalCacheDir().getAbsolutePath();
         APP_EXTERNAL_TEMP_DIRECTORY = context.getExternalFilesDir("tmp").getAbsolutePath();
         APP_EXTERNAL_DATABASE_DIRECTORY = context.getExternalFilesDir(null).getAbsolutePath().replace("files", "") + "databases" + File.separator + DATABASE_NAME;
