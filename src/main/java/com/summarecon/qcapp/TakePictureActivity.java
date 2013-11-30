@@ -30,11 +30,17 @@ import java.io.IOException;
 public class TakePictureActivity extends Activity {
 
     final static String LOG_TAG = "TakePictureActivity";
-    public final static String ITEM_SQII_PELAKSANAAN = "ITEM_SQII_PELAKSANAAN";
-    public final static String URUT_FOTO = "URUT_FOTO";
-    final static String PHOTO_URL = "PHOTO_URL";
+
     final static int ZOOM_IN_INCREMENT = 2;
     final static int ZOOM_OUT_INCREMENT = -2;
+
+    public final static String ACTIVITY = "PHOTO";
+    public final static String PARENT_ITEM_SQII_PELAKSANAAN = "PARENT_ITEM_SQII_PELAKSANAAN";
+    public final static String ITEM_SQII_PELAKSANAAN = "ITEM_SQII_PELAKSANAAN";
+    public final static String URUT_FOTO = "URUT_FOTO";
+    public final static String GRID_BUNDLE = "GRID_BUNDLE";
+    public final static String ACTION_REPLACE = "ACTION_REPLACE";
+
     private FrameLayout cameraLayout;
     private Camera camera;
     private CameraPreview cameraPreview;
@@ -43,8 +49,10 @@ public class TakePictureActivity extends Activity {
     private Button btnTakePicture;
 
     private QCDBHelper db;
+    private SQII_PELAKSANAAN parent;
     private SQII_PELAKSANAAN item;
     private Float urutFoto;
+    private Boolean isReplace;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +62,12 @@ public class TakePictureActivity extends Activity {
         cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
 
         //GET ITEM FROM GRIDVIEW
-        item = (SQII_PELAKSANAAN) getIntent().getSerializableExtra(ITEM_SQII_PELAKSANAAN);
-        urutFoto = (float) getIntent().getIntExtra(URUT_FOTO, 1);
+        Bundle bundle = new Bundle();
+        bundle = getIntent().getBundleExtra(GRID_BUNDLE);
+        parent = (SQII_PELAKSANAAN) bundle.getSerializable(PARENT_ITEM_SQII_PELAKSANAAN);
+        item = (SQII_PELAKSANAAN) bundle.getSerializable(ITEM_SQII_PELAKSANAAN);
+        urutFoto = bundle.getFloat(URUT_FOTO, 1);
+        isReplace = bundle.getBoolean(ACTION_REPLACE);
 
         //Handle listener untuk zoomControl
         setZoomControlListener();
@@ -210,13 +222,6 @@ public class TakePictureActivity extends Activity {
                     fileOutputStream.write(final_data);
                     fileOutputStream.flush();
                     fileOutputStream.close();
-
-                    //UPDATE DB
-                    item.setPATH_FOTO_DEFECT(pictureFile.getAbsolutePath());
-                    item.setSRC_FOTO_DEFECT(pictureFileName);
-                    item.setURUT_FOTO(urutFoto);
-                    Log.e("EXTRA_", item.getPATH_FOTO_DEFECT() + " || " + item.getSRC_FOTO_DEFECT() + " || " + item.getURUT_FOTO());
-                    db.updatePelaksanaan(item);
                 }catch (FileNotFoundException e){
                     Log.e(LOG_TAG, e.getMessage());
                 }catch (IOException e){
@@ -224,17 +229,28 @@ public class TakePictureActivity extends Activity {
                 }
 
                 //preview the photo by calling the markFloorActivity
-                previewPhoto(pictureFile.getAbsolutePath());
+                previewPhoto(pictureFile.getAbsolutePath(), pictureFileDir.getAbsolutePath(), pictureFileName);
             }
         };
 
         camera.takePicture(null, null, pictureCallback);
     }
 
-    public void previewPhoto(String filePath){
+    public void previewPhoto(String filePath, String fileDir, String fileName){
         Intent intent = new Intent(this, MarkPictureActivity.class);
-        intent.putExtra(MarkPictureActivity.PHOTO_URL, filePath);
-        intent.putExtra(MarkPictureActivity.ITEM_SQII_PELAKSANAAN, item);
+
+        //MASUKKAN SEMUA PARAMETER YANG DIPERLUKAN KE DALAM BUNDLE
+        Bundle bundle = new Bundle();
+        bundle.putString(MarkPictureActivity.PHOTO_URL, filePath);
+        bundle.putString(MarkPictureActivity.PHOTO_DIR, fileDir);
+        bundle.putString(MarkPictureActivity.PHOTO_NAME, fileName);
+        bundle.putFloat(MarkPictureActivity.URUT_FOTO, urutFoto);
+        bundle.putBoolean(MarkPictureActivity.ACTION_REPLACE, isReplace);
+        bundle.putSerializable(MarkPictureActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
+        bundle.putSerializable(MarkPictureActivity.ITEM_SQII_PELAKSANAAN, item);
+        bundle.putString(MarkPictureActivity.CALLING_ACTIVITY, ACTIVITY);
+
+        intent.putExtra(MarkPictureActivity.PHOTO_BUNDLE, bundle);
         this.startActivity(intent);
     }
 }

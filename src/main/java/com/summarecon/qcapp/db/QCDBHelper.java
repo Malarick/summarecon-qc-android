@@ -941,6 +941,32 @@ public class QCDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean updateItemDefectPenugasan(SQII_PELAKSANAAN item) {
+        /*SQLiteDatabase db = this.getWritableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        ContentValues values = new ContentValues();
+
+        values.put("JML_FOTO_REALISASI", item.getJML_FOTO_REALISASI());
+
+        String filter = "NO_PENUGASAN = '" + item.getNO_PENUGASAN() + "' AND " +
+                "KD_KAWASAN = '" + item.getKD_KAWASAN() + "' AND " +
+                "BLOK = '" + item.getBLOK() + "' AND " +
+                "NOMOR = '" + item.getNOMOR() + "' AND " +
+                "KD_JENIS = '" + item.getKD_JENIS() + "' AND " +
+                "KD_TIPE = '" + item.getKD_TIPE() + "' AND " +
+                "KD_ITEM_DEFECT = " + item.getKD_ITEM_DEFECT() + " AND " +
+                "KD_LANTAI = " + item.getKD_LANTAI();
+
+        int affected_rows = db.update("SQII_ITEM_DEFECT_PENUGASAN", values, filter, null);
+        db.close();
+
+        if (affected_rows > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public boolean deleteItemDefectPenugasan(SQII_ITEM_DEFECT_PENUGASAN item) {
         SQLiteDatabase db = this.getWritableDatabase();
 

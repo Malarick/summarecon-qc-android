@@ -2,6 +2,7 @@ package com.summarecon.qcapp.item;
 
 import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,8 @@ import java.util.List;
  */
 public class PenugasanChildItem {
     String path;
-    List<SQII_PELAKSANAAN> list;
+    SQII_PELAKSANAAN parent;
+    List<SQII_PELAKSANAAN> listChild;
 
     public PenugasanChildItem() {
     }
@@ -19,16 +21,20 @@ public class PenugasanChildItem {
         this.path = path;
     }
 
-    public PenugasanChildItem(List list) {
-        this.list = list;
-
+    public PenugasanChildItem(SQII_PELAKSANAAN parent, List listChild) {
+        this.parent = parent;
+        this.listChild = listChild;
     }
 
     public String getPath() {
         return path;
     }
 
-    public List<SQII_PELAKSANAAN> getList() {
-        return list;
+    public SQII_PELAKSANAAN getParent() {
+        return parent;
+    }
+
+    public List<SQII_PELAKSANAAN> getListChild() {
+        return listChild;
     }
 }

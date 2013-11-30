@@ -93,7 +93,7 @@ public class PenugasanFragment extends Fragment {
             );
 
             //parentItem.getChildItemList().add(new PenugasanChildItem(sChild.getPATH_FOTO_DEFECT()));
-            parentItem.getChildItemList().add(new PenugasanChildItem(childList));
+            parentItem.getChildItemList().add(new PenugasanChildItem(sParent, childList));
             //parentItem.getChildItemList().add(new PenugasanChildItem(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY));
 
             //if((c % 2) == 0){
