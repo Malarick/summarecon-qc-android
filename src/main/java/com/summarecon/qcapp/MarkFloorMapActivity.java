@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.summarecon.qcapp.adapter.SpinnerListAdapter;
 import com.summarecon.qcapp.core.QCConfig;
 import com.summarecon.qcapp.db.QCDBHelper;
+import com.summarecon.qcapp.db.SQII_LANTAI_TIPE_RUMAH;
 import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.item.SpinnerListItem;
 
@@ -127,7 +128,9 @@ public class MarkFloorMapActivity extends Activity {
         item = (SQII_PELAKSANAAN) bundle.getSerializable(ITEM_SQII_PELAKSANAAN);
         isReplace = bundle.getBoolean(ACTION_REPLACE);
 
-        oriMapURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + File.separator + "A.jpg";
+        SQII_LANTAI_TIPE_RUMAH denah = db.getLantaiTipeRumah(item.getKD_LANTAI(), item.getKD_JENIS(), item.getKD_TIPE(), item.getKD_KAWASAN());
+
+        oriMapURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + File.separator + denah.getSRC_FOTO_DENAH();
         if(item.getSRC_FOTO_DENAH().equals("")){
             mapURL = oriMapURL;
         }else{

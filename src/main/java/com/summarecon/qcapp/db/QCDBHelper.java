@@ -1680,7 +1680,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public SQII_LANTAI_TIPE_RUMAH getLantaiTipeRumah(String kdLantai, String kdJenis, String kdTipe, String kdKawasan) {
+    public SQII_LANTAI_TIPE_RUMAH getLantaiTipeRumah(Float kdLantai, String kdJenis, String kdTipe, String kdKawasan) {
         String query;
 
         SQII_LANTAI_TIPE_RUMAH item = new SQII_LANTAI_TIPE_RUMAH();
