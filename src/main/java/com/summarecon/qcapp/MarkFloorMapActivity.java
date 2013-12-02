@@ -139,6 +139,7 @@ public class MarkFloorMapActivity extends Activity {
 
         mapDir = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY;
         Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
+        Log.e("EXTRA_", denah.getSRC_FOTO_DENAH());
         if(isReplace){
             mapName = item.getSRC_FOTO_DENAH();
         }else{
