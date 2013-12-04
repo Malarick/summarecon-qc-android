@@ -192,7 +192,7 @@ public class TakePictureActivity extends Activity {
 
                 //Setting path dan nama file
                 File pictureFileDir = new File(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY);
-                String pictureFileName = System.currentTimeMillis() + ".jpg";
+                String pictureFileName = QCConfig.PREFIX_FILE_DEFECT + parent.getNM_CLUSTER() + "_" + System.currentTimeMillis() + ".jpg";
                 if(isReplace){
                     pictureFileName = item.getSRC_FOTO_DEFECT();
                 }

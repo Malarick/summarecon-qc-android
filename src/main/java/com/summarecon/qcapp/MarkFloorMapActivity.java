@@ -143,12 +143,14 @@ public class MarkFloorMapActivity extends Activity {
         if(isReplace){
             mapName = item.getSRC_FOTO_DENAH();
         }else{
-            mapName = System.currentTimeMillis() + "AAA.jpg";
+            mapName = item.getSRC_FOTO_DEFECT().replace(QCConfig.PREFIX_FILE_DEFECT, QCConfig.PREFIX_FILE_DENAH);
         }
 
         oriMapBitmap = BitmapFactory.decodeFile(oriMapURL);
         mapBitmap = BitmapFactory.decodeFile(mapURL);
-        mapPreview.setImageBitmap(mapBitmap);
+        if(mapBitmap != null){
+            mapPreview.setImageBitmap(mapBitmap);
+        }
     }
 
     private void clearDrawing(){
@@ -157,6 +159,10 @@ public class MarkFloorMapActivity extends Activity {
     }
 
     private boolean saveMap(){
+        if(mapBitmap == null){
+            return false;
+        }
+
         //Convert bitmap to Byte
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         mapBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
@@ -213,6 +219,10 @@ public class MarkFloorMapActivity extends Activity {
         }
 
         public void drawLineOnCanvas(){
+            if(mapBitmap == null){
+               return;
+            }
+
             //creating bitmap kosongan yg besarnya sama dengan photo yang di preview sebagai wadah coret2
             Bitmap b = Bitmap.createBitmap(mapBitmap.getWidth(), mapBitmap.getHeight(), Bitmap.Config.ARGB_8888);
             //assign bitmap kosongan ke canvas
