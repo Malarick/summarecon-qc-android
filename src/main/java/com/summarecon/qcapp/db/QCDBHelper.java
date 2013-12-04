@@ -1680,7 +1680,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public SQII_LANTAI_TIPE_RUMAH getLantaiTipeRumah(String kdLantai, String kdJenis, String kdTipe, String kdKawasan) {
+    public SQII_LANTAI_TIPE_RUMAH getLantaiTipeRumah(Float kdLantai, String kdJenis, String kdTipe, String kdKawasan) {
         String query;
 
         SQII_LANTAI_TIPE_RUMAH item = new SQII_LANTAI_TIPE_RUMAH();
@@ -1691,7 +1691,11 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "       SRC_FOTO_DENAH,\n" +
                 "       PATH_FOTO_DENAH_2,\n" +
                 "       SRC_FOTO_DENAH_2\n" +
-                "FROM   SQII_LANTAI_TIPE_RUMAH";
+                "FROM   SQII_LANTAI_TIPE_RUMAH\n"+
+                "WHERE  KD_LANTAI = " + kdLantai + " AND\n" +
+                "       KD_JENIS = '" + kdJenis + "' AND\n" +
+                "       KD_TIPE = '" + kdTipe + "' AND\n" +
+                "       KD_KAWASAN = '" + kdKawasan + "'";
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {

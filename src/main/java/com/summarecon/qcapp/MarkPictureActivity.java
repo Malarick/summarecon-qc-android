@@ -192,7 +192,6 @@ public class MarkPictureActivity extends Activity {
         //GET SELECTED ITEM FROM SPINNER/DROPDOWN
         mSelectedViewStatusDefect = (TextView) mSpnStatusDefect.getSelectedView().findViewById(R.id.spinner_item_key);
         mSelectedViewStatusPekerjaan = (TextView) mSpnStatusPekerjaan.getSelectedView().findViewById(R.id.spinner_item_key);
-        Log.e("EXTRA_", mNote.getText().toString());
 
         //File Output Stream
         //Proses write file
@@ -214,8 +213,8 @@ public class MarkPictureActivity extends Activity {
             parent.setJML_FOTO_REALISASI(jumlahFotoRealisasi);
             Log.e("EXTRA_", item.getPATH_FOTO_DEFECT() + " || " + item.getSRC_FOTO_DEFECT() + " || " + item.getURUT_FOTO());
             Log.e("EXTRA_", mSelectedViewStatusDefect.getText().toString() + " || " + mSelectedViewStatusPekerjaan.getText().toString());
-            db.updatePelaksanaan(item);
-            db.updateItemDefectPenugasan(parent);
+            //db.updatePelaksanaan(item);
+            //db.updateItemDefectPenugasan(parent);
             return true;
         }catch (FileNotFoundException e){
             Log.e(LOG_TAG, e.getMessage());
@@ -228,8 +227,15 @@ public class MarkPictureActivity extends Activity {
 
     private void markFloorMap(){
         Intent intent = new Intent(this, MarkFloorMapActivity.class);
-        intent.putExtra(PHOTO_URL, photoURL);
+        Bundle bundle = new Bundle();
+
+        bundle.putBoolean(MarkFloorMapActivity.ACTION_REPLACE, isReplace);
+        bundle.putSerializable(MarkFloorMapActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
+        bundle.putSerializable(MarkFloorMapActivity.ITEM_SQII_PELAKSANAAN, item);
+
+        intent.putExtra(PHOTO_BUNDLE, bundle);
         this.startActivity(intent);
+        this.finish();
     }
 
     private void clearDrawing(){

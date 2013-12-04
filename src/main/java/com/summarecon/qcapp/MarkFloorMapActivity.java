@@ -7,7 +7,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.hardware.Camera;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -17,27 +19,54 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.summarecon.qcapp.adapter.SpinnerListAdapter;
+import com.summarecon.qcapp.core.QCConfig;
+import com.summarecon.qcapp.db.QCDBHelper;
+import com.summarecon.qcapp.db.SQII_LANTAI_TIPE_RUMAH;
+import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.item.SpinnerListItem;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MarkFloorMapActivity extends Activity {
 
+    private static final String LOG_TAG = "MarkFloorMapActivity";
+
+    public static final String PARENT_ITEM_SQII_PELAKSANAAN = "PARENT_ITEM_SQII_PELAKSANAAN";
+    public static final String ITEM_SQII_PELAKSANAAN = "ITEM_SQII_PELAKSANAAN";
+    public static final String PHOTO_BUNDLE = "PHOTO_BUNDLE";
+    public static final String ACTION_REPLACE = "ACTION_REPLACE";
+
     private Intent intent;
 
     private ImageView mapPreview;
     private Bitmap mapBitmap;
     private Bitmap oriMapBitmap;
+    private String oriMapURL;
     private String mapURL;
+    private String mapDir;
+    private String mapName;
+    private Boolean isReplace;
     private Canvas canvas;
+
+    private QCDBHelper db;
+    private SQII_PELAKSANAAN parent;
+    private SQII_PELAKSANAAN item;
 
     private SpinnerListAdapter adapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mark_floor_map);
+
+        //SETUP DB
+        db = QCDBHelper.getInstance(this);
 
         //load the floor map and populate the spinner
         intent = getIntent();
@@ -66,6 +95,7 @@ public class MarkFloorMapActivity extends Activity {
             case R.id.action_save:
                 if(saveMap()){
                     Toast.makeText(this, "Save Successful", Toast.LENGTH_SHORT).show();
+                    this.finish();
                 }else{
                     Toast.makeText(this, "Save Failed", Toast.LENGTH_SHORT).show();
                 }
@@ -93,10 +123,34 @@ public class MarkFloorMapActivity extends Activity {
     }
 
     private void loadMap() {
-        mapURL = intent.getStringExtra("PHOTO_URL");
+        Bundle bundle = intent.getBundleExtra(PHOTO_BUNDLE);
+        parent = (SQII_PELAKSANAAN) bundle.getSerializable(PARENT_ITEM_SQII_PELAKSANAAN);
+        item = (SQII_PELAKSANAAN) bundle.getSerializable(ITEM_SQII_PELAKSANAAN);
+        isReplace = bundle.getBoolean(ACTION_REPLACE);
+
+        SQII_LANTAI_TIPE_RUMAH denah = db.getLantaiTipeRumah(item.getKD_LANTAI(), item.getKD_JENIS(), item.getKD_TIPE(), item.getKD_KAWASAN());
+
+        oriMapURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + File.separator + denah.getSRC_FOTO_DENAH();
+        if(item.getSRC_FOTO_DENAH().equals("")){
+            mapURL = oriMapURL;
+        }else{
+            mapURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + File.separator + item.getSRC_FOTO_DENAH();
+        }
+
+        mapDir = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY;
+        Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
+        Log.e("EXTRA_", denah.getSRC_FOTO_DENAH());
+        if(isReplace){
+            mapName = item.getSRC_FOTO_DENAH();
+        }else{
+            mapName = item.getSRC_FOTO_DEFECT().replace(QCConfig.PREFIX_FILE_DEFECT, QCConfig.PREFIX_FILE_DENAH);
+        }
+
+        oriMapBitmap = BitmapFactory.decodeFile(oriMapURL);
         mapBitmap = BitmapFactory.decodeFile(mapURL);
-        oriMapBitmap = mapBitmap;
-        mapPreview.setImageBitmap(mapBitmap);
+        if(mapBitmap != null){
+            mapPreview.setImageBitmap(mapBitmap);
+        }
     }
 
     private void clearDrawing(){
@@ -105,7 +159,39 @@ public class MarkFloorMapActivity extends Activity {
     }
 
     private boolean saveMap(){
-        return false;
+        if(mapBitmap == null){
+            return false;
+        }
+
+        //Convert bitmap to Byte
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        mapBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+
+        //File Output Stream
+        //Proses write file
+        byte[] final_data = byteArrayOutputStream.toByteArray();
+        File pictureFile = new File(mapDir, mapName);
+        FileOutputStream fileOutputStream;
+        try{
+            fileOutputStream = new FileOutputStream(pictureFile);
+            fileOutputStream.write(final_data);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+            //UPDATE DB
+            item.setPATH_FOTO_DENAH(mapDir);
+            item.setSRC_FOTO_DENAH(mapName);
+            db.updatePelaksanaan(item);
+            db.updateItemDefectPenugasan(parent);
+            Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
+            return true;
+        }catch (FileNotFoundException e){
+            Log.e(LOG_TAG, e.getMessage());
+            return false;
+        }catch (IOException e){
+            Log.e(LOG_TAG, e.getMessage());
+            return false;
+        }
     }
 
     private class DrawingListener implements View.OnTouchListener{
@@ -133,6 +219,10 @@ public class MarkFloorMapActivity extends Activity {
         }
 
         public void drawLineOnCanvas(){
+            if(mapBitmap == null){
+               return;
+            }
+
             //creating bitmap kosongan yg besarnya sama dengan photo yang di preview sebagai wadah coret2
             Bitmap b = Bitmap.createBitmap(mapBitmap.getWidth(), mapBitmap.getHeight(), Bitmap.Config.ARGB_8888);
             //assign bitmap kosongan ke canvas

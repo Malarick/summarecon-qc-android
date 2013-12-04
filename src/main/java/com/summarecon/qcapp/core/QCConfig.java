@@ -15,6 +15,8 @@ public class QCConfig {
     public static final String KD_PENUGASAN_SISA = "S";
     public static final String KD_PENUGASAN_ULANG = "U";
     public static final String KD_PENUGASAN_BARU = "B";
+    public static final String PREFIX_FILE_DEFECT = "DFC_";
+    public static final String PREFIX_FILE_DENAH = "DNH_";
 
     // Files & Directory
     public static String APP_EXTERNAL_IMAGES_DIRECTORY;
