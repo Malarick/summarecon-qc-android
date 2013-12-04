@@ -3,10 +3,8 @@ package com.summarecon.qcapp.fragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,15 +24,12 @@ import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.db.SQII_USER;
 import com.summarecon.qcapp.item.NotificationsItem;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -58,12 +53,13 @@ public class DashboardFragment extends Fragment {
     private ArrayList<SQII_PELAKSANAAN> pelaksanaan;
     private ArrayList<String> update_pelaksanaan;
     private ArrayList<String> foto_pelaksanaan;
-    private ArrayList<String> filedimas;
+    private ArrayList<String> filepreupload;
 
     private Button btn_upload;
     private String year,month,day;
     private Calendar today;
     private String server_ip;
+    private String client_ip;
 
     public DashboardFragment() {
         setRetainInstance(true);
@@ -77,13 +73,17 @@ public class DashboardFragment extends Fragment {
         db = QCDBHelper.getInstance(getActivity());
 
         //Init Ip Server untuk proses upload
-        server_ip = QCConfig.getSharedPreferences().getString("edittext_preference", "172.19.17.19");
+        server_ip = QCConfig.getSharedPreferences().getString("server_ip_preference", "172.19.17.19");
+
+        //Init Ip Client
+        client_ip = QCConfig.getSharedPreferences().getString("client_ip_preference", "192.168.42.49");
 
         mTitle = getActivity().getTitle();
         mListView = (ListView) rootView.findViewById(R.id.list_notifications);
         populateNotifications(mListView);
 
         img_profile = (ImageView) rootView.findViewById(R.id.img_header_profile);
+        //img_profile.setImageResource(APP_EXTERNAL_IMAGES_DIRECTORY);
         txt_profile_name = (TextView) rootView.findViewById(R.id.txt_profile_name);
         txt_profile_nik = (TextView) rootView.findViewById(R.id.txt_profile_nik);
         txt_profile_jabatan = (TextView) rootView.findViewById(R.id.txt_profile_position);
@@ -92,9 +92,7 @@ public class DashboardFragment extends Fragment {
         pelaksanaan = new ArrayList<SQII_PELAKSANAAN>();
         update_pelaksanaan = new ArrayList<String>();
         foto_pelaksanaan = new ArrayList<String>();
-        filedimas = new ArrayList<String>();
-
-        //panggiluploadphp = new PanggilUploadFilePhp();
+        filepreupload = new ArrayList<String>();
 
         bundle = getActivity().getIntent().getBundleExtra("bundle");
         if (bundle != null) {
@@ -105,43 +103,44 @@ public class DashboardFragment extends Fragment {
 
         today = Calendar.getInstance();
         day = String.format("%02d", today.get(Calendar.DATE));
-        month = String.format("%02d", today.get(Calendar.MONTH+1));
+        month = String.format("%02d", today.get(Calendar.MONTH)+1);
         year = String.format("%02d", today.get(Calendar.YEAR));
-
-        //Log.e("Date Today : ", year + "-" + month + "-" + day);
 
                 btn_upload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         pelaksanaan = (ArrayList<SQII_PELAKSANAAN>) db.getAllPelaksanaan();
                         for (int i = 0; i < pelaksanaan.size(); i++) {
-                            update_pelaksanaan.add("--Update data pelaksanaan, data ke : " + String.valueOf(i + 1));
-                            update_pelaksanaan.add("UPDATE SQII_PELAKSANAAN SET STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT().toString() + "', STATUS_PEKERJAAN = '" + pelaksanaan.get(i).getSTATUS_PEKERJAAN().toString() + "', CATATAN = '" + pelaksanaan.get(i).getCATATAN().toString() + "', PATH_FOTO_DENAH = '" + pelaksanaan.get(i).getPATH_FOTO_DENAH().toString() + "', SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH().toString() + "', PATH_FOTO_DEFECT = '" + pelaksanaan.get(i).getPATH_FOTO_DEFECT().toString() + "', SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT().toString() + "' WHERE NO_PENUGASAN IS NOT NULL AND KD_KAWASAN IS NOT NULL AND BLOK IS NOT NULL AND NOMOR IS NOT NULL AND KD_JENIS IS NOT NULL AND KD_TIPE IS NOT NULL AND KD_ITEM_DEFECT IS NOT NULL AND KD_LANTAI IS NOT NULL AND URUT_PELAKSANAAN IS NOT NULL AND URUT_FOTO IS NOT NULL");
-                            update_pelaksanaan.add(" ");
+                            update_pelaksanaan.add("UPDATE SQII_PELAKSANAAN SET TGL_PELAKSANAAN = '" + pelaksanaan.get(i).getTGL_PELAKSANAAN().toString() + "', STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT().toString() + "', CATATAN = '" + pelaksanaan.get(i).getCATATAN().toString() + "', SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH().toString() + "', SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT().toString() + "' " +
+                                                   "WHERE NO_PENUGASAN ='"+pelaksanaan.get(i).getTGL_PELAKSANAAN()+"'  AND " +
+                                                          "KD_KAWASAN ='"+pelaksanaan.get(i).getKD_KAWASAN()+"' AND " +
+                                                          "BLOK ='"+pelaksanaan.get(i).getBLOK()+"' AND " +
+                                                          "NOMOR ='"+pelaksanaan.get(i).getNOMOR()+"' AND " +
+                                                          "KD_JENIS ='"+pelaksanaan.get(i).getKD_JENIS()+"' AND " +
+                                                          "KD_TIPE ='"+pelaksanaan.get(i).getKD_TIPE()+"' AND " +
+                                                          "KD_ITEM_DEFECT ='"+pelaksanaan.get(i).getKD_ITEM_DEFECT()+"' AND " +
+                                                          "KD_LANTAI ='"+pelaksanaan.get(i).getKD_LANTAI()+"' AND " +
+                                                          "URUT_PELAKSANAAN = '"+pelaksanaan.get(i).getURUT_PELAKSANAAN()+"'");
+
                         }
 
 
                         GenerateScriptOnSD("UPLOAD_"+ nik + year + month + day +".txt", update_pelaksanaan);
 
-                        /* Bat Ok*/
-
+                        /* Generate file Bat*/
                         for (int i = 0; i < pelaksanaan.size(); i++) {
-                                                               //"c://xampp/htdocs/sqii_api/ext-download/sqii/bat_file/20100546920131130/adb" pull "/sdcard/Android/data/com.summarecon.qcapp/files/images/A.JPEG" "c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/20100546920131130/A.JPEG"
-                            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext_upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT()));
-                            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext_upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH()));
+                            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT()));
+                            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH()));
                         }
-                        GenerateBat("BAT_UPLOAD_"+ nik + year + month + day +".txt", foto_pelaksanaan);
+                        GenerateBat("BAT_UPLOAD_"+ nik + year + month + day +".bat", foto_pelaksanaan);
 
-                        //Toast.makeText(getActivity().getApplicationContext(),"\"Hello\"",Toast.LENGTH_SHORT).show();
 
+                        /* Tambahkan dan generate*/
                         for (int i = 0; i < pelaksanaan.size(); i++) {
-                            filedimas.add("TGL_PElAKSANAAN='"+ year +"-"+ month +"-"+ day +"'|STATUS_DEFECT='"+pelaksanaan.get(i).getKD_ITEM_DEFECT()+"'|CATATAN='"+pelaksanaan.get(i).getCATATAN()+"'|SRC_FOTO_DENAH='"+pelaksanaan.get(i).getSRC_FOTO_DENAH()+"'|SRC_FOTO_DEFECT='"+pelaksanaan.get(i).getSRC_FOTO_DEFECT()+"'#NO_PENUGASAN='"+pelaksanaan.get(i).getNO_PENUGASAN()+"'|KD_KAWASAN='"+pelaksanaan.get(i).getKD_KAWASAN()+"'|BLOK='"+pelaksanaan.get(i).getBLOK()+"'|NOMOR='"+pelaksanaan.get(i).getNOMOR()+"'|KD_JENIS='"+pelaksanaan.get(i).getKD_JENIS()+"'|KD_TIPE='"+pelaksanaan.get(i).getKD_TIPE()+"'|KD_ITEM_DEFECT='"+pelaksanaan.get(i).getKD_ITEM_DEFECT()+"'|KD_LANTAI='"+pelaksanaan.get(i).getKD_LANTAI()+"'|URUT_PELAKSANAAN='"+pelaksanaan.get(i).getURUT_PELAKSANAAN()+"'|URUT_FOTO='"+pelaksanaan.get(i).getURUT_FOTO()+"'");
-                            //filedimas.add("TGL_PElAKSANAAN='"+ year +"-"+ month +"-"+ day +"'|STATUS_DEFECT='S'|CATATAN='YYY'|SRC_FOTO_DENAH='B.JPEG'|SRC_FOTO_DEFECT='B.JPEG'#NO_PENUGASAN='F001'|KD_KAWASAN='BTK'|BLOK='BB'|NOMOR='001'|KD_JENIS='RMS'|KD_TIPE='RM467'|KD_ITEM_DEFECT='7'|KD_LANTAI='1'|URUT_PELAKSANAAN='1'|URUT_FOTO='2'");
+                            filepreupload.add("JENIS_PENUGASAN = '" + pelaksanaan.get(i).getJENIS_PENUGASAN() + "'|TGL_PElAKSANAAN = '" + year + "-" + month + "-" + day + "'|STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT() + "'| STATUS_PEKERJAAN = '" + pelaksanaan.get(i).getSTATUS_PEKERJAAN() + "'|CATATAN = '" + pelaksanaan.get(i).getCATATAN() + "'|SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH() + "'|SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT() + "'#NO_PENUGASAN = '" + pelaksanaan.get(i).getNO_PENUGASAN() + "'|KD_KAWASAN = '" + pelaksanaan.get(i).getKD_KAWASAN() + "'|BLOK = '" + pelaksanaan.get(i).getBLOK() + "'|NOMOR = '" + pelaksanaan.get(i).getNOMOR() + "'|KD_JENIS = '" + pelaksanaan.get(i).getKD_JENIS() + "'|KD_TIPE = '" + pelaksanaan.get(i).getKD_TIPE() + "'|KD_ITEM_DEFECT = '" + pelaksanaan.get(i).getKD_ITEM_DEFECT() + "'|KD_LANTAI = '" + pelaksanaan.get(i).getKD_LANTAI() + "'|URUT_PELAKSANAAN = '" + pelaksanaan.get(i).getURUT_PELAKSANAAN() + "'|URUT_FOTO = '" + pelaksanaan.get(i).getURUT_FOTO() + "'");
                         }
-                        GenerateDimas("pre_upload.txt",filedimas);
+                      GeneratePreUpload("PRE_UPLOAD_" + nik + year + month + day + ".txt", filepreupload);
 
-                        new PanggilUploadFilePhp().execute(); // Panggil Php untuk jalanin bat (permintaan dimas)
-                        Toast.makeText(getActivity().getApplicationContext(),password,Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -151,7 +150,6 @@ public class DashboardFragment extends Fragment {
     private void DataUserProfile(String no_induk) {
         ArrayList<SQII_USER> user_profile;
         user_profile = (ArrayList<SQII_USER>) db.getUser(no_induk);
-        //user_profile.get(0).getNAMA();
 
         if ((user_profile.get(0).getFLAG_PETUGAS_ADMIN()).equals("Y")) {
             txt_profile_jabatan.setText("ADMIN QC");
@@ -249,7 +247,8 @@ public class DashboardFragment extends Fragment {
 
             for (int i=0;i<jum_data;i++){
                 writer.append(sBody.get(i));
-                writer.append("\n");
+                    writer.append("\r\n");
+
             }
             writer.flush();
             writer.close();
@@ -274,15 +273,15 @@ public class DashboardFragment extends Fragment {
             File gpxfile = new File(root, sFileName);
             FileWriter writer = new FileWriter(gpxfile);
             writer.append("@echo off");
-            writer.append("\n");
+            writer.append("\r\n");
 
             for (int i=0;i<jum_data;i++){
                 writer.append(sBody.get(i));
-                writer.append("\n");
+                writer.append("\r\n");
             }
 
             writer.append("echo 'Proses Download Selesai'");
-            writer.append("\n");
+            writer.append("\r\n");
             writer.append("taskkill /f /im adb.exe");
             writer.flush();
             writer.close();
@@ -296,7 +295,7 @@ public class DashboardFragment extends Fragment {
         }
     }
 
-    public void GenerateDimas(String sFileName, ArrayList<String> sBody){
+    public void GeneratePreUpload(String sFileName, ArrayList<String> sBody){
         int jum_data=sBody.size();
         try
         {
@@ -306,20 +305,17 @@ public class DashboardFragment extends Fragment {
             }
             File gpxfile = new File(root, sFileName);
             FileWriter writer = new FileWriter(gpxfile);
-            //writer.append("@echo off");
-            //writer.append("\n");
 
             for (int i=0;i<jum_data;i++){
                 writer.append(sBody.get(i));
-                writer.append("\n");
+                if (i<jum_data-1){
+                    writer.append("\r\n");
+                }
             }
 
-            writer.append("echo 'Proses Download Selesai'");
-            writer.append("\n");
-            writer.append("taskkill /f /im adb.exe");
             writer.flush();
             writer.close();
-            Toast.makeText(getActivity().getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(), "Data berhasil dibuat", Toast.LENGTH_SHORT).show();
         }
         catch(IOException e)
         {
@@ -329,62 +325,27 @@ public class DashboardFragment extends Fragment {
         }
     }
 
-    class PanggilUploadFilePhp extends AsyncTask<Void, Void, Void> {
-        ProgressDialog loading;
-        String response;
 
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            loading = new ProgressDialog(getActivity());
-            loading.setMessage("Uploading data penugasan Please wait...");
-            loading.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
-                    PanggilUploadFilePhp.this.cancel(true);
-                }
-            });
-            loading.show();
-        }
+    private static String uploadpenugasan(String stringUrl) {
+        URL url = null;
+        HttpURLConnection connection = null;
+        InputStream inputStream = null;
 
-        @Override
-        protected Void doInBackground(Void... Void) {
-            HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("http://192.168.42.49/sqii_api/index.php/sqii/c_das_api/upload/"+nik+"/"+password);
-            //HttpPost request = new HttpPost("http://" + server_ip + "/sqii/ext-lib/agung_qc/get-penugasan.php");
-
-            try {
-                HttpResponse httpResponse = client.execute(request);
-                response = EntityUtils.toString(httpResponse.getEntity());
-
-                // Write response to script file
-                /*
-                PrintStream out = null;
-                try {
-                    out = new PrintStream(new FileOutputStream(QCConfig.APP_EXTERNAL_DATABASE_SCRIPT_DIRECTORY));
-                    out.print(response);
-                } finally {
-                    if (out != null) out.close();
-                }
-                */
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
+        try {
+            url = new URL(stringUrl);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setUseCaches(true);
+            inputStream = connection.getInputStream();
+            Log.e("upload : ", inputStream.toString());
+            return inputStream.toString();
+        } catch (Exception e) {
+            Log.w("x", "Error while uploading data from " + stringUrl, e);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
             }
-
-            return null;
         }
 
-        @Override
-        protected void onPostExecute(Void returnValue) {
-            //QCDBHelper.getInstance(getActivity()).executeSQLScriptFile();
-            loading.dismiss();
-            Toast.makeText(getActivity().getApplicationContext(),response,Toast.LENGTH_SHORT).show();
-            //checkUserLogin();
-        }
+        return null;
     }
-
 }

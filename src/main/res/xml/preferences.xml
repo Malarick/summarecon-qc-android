@@ -17,10 +17,21 @@
         android:title="Server Connection Setting">
 
         <EditTextPreference
-            android:key="edittext_preference"
+            android:key="server_ip_preference"
             android:title="Server IP ADDRESS"
-            android:summary="summary_edittext_preference"
-            android:dialogTitle="dialog_title_edittext_preference" />
+            android:summary="Change client ip address"
+            android:dialogTitle="Input Server Ip Address" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Server Connection Setting">
+
+        <EditTextPreference
+            android:key="client_ip_preference"
+            android:title="Client IP ADDRESS"
+            android:summary="Change client ip address"
+            android:dialogTitle="Input Client Ip Address" />
 
     </PreferenceCategory>
 

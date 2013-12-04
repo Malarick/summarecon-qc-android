@@ -46,7 +46,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        server_ip = QCConfig.getSharedPreferences().getString("edittext_preference", "192.168.100.106");
+        server_ip = QCConfig.getSharedPreferences().getString("server_ip_preference", "192.168.100.106");
 
         //**inisialisasi EditText, Button, ImageView, Layout yg mau di gerakin (Logo, username, password)
         edt_nik = (EditText) findViewById(R.id.edt_nik);

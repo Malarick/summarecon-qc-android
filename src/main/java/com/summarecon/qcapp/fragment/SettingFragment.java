@@ -15,7 +15,7 @@ import com.summarecon.qcapp.R;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SettingFragment extends PreferenceFragment {
-    Preference checkbox_1,edittext_1;
+    Preference checkbox_1,edt_server_ip,edt_client_ip;
     @Override
     //public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //View rootView = inflater.inflate(R.layout.fragment_setting, container, false);
@@ -27,7 +27,8 @@ public class SettingFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
 
         //checkbox_1 = (Preference) findPreference("checkbox_preference");
-        edittext_1 = (Preference) findPreference("edittext_preference");
+        edt_server_ip = (Preference) findPreference("server_ip_preference");
+        edt_client_ip = (Preference) findPreference("client_ip_preference");
         loadPref();
 /*
         checkbox_1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -46,11 +47,21 @@ public class SettingFragment extends PreferenceFragment {
             }
         });
 */
-        edittext_1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        edt_server_ip.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String text= (String) newValue;
-                edittext_1.setSummary(text);
+            public boolean onPreferenceChange(Preference preference, Object new_ip_server) {
+                String text2= (String) new_ip_server;
+                edt_server_ip.setSummary(text2);
+                //edittext_1.setSummary(mySharedPreferences.getString("edittext_preference","127.0.0.0"));
+                return true;
+            }
+        });
+
+        edt_client_ip.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object new_ip_client) {
+                String text2= (String) new_ip_client;
+                edt_client_ip.setSummary(text2);
                 //edittext_1.setSummary(mySharedPreferences.getString("edittext_preference","127.0.0.0"));
                 return true;
             }
@@ -62,7 +73,8 @@ public class SettingFragment extends PreferenceFragment {
         SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         //boolean my_checkbox_preference = mySharedPreferences.getBoolean("checkbox_preference", false);
-        String my_edittext_preference = mySharedPreferences.getString("edittext_preference", "");
+        String server_ip = mySharedPreferences.getString("server_ip_preference", "");
+        String client_ip = mySharedPreferences.getString("client_ip_preference", "");
 /*
         if (my_checkbox_preference){
             checkbox_1.setSummary("Enable");
@@ -72,15 +84,23 @@ public class SettingFragment extends PreferenceFragment {
         }
 */
 
-        if (my_edittext_preference != "")
+        if (server_ip != "")
         {
-            edittext_1.setSummary(mySharedPreferences.getString("edittext_preference",""));
-            Toast.makeText(getActivity().getApplicationContext(),my_edittext_preference,Toast.LENGTH_SHORT).show();
+            edt_server_ip.setSummary(mySharedPreferences.getString("server_ip_preference",""));
+            Toast.makeText(getActivity().getApplicationContext(),server_ip,Toast.LENGTH_SHORT).show();
         }else
         {
             Toast.makeText(getActivity().getApplicationContext(),"isian kosong!!",Toast.LENGTH_SHORT).show();
         }
 
+        if (client_ip != "")
+        {
+            edt_client_ip.setSummary(mySharedPreferences.getString("client_ip_preference",""));
+            Toast.makeText(getActivity().getApplicationContext(),client_ip,Toast.LENGTH_SHORT).show();
+        }else
+        {
+            Toast.makeText(getActivity().getApplicationContext(),"isian kosong!!",Toast.LENGTH_SHORT).show();
+        }
         //prefEditText.setText(my_edittext_preference);
 
     }
