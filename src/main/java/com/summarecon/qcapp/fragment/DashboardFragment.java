@@ -97,7 +97,6 @@ public class DashboardFragment extends Fragment {
         //isi imageview dengan foto user
         File f = new File(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY+"/profile.jpeg");
         if (f.exists()){
-            Toast.makeText(getActivity().getApplicationContext(),f.toString(),Toast.LENGTH_SHORT).show();
             Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
             img_profile.setImageBitmap(bmp);
         }
