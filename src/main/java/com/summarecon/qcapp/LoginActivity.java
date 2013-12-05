@@ -121,7 +121,7 @@ public class LoginActivity extends Activity {
             Bundle bundle = new Bundle();
             bundle.putString("nik", edt_nik.getText().toString());
             bundle.putString("password", MD5Hash.getMD5(edt_password.getText().toString()));
-            intent.putExtra("bundle", bundle);
+            intent.putExtra("bundleLogin", bundle);
             startActivity(intent);
             LoginActivity.this.finish();
         } else {

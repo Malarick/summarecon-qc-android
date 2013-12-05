@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
     private static final String LOG_TAG = "MainActivity";
     //Fragment
     public static Fragment mFragment;
-    private String username;
+    private String nik;
     private String password;
     private String response;
     private CharSequence mTitle;
@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
     private FragmentTransaction mFragmentTransaction;
     private Bundle fragmentArgs;
     private TextView lbl_user;
-    private Bundle bundle = new Bundle();
+    private Bundle bundleLogin = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +69,10 @@ public class MainActivity extends Activity {
         setupActionBar();
         mTitle = mDrawerTitle = getTitle();
 
-        bundle = getIntent().getBundleExtra("bundle");
-        if (bundle != null) {
-            username = bundle.getString("username");
-            password = bundle.getString("password");
+        bundleLogin = getIntent().getBundleExtra("bundleLogin");
+        if (bundleLogin != null) {
+            nik = bundleLogin.getString("nik");
+            password = bundleLogin.getString("password");
         }
 
         //INITIALIZING NAVIGATION DRAWER LAYOUT
@@ -188,13 +188,13 @@ public class MainActivity extends Activity {
             if (iconList.get(c) != "null") {
                 int id_icon = getResources().getIdentifier(iconList.get(c), "drawable", this.getPackageName());
                 if (s.equals(QCConfig.JENIS_PENUGASAN_SISA)) {
-                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_SISA)));
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getPelaksanaanJumlahFoto(nik, QCConfig.KD_PENUGASAN_SISA)));
                     Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
                 } else if (s.equals(QCConfig.JENIS_PENUGASAN_ULANG)) {
-                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_ULANG)));
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getPelaksanaanJumlahFoto(nik, QCConfig.KD_PENUGASAN_ULANG)));
                     Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
                 } else if (s.equals(QCConfig.JENIS_PENUGASAN_BARU)) {
-                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getPelaksanaanJumlahFoto("201005469", QCConfig.KD_PENUGASAN_BARU)));
+                    itemList.add(new NavDrawerItem(id_icon, s, QCDBHelper.getInstance(this).getPelaksanaanJumlahFoto(nik, QCConfig.KD_PENUGASAN_BARU)));
                     Log.e("LUAR", s + "= " + itemList.get(c).counterExist.toString());
                 } else {
                     itemList.add(new NavDrawerItem(id_icon, s));

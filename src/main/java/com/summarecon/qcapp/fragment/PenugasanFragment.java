@@ -36,11 +36,19 @@ public class PenugasanFragment extends Fragment {
     private int lastGroupPosition;
     private QCDBHelper db;
 
+    private Bundle bundleLogin;
+    private String nik;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_penugasan, container, false);
 
         db = QCDBHelper.getInstance(getActivity());
+
+        bundleLogin = getActivity().getIntent().getBundleExtra("bundleLogin");
+        if(bundleLogin != null){
+            nik = bundleLogin.getString("nik");
+        }
 
         TextView textView = (TextView) rootView.findViewById(R.id.lbl_test);
         jenisPenugasan = getArguments().getString(ARGS_PENUGASAN, "PENUGASAN");
@@ -59,7 +67,7 @@ public class PenugasanFragment extends Fragment {
     }
 
     public void populateExpListPenugasan(){
-        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan("201005469", jenisPenugasan);
+        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan(nik, jenisPenugasan);
         List<SQII_PELAKSANAAN> childList;
 
         List<PenugasanParentItem> parentItemsList = new ArrayList<PenugasanParentItem>();
