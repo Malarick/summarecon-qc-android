@@ -38,7 +38,8 @@ public class TakePictureActivity extends Activity {
     public final static String ITEM_SQII_PELAKSANAAN = "ITEM_SQII_PELAKSANAAN";
     public final static String URUT_FOTO = "URUT_FOTO";
     public final static String GRID_BUNDLE = "GRID_BUNDLE";
-    public final static String ACTION_REPLACE = "ACTION_REPLACE";
+    public final static String ACTION_REPLACE_DEFECT = "ACTION_REPLACE_DEFECT";
+    public static final String ACTION_REPLACE_DENAH = "ACTION_REPLACE_DENAH";
 
     private FrameLayout cameraLayout;
     private Camera camera;
@@ -51,7 +52,8 @@ public class TakePictureActivity extends Activity {
     private SQII_PELAKSANAAN parent;
     private SQII_PELAKSANAAN item;
     private Float urutFoto;
-    private Boolean isReplace;
+    private Boolean isReplaceDefect;
+    private Boolean isReplaceDenah;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +68,8 @@ public class TakePictureActivity extends Activity {
         parent = (SQII_PELAKSANAAN) bundle.getSerializable(PARENT_ITEM_SQII_PELAKSANAAN);
         item = (SQII_PELAKSANAAN) bundle.getSerializable(ITEM_SQII_PELAKSANAAN);
         urutFoto = bundle.getFloat(URUT_FOTO, 1);
-        isReplace = bundle.getBoolean(ACTION_REPLACE);
+        isReplaceDefect = bundle.getBoolean(ACTION_REPLACE_DEFECT);
+        isReplaceDenah = bundle.getBoolean(ACTION_REPLACE_DENAH);
 
         //Handle listener untuk zoomControl
         setZoomControlListener();
@@ -193,7 +196,7 @@ public class TakePictureActivity extends Activity {
                 //Setting path dan nama file
                 File pictureFileDir = new File(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY);
                 String pictureFileName = QCConfig.PREFIX_FILE_DEFECT + parent.getNM_CLUSTER() + "_" + System.currentTimeMillis() + ".jpg";
-                if(isReplace){
+                if(isReplaceDefect){
                     pictureFileName = item.getSRC_FOTO_DEFECT();
                 }
 
@@ -248,7 +251,8 @@ public class TakePictureActivity extends Activity {
         bundle.putString(MarkPictureActivity.PHOTO_DIR, fileDir);
         bundle.putString(MarkPictureActivity.PHOTO_NAME, fileName);
         bundle.putFloat(MarkPictureActivity.URUT_FOTO, urutFoto);
-        bundle.putBoolean(MarkPictureActivity.ACTION_REPLACE, isReplace);
+        bundle.putBoolean(MarkPictureActivity.ACTION_REPLACE_DEFECT, isReplaceDefect);
+        bundle.putBoolean(MarkPictureActivity.ACTION_REPLACE_DENAH, isReplaceDenah);
         bundle.putSerializable(MarkPictureActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
         bundle.putSerializable(MarkPictureActivity.ITEM_SQII_PELAKSANAAN, item);
         bundle.putString(MarkPictureActivity.CALLING_ACTIVITY, ACTIVITY);

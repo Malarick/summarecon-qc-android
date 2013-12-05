@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -41,7 +40,8 @@ public class MarkFloorMapActivity extends Activity {
     public static final String PARENT_ITEM_SQII_PELAKSANAAN = "PARENT_ITEM_SQII_PELAKSANAAN";
     public static final String ITEM_SQII_PELAKSANAAN = "ITEM_SQII_PELAKSANAAN";
     public static final String PHOTO_BUNDLE = "PHOTO_BUNDLE";
-    public static final String ACTION_REPLACE = "ACTION_REPLACE";
+    public static final String ACTION_REPLACE_DEFECT = "ACTION_REPLACE_DEFECT";
+    public static final String ACTION_REPLACE_DENAH = "ACTION_REPLACE_DENAH";
 
     private Intent intent;
 
@@ -52,7 +52,8 @@ public class MarkFloorMapActivity extends Activity {
     private String mapURL;
     private String mapDir;
     private String mapName;
-    private Boolean isReplace;
+    private Boolean isReplaceDefect;
+    private Boolean isReplaceDenah;
     private Canvas canvas;
 
     private QCDBHelper db;
@@ -126,12 +127,13 @@ public class MarkFloorMapActivity extends Activity {
         Bundle bundle = intent.getBundleExtra(PHOTO_BUNDLE);
         parent = (SQII_PELAKSANAAN) bundle.getSerializable(PARENT_ITEM_SQII_PELAKSANAAN);
         item = (SQII_PELAKSANAAN) bundle.getSerializable(ITEM_SQII_PELAKSANAAN);
-        isReplace = bundle.getBoolean(ACTION_REPLACE);
+        isReplaceDefect = bundle.getBoolean(ACTION_REPLACE_DEFECT);
+        isReplaceDenah = bundle.getBoolean(ACTION_REPLACE_DENAH);
 
         SQII_LANTAI_TIPE_RUMAH denah = db.getLantaiTipeRumah(item.getKD_LANTAI(), item.getKD_JENIS(), item.getKD_TIPE(), item.getKD_KAWASAN());
 
         oriMapURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + File.separator + denah.getSRC_FOTO_DENAH();
-        if(item.getSRC_FOTO_DENAH().equals("")){
+        if(item.getSRC_FOTO_DENAH().equals("") || isReplaceDenah){
             mapURL = oriMapURL;
         }else{
             mapURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + File.separator + item.getSRC_FOTO_DENAH();
@@ -140,7 +142,7 @@ public class MarkFloorMapActivity extends Activity {
         mapDir = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY;
         Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
         Log.e("EXTRA_", denah.getSRC_FOTO_DENAH());
-        if(isReplace){
+        if(isReplaceDenah){
             mapName = item.getSRC_FOTO_DENAH();
         }else{
             mapName = item.getSRC_FOTO_DEFECT().replace(QCConfig.PREFIX_FILE_DEFECT, QCConfig.PREFIX_FILE_DENAH);

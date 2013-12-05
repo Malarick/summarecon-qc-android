@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -142,7 +141,8 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
         Bundle bundle = new Bundle();
 
         bundle.putFloat(TakePictureActivity.URUT_FOTO, item.getURUT_FOTO());
-        bundle.putBoolean(TakePictureActivity.ACTION_REPLACE, false);
+        bundle.putBoolean(TakePictureActivity.ACTION_REPLACE_DEFECT, false);
+        bundle.putBoolean(TakePictureActivity.ACTION_REPLACE_DENAH, false);
         bundle.putSerializable(TakePictureActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
         bundle.putSerializable(TakePictureActivity.ITEM_SQII_PELAKSANAAN, item);
 
@@ -159,7 +159,8 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
         bundle.putString(MarkPictureActivity.PHOTO_DIR, QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY);
         bundle.putString(MarkPictureActivity.PHOTO_NAME, item.getSRC_FOTO_DEFECT());
         bundle.putFloat(MarkPictureActivity.URUT_FOTO, item.getURUT_FOTO());
-        bundle.putBoolean(TakePictureActivity.ACTION_REPLACE, true);
+        bundle.putBoolean(MarkPictureActivity.ACTION_REPLACE_DEFECT, true);
+        bundle.putBoolean(MarkPictureActivity.ACTION_REPLACE_DENAH, false);
         bundle.putSerializable(MarkPictureActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
         bundle.putSerializable(MarkPictureActivity.ITEM_SQII_PELAKSANAAN, item);
         bundle.putString(MarkPictureActivity.CALLING_ACTIVITY, ACTIVITY);
@@ -174,7 +175,8 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
 
         Log.e("EXTRA_", QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + File.separator + item.getSRC_FOTO_DEFECT());
         bundle.putFloat(TakePictureActivity.URUT_FOTO, item.getURUT_FOTO());
-        bundle.putBoolean(TakePictureActivity.ACTION_REPLACE, true);
+        bundle.putBoolean(TakePictureActivity.ACTION_REPLACE_DEFECT, true);
+        bundle.putBoolean(TakePictureActivity.ACTION_REPLACE_DENAH, true);
         bundle.putSerializable(TakePictureActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
         bundle.putSerializable(TakePictureActivity.ITEM_SQII_PELAKSANAAN, item);
 

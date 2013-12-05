@@ -45,7 +45,8 @@ public class MarkPictureActivity extends Activity {
     public static final String PHOTO_DIR = "PHOTO_DIR";
     public static final String PHOTO_NAME = "PHOTO_NAME";
     public static final String URUT_FOTO = "URUT_FOTO";
-    public final static String ACTION_REPLACE = "ACTION_REPLACE";
+    public final static String ACTION_REPLACE_DEFECT = "ACTION_REPLACE_DEFECT";
+    public static final String ACTION_REPLACE_DENAH = "ACTION_REPLACE_DENAH";
     public final static String PARENT_ITEM_SQII_PELAKSANAAN = "PARENT_ITEM_SQII_PELAKSANAAN";
     public final static String ITEM_SQII_PELAKSANAAN = "ITEM_SQII_PELAKSANAAN";
 
@@ -75,7 +76,8 @@ public class MarkPictureActivity extends Activity {
     private SQII_PELAKSANAAN parent;
     private SQII_PELAKSANAAN item;
     private String callingActivity;
-    private Boolean isReplace;
+    private Boolean isReplaceDefect;
+    private Boolean isReplaceDenah;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,9 +168,10 @@ public class MarkPictureActivity extends Activity {
         //KALAU DARI GRID DIA BERSIFAT EDIT, ARTINYA SPINNER-NYA + NOTE-NYA DI SET
         //KALAU DARI PHOTO DIA BERSIFAT BARU, ARTINYA SEMUA DALAM KEADAAN DEFAULT
         callingActivity = bundle.getString(CALLING_ACTIVITY);
-        isReplace = bundle.getBoolean(ACTION_REPLACE);
+        isReplaceDefect = bundle.getBoolean(ACTION_REPLACE_DEFECT);
+        isReplaceDenah = bundle.getBoolean(ACTION_REPLACE_DENAH);
         if(callingActivity.equals(TakePictureActivity.ACTIVITY)){
-            if(!isReplace){
+            if(!isReplaceDefect){
                 jumlahFotoRealisasi++;
             }
         }else if(callingActivity.equals(PenugasanExpListAdapter.ACTIVITY)){
@@ -229,7 +232,8 @@ public class MarkPictureActivity extends Activity {
         Intent intent = new Intent(this, MarkFloorMapActivity.class);
         Bundle bundle = new Bundle();
 
-        bundle.putBoolean(MarkFloorMapActivity.ACTION_REPLACE, isReplace);
+        bundle.putBoolean(MarkFloorMapActivity.ACTION_REPLACE_DEFECT, isReplaceDefect);
+        bundle.putBoolean(MarkFloorMapActivity.ACTION_REPLACE_DENAH, isReplaceDenah);
         bundle.putSerializable(MarkFloorMapActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
         bundle.putSerializable(MarkFloorMapActivity.ITEM_SQII_PELAKSANAAN, item);
 
