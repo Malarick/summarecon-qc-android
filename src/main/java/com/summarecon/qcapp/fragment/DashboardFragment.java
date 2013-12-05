@@ -74,6 +74,12 @@ public class DashboardFragment extends Fragment {
         //Init the DB
         db = QCDBHelper.getInstance(getActivity());
 
+        txt_profile_name = (TextView) rootView.findViewById(R.id.txt_profile_name);
+        txt_profile_nik = (TextView) rootView.findViewById(R.id.txt_profile_nik);
+        txt_profile_jabatan = (TextView) rootView.findViewById(R.id.txt_profile_position);
+
+        btn_upload = (Button) rootView.findViewById(R.id.btn_upload);
+
         bundleLogin = getActivity().getIntent().getBundleExtra("bundleLogin");
         if (bundleLogin != null) {
             nik = bundleLogin.getString("nik");
@@ -101,11 +107,6 @@ public class DashboardFragment extends Fragment {
             img_profile.setImageBitmap(bmp);
         }
 
-        txt_profile_name = (TextView) rootView.findViewById(R.id.txt_profile_name);
-        txt_profile_nik = (TextView) rootView.findViewById(R.id.txt_profile_nik);
-        txt_profile_jabatan = (TextView) rootView.findViewById(R.id.txt_profile_position);
-
-        btn_upload = (Button) rootView.findViewById(R.id.btn_upload);
         pelaksanaan = new ArrayList<SQII_PELAKSANAAN>();
         update_pelaksanaan = new ArrayList<String>();
         foto_pelaksanaan = new ArrayList<String>();
@@ -158,6 +159,7 @@ public class DashboardFragment extends Fragment {
     }
 
     private void DataUserProfile(String no_induk) {
+        Log.e("NIK_", "xxx" + no_induk + "xxx");
         ArrayList<SQII_USER> user_profile;
         user_profile = (ArrayList<SQII_USER>) db.getUser(no_induk);
 
