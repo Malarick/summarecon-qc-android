@@ -3,6 +3,8 @@ package com.summarecon.qcapp.fragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -82,8 +84,17 @@ public class DashboardFragment extends Fragment {
         mListView = (ListView) rootView.findViewById(R.id.list_notifications);
         populateNotifications(mListView);
 
-        img_profile = (ImageView) rootView.findViewById(R.id.img_header_profile);
-        //img_profile.setImageResource(APP_EXTERNAL_IMAGES_DIRECTORY);
+        //init imageview buat foto profile
+        img_profile = (ImageView) rootView.findViewById(R.id.img_profile_picture);
+
+        //isi imageview dengan foto user
+        File f = new File(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY+"/profile.jpeg");
+        if (f.exists()){
+            Toast.makeText(getActivity().getApplicationContext(),f.toString(),Toast.LENGTH_SHORT).show();
+            Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
+            img_profile.setImageBitmap(bmp);
+        }
+
         txt_profile_name = (TextView) rootView.findViewById(R.id.txt_profile_name);
         txt_profile_nik = (TextView) rootView.findViewById(R.id.txt_profile_nik);
         txt_profile_jabatan = (TextView) rootView.findViewById(R.id.txt_profile_position);
