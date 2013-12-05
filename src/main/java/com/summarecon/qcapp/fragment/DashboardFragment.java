@@ -74,6 +74,13 @@ public class DashboardFragment extends Fragment {
         //Init the DB
         db = QCDBHelper.getInstance(getActivity());
 
+        bundleLogin = getActivity().getIntent().getBundleExtra("bundleLogin");
+        if (bundleLogin != null) {
+            nik = bundleLogin.getString("nik");
+            password = bundleLogin.getString("password");
+            DataUserProfile(nik);
+        }
+
         //Init Ip Server untuk proses upload
         server_ip = QCConfig.getSharedPreferences().getString("server_ip_preference", "172.19.17.19");
 
@@ -104,13 +111,6 @@ public class DashboardFragment extends Fragment {
         update_pelaksanaan = new ArrayList<String>();
         foto_pelaksanaan = new ArrayList<String>();
         filepreupload = new ArrayList<String>();
-
-        bundleLogin = getActivity().getIntent().getBundleExtra("bundleLogin");
-        if (bundleLogin != null) {
-            nik = bundleLogin.getString("nik");
-            password = bundleLogin.getString("password");
-            DataUserProfile(nik);
-        }
 
         today = Calendar.getInstance();
         day = String.format("%02d", today.get(Calendar.DATE));
