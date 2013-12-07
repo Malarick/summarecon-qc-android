@@ -54,8 +54,7 @@ public class NavDrawerAdapter extends BaseAdapter {
 
     @Override
     public boolean areAllItemsEnabled() {
-        return true;
-//        return super.areAllItemsEnabled();
+        return super.areAllItemsEnabled();
     }
 
     @Override
