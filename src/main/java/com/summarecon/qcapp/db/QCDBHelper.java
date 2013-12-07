@@ -1943,10 +1943,15 @@ public class QCDBHelper extends SQLiteOpenHelper {
         /*SQLiteDatabase db = this.getReadableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
 
-        query = "SELECT  COUNT(SQII_PELAKSANAAN.NO_PENUGASAN) \n" +
-                "\n" +
+        query = "SELECT  COUNT(SQII_PELAKSANAAN.NO_PENUGASAN) - \n" +
+                "        (\n" +
+                "         SELECT COUNT(1) \n" +
+                "         FROM SQII_PELAKSANAAN \n" +
+                "         WHERE LENGTH(SRC_FOTO_DEFECT) > 0 AND         \n" +
+                "               SQII_PELAKSANAAN.PETUGAS_QC = '201005469' AND\n" +
+                "               SQII_PELAKSANAAN.JENIS_PENUGASAN = 'B'               \n" +
+                "        )\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
-                "\n" +
                 "WHERE   SQII_PELAKSANAAN.PETUGAS_QC = '" + petugasQC + "' AND\n" +
                 "        SQII_PELAKSANAAN.JENIS_PENUGASAN = '" + jenisPenugasan + "' \n" ;
 
@@ -2060,8 +2065,24 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        SQII_PELAKSANAAN.KD_LANTAI,\n" +
                 "        SQII_LANTAI.NM_LANTAI,\n" +
                 "        SQII_PELAKSANAAN.URUT_PELAKSANAAN,\n" +
-                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,0), \n" +
-                "        IFNULL(SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI,0), \n" +
+                "        COUNT(SQII_PELAKSANAAN.NO_PENUGASAN), \n" +
+                "        ( \n" +
+                "          SELECT COUNT(1) \n" +
+                "          FROM SQII_PELAKSANAAN B \n" +
+                "          WHERE LENGTH(B.SRC_FOTO_DEFECT) > 0 AND \n" +
+                "                B.PETUGAS_QC = '201005469' AND \n" +
+                "                B.JENIS_PENUGASAN = 'U' AND \n" +
+                "                B.NO_PENUGASAN = SQII_PELAKSANAAN.NO_PENUGASAN AND \n" +
+                "                B.KD_KAWASAN = SQII_PELAKSANAAN.KD_KAWASAN AND \n" +
+                "                B.BLOK = SQII_PELAKSANAAN.BLOK AND \n" +
+                "                B.NOMOR = SQII_PELAKSANAAN.NOMOR AND \n" +
+                "                B.KD_JENIS = SQII_PELAKSANAAN.KD_JENIS AND \n" +
+                "                B.KD_TIPE = SQII_PELAKSANAAN.KD_TIPE AND \n" +
+                "                B.KD_ITEM_DEFECT = SQII_PELAKSANAAN.KD_ITEM_DEFECT AND \n" +
+                "                B.KD_LANTAI = SQII_PELAKSANAAN.KD_LANTAI AND \n" +
+                "                B.URUT_PELAKSANAAN = SQII_PELAKSANAAN.URUT_PELAKSANAAN AND \n" +
+                "                B.URUT_FOTO = SQII_PELAKSANAAN.URUT_FOTO \n" +
+                "         ), \n" +
                 "        SQII_PELAKSANAAN.URUT_FOTO,\n" +
                 "        SQII_PELAKSANAAN.JENIS_PENUGASAN,\n" +
                 "        SQII_PELAKSANAAN.TGL_PELAKSANAAN,\n" +
@@ -2137,9 +2158,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        SQII_ITEM_DEFECT.NM_ITEM_DEFECT,\n" +
                 "        SQII_PELAKSANAAN.KD_LANTAI,\n" +
                 "        SQII_LANTAI.NM_LANTAI,\n" +
-                "        SQII_PELAKSANAAN.URUT_PELAKSANAAN,\n" +
-                "        SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_PENUGASAN,\n" +
-                "        SQII_ITEM_DEFECT_PENUGASAN.JML_FOTO_REALISASI";
+                "        SQII_PELAKSANAAN.URUT_PELAKSANAAN";
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
