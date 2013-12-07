@@ -1948,8 +1948,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "         SELECT COUNT(1) \n" +
                 "         FROM SQII_PELAKSANAAN \n" +
                 "         WHERE LENGTH(SRC_FOTO_DEFECT) > 0 AND         \n" +
-                "               SQII_PELAKSANAAN.PETUGAS_QC = '201005469' AND\n" +
-                "               SQII_PELAKSANAAN.JENIS_PENUGASAN = 'B'               \n" +
+                "               SQII_PELAKSANAAN.PETUGAS_QC = '" + petugasQC + "' AND\n" +
+                "               SQII_PELAKSANAAN.JENIS_PENUGASAN = '" + jenisPenugasan + "' \n" +
                 "        )\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
                 "WHERE   SQII_PELAKSANAAN.PETUGAS_QC = '" + petugasQC + "' AND\n" +
@@ -2070,8 +2070,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "          SELECT COUNT(1) \n" +
                 "          FROM SQII_PELAKSANAAN B \n" +
                 "          WHERE LENGTH(B.SRC_FOTO_DEFECT) > 0 AND \n" +
-                "                B.PETUGAS_QC = '201005469' AND \n" +
-                "                B.JENIS_PENUGASAN = 'U' AND \n" +
+                "                B.PETUGAS_QC = '" + petugasQC + "' AND \n" +
+                "                B.JENIS_PENUGASAN = '" + jenisPenugasan + "' AND \n" +
                 "                B.NO_PENUGASAN = SQII_PELAKSANAAN.NO_PENUGASAN AND \n" +
                 "                B.KD_KAWASAN = SQII_PELAKSANAAN.KD_KAWASAN AND \n" +
                 "                B.BLOK = SQII_PELAKSANAAN.BLOK AND \n" +
