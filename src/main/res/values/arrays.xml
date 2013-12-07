@@ -57,6 +57,7 @@
 
     <string-array name="arr_lbl_status_defect">
         <item>N</item>
+        <item>R</item>
         <item>S</item>
         <item>B</item>
     </string-array>
@@ -64,6 +65,10 @@
     <string-array name="arr_lbl_status_pekerjaan">
         <item>P</item>
         <item>F</item>
+    </string-array>
+
+    <string-array name="arr_lbl_status_pekerjaan_berat">
+        <item>P</item>
     </string-array>
 
     <string-array name="arr_lbl_lantai">

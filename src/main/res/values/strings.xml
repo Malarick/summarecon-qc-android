@@ -37,6 +37,7 @@
 
     <!-- referensi arr_lbl_jenis_defect -->
     <string name="N">No Defect</string>
+    <string name="R">Ringan</string>
     <string name="S">Sedang</string>
     <string name="B">Berat</string>
 

@@ -27,7 +27,6 @@
             android:id="@+id/list_section_dashboard"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:divider="#555555"
             android:headerDividersEnabled="false"
             android:dividerHeight="2dp"
             android:choiceMode="singleChoice"></ListView>
@@ -35,7 +34,6 @@
             android:id="@+id/list_section_penugasan"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:divider="#555555"
             android:headerDividersEnabled="false"
             android:dividerHeight="2dp"
             android:choiceMode="singleChoice"></ListView>
@@ -43,7 +41,6 @@
             android:id="@+id/list_section_etc"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:divider="#555555"
             android:headerDividersEnabled="false"
             android:dividerHeight="2dp"
             android:choiceMode="singleChoice"></ListView>

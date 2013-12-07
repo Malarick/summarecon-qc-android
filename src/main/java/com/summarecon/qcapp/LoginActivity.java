@@ -40,11 +40,14 @@ public class LoginActivity extends Activity {
     private ImageView img_logo;
     private String server_ip;
     private LinearLayout layout_user_input;
+    private QCDBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        db = QCDBHelper.getInstance(this);
 
         server_ip = QCConfig.getSharedPreferences().getString("server_ip_preference", "192.168.100.106");
 
@@ -85,7 +88,7 @@ public class LoginActivity extends Activity {
 
     private void login() {
         /* Check isi tabel user/penugasan */
-        if (QCDBHelper.getInstance(this).checkTabelPenugasan()) {
+        if (db.checkTabelPenugasan()) {
             /* Kalau ada ada datanya check login dari database lokal */
             Log.e(LOG_TAG, "data penugasan ada di database...");
             checkUserLogin();
@@ -94,7 +97,7 @@ public class LoginActivity extends Activity {
             Log.e(LOG_TAG, "download file penugasan...");
             new DownloadDataPenugasan().execute();
         } else {
-            QCDBHelper.getInstance(this).executeSQLScriptFile();
+            db.executeSQLScriptFile();
             checkUserLogin();
         }
     }
@@ -113,7 +116,7 @@ public class LoginActivity extends Activity {
     private void checkUserLogin() {
         String nik = edt_nik.getText().toString().trim();
         String password = edt_password.getText().toString().trim();
-        if (QCDBHelper.getInstance(this).checkLogin(nik, MD5Hash.getMD5(password))) {
+        if (db.checkLogin(nik, MD5Hash.getMD5(password))) {
             Toast.makeText(getApplicationContext(), "Login Berhasil", Toast.LENGTH_SHORT).show();
                 /* Init intent*/
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -173,7 +176,7 @@ public class LoginActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void returnValue) {
-            QCDBHelper.getInstance(LoginActivity.this).executeSQLScriptFile();
+            db.executeSQLScriptFile();
             loading.dismiss();
             checkUserLogin();
         }

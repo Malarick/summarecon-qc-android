@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="state_normal">#555555</drawable>
+    <drawable name="state_disabled">#555555</drawable>
+</resources>
