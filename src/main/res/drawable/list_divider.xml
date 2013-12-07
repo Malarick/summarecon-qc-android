@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/state_normal" />
+    <item android:state_enabled="false" android:drawable="@drawable/state_disabled" />
+    <item android:state_activated="false" android:drawable="@drawable/state_disabled" />
+    <item android:state_active="false" android:drawable="@drawable/state_disabled" />
+
+</selector>

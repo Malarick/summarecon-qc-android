@@ -1948,8 +1948,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "         SELECT COUNT(1) \n" +
                 "         FROM SQII_PELAKSANAAN \n" +
                 "         WHERE LENGTH(SRC_FOTO_DEFECT) > 0 AND         \n" +
-                "               SQII_PELAKSANAAN.PETUGAS_QC = '" + petugasQC + "' AND\n" +
-                "               SQII_PELAKSANAAN.JENIS_PENUGASAN = '" + jenisPenugasan + "' \n" +
+                "               SQII_PELAKSANAAN.PETUGAS_QC = '"+ petugasQC + "' AND\n" +
+                "               SQII_PELAKSANAAN.JENIS_PENUGASAN = '" + jenisPenugasan + "' \n" +  
                 "        )\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
                 "WHERE   SQII_PELAKSANAAN.PETUGAS_QC = '" + petugasQC + "' AND\n" +

@@ -94,13 +94,16 @@ public class MarkPictureActivity extends Activity {
         mSpnStatusDefect = (Spinner) findViewById(R.id.ddl_status_defect);
         mSpnStatusPekerjaan = (Spinner) findViewById(R.id.ddl_status_pekerjaan);
         populateSpinner(R.array.arr_lbl_status_defect, mSpnStatusDefect);
-        populateSpinner(R.array.arr_lbl_status_pekerjaan, mSpnStatusPekerjaan);
 
         mSpnStatusDefect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView txt = (TextView) view.findViewById(R.id.spinner_item_key);
-                //mNote.setText(txt.getText());
+                if(txt.getText().equals("B")){
+                    populateSpinner(R.array.arr_lbl_status_pekerjaan_berat, mSpnStatusPekerjaan);
+                }else{
+                    populateSpinner(R.array.arr_lbl_status_pekerjaan, mSpnStatusPekerjaan);
+                }
             }
 
             @Override
