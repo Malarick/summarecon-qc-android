@@ -457,6 +457,33 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
+    public List<SQII_CATATAN> getAllCatatan(Float kdItemDefect) {
+        List<SQII_CATATAN> listData = new ArrayList<SQII_CATATAN>();
+        /*SQLiteDatabase db = this.getReadableDatabase();*/
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM SQII_CATATAN WHERE KD_ITEM_DEFECT = " + kdItemDefect , null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                SQII_CATATAN item = new SQII_CATATAN();
+
+                item.setKD_CATATAN(cursor.getFloat(0));
+                item.setKD_ITEM_DEFECT(cursor.getFloat(1));
+                item.setDESKRIPSI(cursor.getString(2));
+                item.setFLAG_AKTIF(cursor.getString(3));
+                item.setUSER_ENTRY(cursor.getString(4));
+                item.setTGL_ENTRY(cursor.getString(5));
+                item.setUSER_UPDATE(cursor.getString(6));
+                item.setTGL_UPDATE(cursor.getString(7));
+
+                listData.add(item);
+            }
+        }
+        cursor.close();
+        db.close();
+
+        return listData;
+    }
+
     public long insertCatatan(SQII_CATATAN item) {
         /*SQLiteDatabase db = this.getWritableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
@@ -1680,22 +1707,40 @@ public class QCDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public SQII_LANTAI_TIPE_RUMAH getLantaiTipeRumah(Float kdLantai, String kdJenis, String kdTipe, String kdKawasan) {
+    public SQII_LANTAI_TIPE_RUMAH getLantaiTipeRumah(Float kdLantai, String kdJenis, String kdTipe, String kdKawasan, String tipeDenah) {
         String query;
 
         SQII_LANTAI_TIPE_RUMAH item = new SQII_LANTAI_TIPE_RUMAH();
         /*SQLiteDatabase db = this.getReadableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
 
-        query = "SELECT PATH_FOTO_DENAH,\n" +
-                "       SRC_FOTO_DENAH,\n" +
-                "       PATH_FOTO_DENAH_2,\n" +
-                "       SRC_FOTO_DENAH_2\n" +
+        query = "SELECT PATH_FOTO_DENAH, \n" +
+                "       SRC_FOTO_DENAH, \n" +
+                "       PATH_FOTO_DENAH_2, \n" +
+                "       SRC_FOTO_DENAH_2 \n" +
                 "FROM   SQII_LANTAI_TIPE_RUMAH\n"+
                 "WHERE  KD_LANTAI = " + kdLantai + " AND\n" +
                 "       KD_JENIS = '" + kdJenis + "' AND\n" +
                 "       KD_TIPE = '" + kdTipe + "' AND\n" +
                 "       KD_KAWASAN = '" + kdKawasan + "'";
+
+        if (tipeDenah.equals("S")) {
+            query = "SELECT PATH_FOTO_DENAH, \n" +
+                    "       SRC_FOTO_DENAH \n" +
+                    "FROM   SQII_LANTAI_TIPE_RUMAH\n"+
+                    "WHERE  KD_LANTAI = " + kdLantai + " AND\n" +
+                    "       KD_JENIS = '" + kdJenis + "' AND\n" +
+                    "       KD_TIPE = '" + kdTipe + "' AND\n" +
+                    "       KD_KAWASAN = '" + kdKawasan + "'";
+        } else if (tipeDenah.equals("A")) {
+            query = "SELECT PATH_FOTO_DENAH_2,\n" +
+                    "       SRC_FOTO_DENAH_2 \n" +
+                    "FROM   SQII_LANTAI_TIPE_RUMAH\n"+
+                    "WHERE  KD_LANTAI = " + kdLantai + " AND\n" +
+                    "       KD_JENIS = '" + kdJenis + "' AND\n" +
+                    "       KD_TIPE = '" + kdTipe + "' AND\n" +
+                    "       KD_KAWASAN = '" + kdKawasan + "'";
+        }
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
@@ -2080,8 +2125,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "                B.KD_TIPE = SQII_PELAKSANAAN.KD_TIPE AND \n" +
                 "                B.KD_ITEM_DEFECT = SQII_PELAKSANAAN.KD_ITEM_DEFECT AND \n" +
                 "                B.KD_LANTAI = SQII_PELAKSANAAN.KD_LANTAI AND \n" +
-                "                B.URUT_PELAKSANAAN = SQII_PELAKSANAAN.URUT_PELAKSANAAN AND \n" +
-                "                B.URUT_FOTO = SQII_PELAKSANAAN.URUT_FOTO \n" +
+                "                B.URUT_PELAKSANAAN = SQII_PELAKSANAAN.URUT_PELAKSANAAN \n" +
                 "         ), \n" +
                 "        SQII_PELAKSANAAN.URUT_FOTO,\n" +
                 "        SQII_PELAKSANAAN.JENIS_PENUGASAN,\n" +
@@ -2115,7 +2159,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        SQII_PELAKSANAAN.USER_UPDATE,\n" +
                 "        SQII_PELAKSANAAN.TGL_UPDATE,\n" +
                 "        SQII_PELAKSANAAN.PARENT_ROWID,\n" +
-                "        SQII_PELAKSANAAN.ROWID\n" +
+                "        SQII_PELAKSANAAN.ROWID, \n" +
+                "        SQII_KATEGORI_DEFECT.TIPE_DENAH \n" +
                 "\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
                 "\n" +
@@ -2132,16 +2177,19 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        INNER JOIN SQII_CLUSTER\n" +
                 "        ON SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN = SQII_CLUSTER.KD_KAWASAN AND\n" +
                 "           SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER = TRIM(SQII_CLUSTER.KD_CLUSTER)\n" +
-                "           \n" +
+                "\n" +
                 "        INNER JOIN SQII_ITEM_DEFECT\n" +
                 "        ON SQII_PELAKSANAAN.KD_ITEM_DEFECT = SQII_ITEM_DEFECT.KD_ITEM_DEFECT\n" +
-                "    \n" +
+                "\n" +
+                "        INNER JOIN SQII_KATEGORI_DEFECT \n" +
+                "        ON SQII_ITEM_DEFECT.KD_KATEGORI_DEFECT = SQII_KATEGORI_DEFECT.KD_KATEGORI_DEFECT\n" +
+                "\n" +
                 "        INNER JOIN SQII_PENUGASAN\n" +
                 "        ON SQII_PELAKSANAAN.NO_PENUGASAN = SQII_PENUGASAN.NO_PENUGASAN\n" +
-                "        \n" +
+                "\n" +
                 "        INNER JOIN SQII_LANTAI\n" +
                 "        ON SQII_PELAKSANAAN.KD_LANTAI = SQII_LANTAI.KD_LANTAI\n" +
-                "        \n" +
+                "\n" +
                 "WHERE   SQII_PELAKSANAAN.PETUGAS_QC = '" + petugasQC + "' AND\n" +
                 "        SQII_PELAKSANAAN.JENIS_PENUGASAN = '" + jenisPenugasan + "' \n" +
                 "\n" +
@@ -2214,6 +2262,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 item.setTGL_UPDATE(cursor.getString(46));
                 item.setPARENT_ROWID(cursor.getFloat(47));
                 item.setROWID(cursor.getFloat(48));
+                item.setTIPE_DENAH(cursor.getString(49));
 
                 listData.add(item);
             }
