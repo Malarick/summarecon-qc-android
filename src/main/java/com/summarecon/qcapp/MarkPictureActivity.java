@@ -216,9 +216,9 @@ public class MarkPictureActivity extends Activity {
             item.setSTATUS_DEFECT(mSelectedViewStatusDefect.getText().toString());
             item.setSTATUS_PEKERJAAN(mSelectedViewStatusPekerjaan.getText().toString());
             item.setCATATAN(mNote.getText().toString());
-            parent.setJML_FOTO_REALISASI(jumlahFotoRealisasi);
-            Log.e("EXTRA_", item.getPATH_FOTO_DEFECT() + " || " + item.getSRC_FOTO_DEFECT() + " || " + item.getURUT_FOTO());
-            Log.e("EXTRA_", mSelectedViewStatusDefect.getText().toString() + " || " + mSelectedViewStatusPekerjaan.getText().toString());
+            //parent.setJML_FOTO_REALISASI(jumlahFotoRealisasi);
+            //Log.e("EXTRA_", item.getPATH_FOTO_DEFECT() + " || " + item.getSRC_FOTO_DEFECT() + " || " + item.getURUT_FOTO());
+            //Log.e("EXTRA_", mSelectedViewStatusDefect.getText().toString() + " || " + mSelectedViewStatusPekerjaan.getText().toString());
             //db.updatePelaksanaan(item);
             //db.updateItemDefectPenugasan(parent);
             return true;

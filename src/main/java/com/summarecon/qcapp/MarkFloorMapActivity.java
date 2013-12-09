@@ -184,8 +184,8 @@ public class MarkFloorMapActivity extends Activity {
             item.setPATH_FOTO_DENAH(mapDir);
             item.setSRC_FOTO_DENAH(mapName);
             db.updatePelaksanaan(item);
-            db.updateItemDefectPenugasan(parent);
-            Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
+            //db.updateItemDefectPenugasan(parent);
+            //Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
             return true;
         }catch (FileNotFoundException e){
             Log.e(LOG_TAG, e.getMessage());
