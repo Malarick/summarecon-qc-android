@@ -9,6 +9,7 @@ public class SpinnerListItem {
 
     public SpinnerListItem(String lbl_item) {
         this.lbl_item = lbl_item;
+        this.key_item = lbl_item;
     }
 
     public SpinnerListItem(String key_item, String lbl_item) {

@@ -95,7 +95,8 @@ public class DashboardFragment extends Fragment {
 
         mTitle = getActivity().getTitle();
         mListView = (ListView) rootView.findViewById(R.id.list_notifications);
-        populateNotifications(mListView);
+        //PINDAH KE ONRESUME
+        //populateNotifications(mListView);
 
         //init imageview buat foto profile
         img_profile = (ImageView) rootView.findViewById(R.id.img_profile_picture);
@@ -156,6 +157,12 @@ public class DashboardFragment extends Fragment {
                 });
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        populateNotifications(mListView);
+        super.onResume();
     }
 
     private void DataUserProfile(String no_induk) {

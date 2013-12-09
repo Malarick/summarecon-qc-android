@@ -69,7 +69,7 @@ public class NotificationsAdapter extends BaseAdapter {
                     return false;
                 }
             case 1:
-                if(isEnabled(position - 1)){
+                if(isEnabled(position - 1) || item.getItemCounter() > 0){
                     return false;
                 }else{
                     return true;
@@ -77,7 +77,7 @@ public class NotificationsAdapter extends BaseAdapter {
             case 2:
                 if(isEnabled(position - 2)){
                     return false;
-                }else if(isEnabled(position - 1)){
+                }else if(isEnabled(position - 1) || item.getItemCounter() > 0){
                     return false;
                 }else{
                     return true;

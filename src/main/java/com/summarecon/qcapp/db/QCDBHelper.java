@@ -1748,8 +1748,6 @@ public class QCDBHelper extends SQLiteOpenHelper {
 
                 item.setPATH_FOTO_DENAH(cursor.getString(0));
                 item.setSRC_FOTO_DENAH(cursor.getString(1));
-                item.setPATH_FOTO_DENAH_2(cursor.getString(2));
-                item.setSRC_FOTO_DENAH_2(cursor.getString(3));
 
             }
         }

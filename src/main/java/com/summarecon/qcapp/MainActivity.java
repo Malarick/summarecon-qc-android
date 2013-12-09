@@ -294,6 +294,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onDrawerOpened(View drawerView) {
+            populateNavDrawerSection(R.array.arr_icon_section_penugasan, R.array.arr_lbl_section_penugasan, R.layout.drawer_item, mListSectionPenugasan, null);
             super.onDrawerOpened(drawerView);
             getActionBar().setTitle(mDrawerTitle);
         }
