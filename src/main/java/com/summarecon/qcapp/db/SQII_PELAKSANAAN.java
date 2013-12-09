@@ -56,6 +56,15 @@ public class SQII_PELAKSANAAN implements Serializable {
     private String TGL_PENUGASAN;
     private Float JML_FOTO_PENUGASAN;
     private Float JML_FOTO_REALISASI;
+    private String TIPE_DENAH;
+
+    public String getTIPE_DENAH() {
+        return TIPE_DENAH;
+    }
+
+    public void setTIPE_DENAH(String TIPE_DENAH) {
+        this.TIPE_DENAH = TIPE_DENAH;
+    }
 
     public String getNM_LANTAI() {
         return NM_LANTAI;
