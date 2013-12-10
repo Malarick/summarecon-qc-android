@@ -59,30 +59,28 @@ public class NavDrawerAdapter extends BaseAdapter {
 
     @Override
     public boolean isEnabled(int position) {
-        NavDrawerItem item = items.get(0);
+        NavDrawerItem item = items.get(position);
         String label = item.getItemLabel();
 
         if(label.equals(QCConfig.JENIS_PENUGASAN_SISA) || label.equals(QCConfig.JENIS_PENUGASAN_ULANG) || label.equals(QCConfig.JENIS_PENUGASAN_BARU)){
             switch(position){
                 case 0:
-                    if(label.equals(QCConfig.JENIS_PENUGASAN_SISA) && item.getItemCounter() > 0){
+                    if(item.getItemCounter() > 0){
                         return true;
                     }else{
                         return false;
                     }
                 case 1:
-                    if(isEnabled(position - 1) || item.getItemCounter() > 0){
-                        return false;
-                    }else{
+                    if(!isEnabled(position - 1) && item.getItemCounter() > 0){
                         return true;
+                    }else{
+                        return false;
                     }
                 case 2:
-                    if(isEnabled(position - 2)){
-                        return false;
-                    }else if(isEnabled(position - 1) || item.getItemCounter() > 0){
-                        return false;
-                    }else{
+                    if(!isEnabled(position - 1) && item.getItemCounter() > 0){
                         return true;
+                    }else{
+                        return false;
                     }
                 default:
                     return true;

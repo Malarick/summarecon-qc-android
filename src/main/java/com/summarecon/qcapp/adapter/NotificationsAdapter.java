@@ -58,29 +58,27 @@ public class NotificationsAdapter extends BaseAdapter {
 
     @Override
     public boolean isEnabled(int position) {
-        NotificationsItem item = items.get(0);
+        NotificationsItem item = items.get(position);
         String label = item.getItemLabel();
 
         switch(position){
             case 0:
-                if(label.equals(QCConfig.JENIS_PENUGASAN_SISA) && item.getItemCounter() > 0){
+                if(item.getItemCounter() > 0){
                     return true;
                 }else{
                     return false;
                 }
             case 1:
-                if(isEnabled(position - 1) || item.getItemCounter() > 0){
-                    return false;
-                }else{
+                if(!isEnabled(position - 1) && item.getItemCounter() > 0){
                     return true;
+                }else{
+                    return false;
                 }
             case 2:
-                if(isEnabled(position - 2)){
-                    return false;
-                }else if(isEnabled(position - 1) || item.getItemCounter() > 0){
-                    return false;
-                }else{
+                if(!isEnabled(position - 1) && item.getItemCounter() > 0){
                     return true;
+                }else{
+                    return false;
                 }
             default:
                 return true;
