@@ -52,6 +52,13 @@ public class PenugasanFragment extends Fragment {
 
         TextView textView = (TextView) rootView.findViewById(R.id.lbl_test);
         jenisPenugasan = getArguments().getString(ARGS_PENUGASAN, "PENUGASAN");
+        if(jenisPenugasan.equals(QCConfig.KD_PENUGASAN_SISA)){
+            jenisPenugasan = QCConfig.JENIS_PENUGASAN_SISA;
+        }else if(jenisPenugasan.equals(QCConfig.KD_PENUGASAN_ULANG)){
+            jenisPenugasan = QCConfig.JENIS_PENUGASAN_ULANG;
+        }else{
+            jenisPenugasan = QCConfig.JENIS_PENUGASAN_BARU;
+        }
         textView.setText(jenisPenugasan);
 
         mExpListPenugasan = (ExpandableListView) rootView.findViewById(R.id.exp_list_penugasan);

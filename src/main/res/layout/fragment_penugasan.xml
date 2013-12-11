@@ -8,11 +8,14 @@
         android:id="@+id/lbl_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PENUGASAN" />
+        android:text="PENUGASAN"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
 
     <ExpandableListView
         android:id="@+id/exp_list_penugasan"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"></ExpandableListView>
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"></ExpandableListView>
 
 </LinearLayout>
