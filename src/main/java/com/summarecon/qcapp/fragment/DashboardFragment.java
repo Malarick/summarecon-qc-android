@@ -39,7 +39,7 @@ import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
-    private QCDBHelper db;
+    private QCDBHelper db,db2;
     private ImageView img_profile;
     private TextView txt_profile_name, txt_profile_nik, txt_profile_jabatan;
     private ListView mListView;
@@ -120,38 +120,7 @@ public class DashboardFragment extends Fragment {
                 btn_upload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        pelaksanaan = (ArrayList<SQII_PELAKSANAAN>) db.getAllPelaksanaan();
-                        for (int i = 0; i < pelaksanaan.size(); i++) {
-                            update_pelaksanaan.add("UPDATE SQII_PELAKSANAAN SET TGL_PELAKSANAAN = '" + pelaksanaan.get(i).getTGL_PELAKSANAAN().toString() + "', STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT().toString() + "', CATATAN = '" + pelaksanaan.get(i).getCATATAN().toString() + "', SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH().toString() + "', SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT().toString() + "' " +
-                                                   "WHERE NO_PENUGASAN ='"+pelaksanaan.get(i).getTGL_PELAKSANAAN()+"'  AND " +
-                                                          "KD_KAWASAN ='"+pelaksanaan.get(i).getKD_KAWASAN()+"' AND " +
-                                                          "BLOK ='"+pelaksanaan.get(i).getBLOK()+"' AND " +
-                                                          "NOMOR ='"+pelaksanaan.get(i).getNOMOR()+"' AND " +
-                                                          "KD_JENIS ='"+pelaksanaan.get(i).getKD_JENIS()+"' AND " +
-                                                          "KD_TIPE ='"+pelaksanaan.get(i).getKD_TIPE()+"' AND " +
-                                                          "KD_ITEM_DEFECT ='"+pelaksanaan.get(i).getKD_ITEM_DEFECT()+"' AND " +
-                                                          "KD_LANTAI ='"+pelaksanaan.get(i).getKD_LANTAI()+"' AND " +
-                                                          "URUT_PELAKSANAAN = '"+pelaksanaan.get(i).getURUT_PELAKSANAAN()+"'");
-
-                        }
-
-
-                        GenerateScriptOnSD("UPLOAD_"+ nik + year + month + day +".txt", update_pelaksanaan);
-
-                        /* Generate file Bat*/
-                        for (int i = 0; i < pelaksanaan.size(); i++) {
-                            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT()));
-                            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH()));
-                        }
-                        GenerateBat("BAT_UPLOAD_"+ nik + year + month + day +".bat", foto_pelaksanaan);
-
-
-                        /* Tambahkan dan generate*/
-                        for (int i = 0; i < pelaksanaan.size(); i++) {
-                            filepreupload.add("JENIS_PENUGASAN = '" + pelaksanaan.get(i).getJENIS_PENUGASAN() + "'|TGL_PElAKSANAAN = '" + year + "-" + month + "-" + day + "'|STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT() + "'| STATUS_PEKERJAAN = '" + pelaksanaan.get(i).getSTATUS_PEKERJAAN() + "'|CATATAN = '" + pelaksanaan.get(i).getCATATAN() + "'|SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH() + "'|SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT() + "'#NO_PENUGASAN = '" + pelaksanaan.get(i).getNO_PENUGASAN() + "'|KD_KAWASAN = '" + pelaksanaan.get(i).getKD_KAWASAN() + "'|BLOK = '" + pelaksanaan.get(i).getBLOK() + "'|NOMOR = '" + pelaksanaan.get(i).getNOMOR() + "'|KD_JENIS = '" + pelaksanaan.get(i).getKD_JENIS() + "'|KD_TIPE = '" + pelaksanaan.get(i).getKD_TIPE() + "'|KD_ITEM_DEFECT = '" + pelaksanaan.get(i).getKD_ITEM_DEFECT() + "'|KD_LANTAI = '" + pelaksanaan.get(i).getKD_LANTAI() + "'|URUT_PELAKSANAAN = '" + pelaksanaan.get(i).getURUT_PELAKSANAAN() + "'|URUT_FOTO = '" + pelaksanaan.get(i).getURUT_FOTO() + "'");
-                        }
-                      GeneratePreUpload("PRE_UPLOAD_" + nik + year + month + day + ".txt", filepreupload);
-
+                        GenerateFile();
                     }
                 });
 
@@ -244,6 +213,41 @@ public class DashboardFragment extends Fragment {
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
             selectItem(adapterView, view, position);
         }
+    }
+
+    /* Untuk Panggil Semua Generate*/
+    public void GenerateFile(){
+        pelaksanaan = (ArrayList<SQII_PELAKSANAAN>) db.getAllPelaksanaan();
+        for (int i = 0; i < pelaksanaan.size(); i++) {
+            update_pelaksanaan.add("UPDATE SQII_PELAKSANAAN SET TGL_PELAKSANAAN = '" + pelaksanaan.get(i).getTGL_PELAKSANAAN().toString() + "', STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT().toString() + "', CATATAN = '" + pelaksanaan.get(i).getCATATAN().toString() + "', SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH().toString() + "', SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT().toString() + "' " +
+                    "WHERE NO_PENUGASAN ='"+pelaksanaan.get(i).getTGL_PELAKSANAAN()+"'  AND " +
+                    "KD_KAWASAN ='"+pelaksanaan.get(i).getKD_KAWASAN()+"' AND " +
+                    "BLOK ='"+pelaksanaan.get(i).getBLOK()+"' AND " +
+                    "NOMOR ='"+pelaksanaan.get(i).getNOMOR()+"' AND " +
+                    "KD_JENIS ='"+pelaksanaan.get(i).getKD_JENIS()+"' AND " +
+                    "KD_TIPE ='"+pelaksanaan.get(i).getKD_TIPE()+"' AND " +
+                    "KD_ITEM_DEFECT ='"+pelaksanaan.get(i).getKD_ITEM_DEFECT()+"' AND " +
+                    "KD_LANTAI ='"+pelaksanaan.get(i).getKD_LANTAI()+"' AND " +
+                    "URUT_PELAKSANAAN = '"+pelaksanaan.get(i).getURUT_PELAKSANAAN()+"'");
+
+        }
+
+
+        GenerateScriptOnSD("UPLOAD_"+ nik + year + month + day +".txt", update_pelaksanaan);
+
+                        /* Generate file Bat*/
+        for (int i = 0; i < pelaksanaan.size(); i++) {
+            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT()));
+            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH()));
+        }
+        GenerateBat("BAT_UPLOAD_"+ nik + year + month + day +".bat", foto_pelaksanaan);
+
+
+                        /* Tambahkan dan generate*/
+        for (int i = 0; i < pelaksanaan.size(); i++) {
+            filepreupload.add("JENIS_PENUGASAN = '" + pelaksanaan.get(i).getJENIS_PENUGASAN() + "'|TGL_PElAKSANAAN = '" + year + "-" + month + "-" + day + "'|STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT() + "'| STATUS_PEKERJAAN = '" + pelaksanaan.get(i).getSTATUS_PEKERJAAN() + "'|CATATAN = '" + pelaksanaan.get(i).getCATATAN() + "'|SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH() + "'|SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT() + "'#NO_PENUGASAN = '" + pelaksanaan.get(i).getNO_PENUGASAN() + "'|KD_KAWASAN = '" + pelaksanaan.get(i).getKD_KAWASAN() + "'|BLOK = '" + pelaksanaan.get(i).getBLOK() + "'|NOMOR = '" + pelaksanaan.get(i).getNOMOR() + "'|KD_JENIS = '" + pelaksanaan.get(i).getKD_JENIS() + "'|KD_TIPE = '" + pelaksanaan.get(i).getKD_TIPE() + "'|KD_ITEM_DEFECT = '" + pelaksanaan.get(i).getKD_ITEM_DEFECT() + "'|KD_LANTAI = '" + pelaksanaan.get(i).getKD_LANTAI() + "'|URUT_PELAKSANAAN = '" + pelaksanaan.get(i).getURUT_PELAKSANAAN() + "'|URUT_FOTO = '" + pelaksanaan.get(i).getURUT_FOTO() + "'");
+        }
+        GeneratePreUpload("PRE_UPLOAD_" + nik + year + month + day + ".txt", filepreupload);
     }
 
     public void GenerateScriptOnSD(String sFileName, ArrayList<String> sBody){
