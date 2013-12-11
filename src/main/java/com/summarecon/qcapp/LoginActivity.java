@@ -47,6 +47,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Init the DB
         db = QCDBHelper.getInstance(this);
 
         server_ip = QCConfig.getSharedPreferences().getString("server_ip_preference", "192.168.100.106");
@@ -88,16 +89,21 @@ public class LoginActivity extends Activity {
 
     private void login() {
         /* Check isi tabel user/penugasan */
-        if (db.checkTabelPenugasan()) {
-            /* Kalau ada ada datanya check login dari database lokal */
-            Log.e(LOG_TAG, "data penugasan ada di database...");
-            checkUserLogin();
+        if (!checkFileDatabase()){
+            QCDBHelper.createNewInstance(this);
+        }
+
+        if (QCDBHelper.getInstance(this).checkTabelPenugasan()) {
+                /* Kalau ada ada datanya check login dari database lokal */
+                Log.e(LOG_TAG, "data penugasan ada di database...");
+                checkUserLogin();
         } else if (!checkFileSQLPenugasan()) {
              /* Download Penugasan dari Server */
             Log.e(LOG_TAG, "download file penugasan...");
             new DownloadDataPenugasan().execute();
         } else {
-            db.executeSQLScriptFile();
+            Log.e(LOG_TAG, "baca data offline...");
+            QCDBHelper.getInstance(this).executeSQLScriptFile();
             checkUserLogin();
         }
     }
@@ -113,10 +119,21 @@ public class LoginActivity extends Activity {
         }
     }
 
+    private boolean checkFileDatabase() {
+        File file = new File(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY);
+        if (file.exists()) {
+            Log.e(LOG_TAG, "ada file database...");
+            return true;
+        } else {
+            Log.e(LOG_TAG, "tidak ada file databse...");
+            return false;
+        }
+    }
+
     private void checkUserLogin() {
         String nik = edt_nik.getText().toString().trim();
         String password = edt_password.getText().toString().trim();
-        if (db.checkLogin(nik, MD5Hash.getMD5(password))) {
+        if (QCDBHelper.getInstance(this).checkLogin(nik, MD5Hash.getMD5(password))) {
             Toast.makeText(getApplicationContext(), "Login Berhasil", Toast.LENGTH_SHORT).show();
                 /* Init intent*/
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -152,9 +169,9 @@ public class LoginActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... Void) {
-            HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("http://" + server_ip + "/sqii/ext-lib/agung_qc/get-penugasan.php");
-            try {
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost("http://" + server_ip + "/sqii/ext-lib/agung_qc/get-penugasan.php");
+                try {
                 HttpResponse httpResponse = client.execute(request);
                 response = EntityUtils.toString(httpResponse.getEntity());
 
@@ -176,7 +193,7 @@ public class LoginActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void returnValue) {
-            db.executeSQLScriptFile();
+            QCDBHelper.getInstance(LoginActivity.this).executeSQLScriptFile();
             loading.dismiss();
             checkUserLogin();
         }

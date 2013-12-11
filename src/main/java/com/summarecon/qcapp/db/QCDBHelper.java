@@ -24,7 +24,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
     private static int success = 1;
     private static int failed = -1;
 
-    private QCDBHelper(Context context) {
+    public QCDBHelper(Context context) {
         super(context, QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null, DB_VERSION);
         getReadableDatabase();
     }
@@ -33,6 +33,11 @@ public class QCDBHelper extends SQLiteOpenHelper {
         if (sInstance == null) {
             sInstance = new QCDBHelper(context.getApplicationContext());
         }
+        return sInstance;
+    }
+
+    public static QCDBHelper createNewInstance(Context context){
+        sInstance = new QCDBHelper(context.getApplicationContext());
         return sInstance;
     }
 
@@ -421,8 +426,9 @@ public class QCDBHelper extends SQLiteOpenHelper {
             return failed;
         } finally {
             db.endTransaction();
-        }
 
+        }
+        db.close();
         return success;
     }
 
@@ -2278,7 +2284,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
         /*SQLiteDatabase db = this.getReadableDatabase();*/
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
 
-        query = "SELECT * FROM SQII_PELAKSANAAN WHERE TGL_PENUGASAN = '" + tglPenugasan + "' AND PETUGAS_QC = '" + petugasQC + "' AND JENIS_PENUGASAN = '" + jenis_penugasan + "'";
+        query = "SELECT * FROM SQII_PELAKSANAAN WHERE TGL_PELAKSANAAN = '" + tglPenugasan + "' AND PETUGAS_QC = '" + petugasQC + "' AND JENIS_PENUGASAN = '" + jenis_penugasan + "'";
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
@@ -3060,9 +3066,11 @@ public class QCDBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER", null);
         if (cursor.getCount() > 0) {
             db.close();
+            cursor.close();
             return true;
         } else {
             db.close();
+            cursor.close();
             return false;
         }
     }
@@ -3072,9 +3080,11 @@ public class QCDBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM SQII_USER WHERE NO_INDUK='" + nik + "' AND PASSWORD='" + password + "'", null);
         if (cursor.getCount() > 0) {
             db.close();
+            cursor.close();
             return true; /* Login Sukses*/
         } else {
             db.close();
+            cursor.close();
             return false; /* Login Gagal*/
         }
     }
