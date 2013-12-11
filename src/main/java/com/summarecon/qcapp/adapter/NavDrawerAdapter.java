@@ -1,6 +1,7 @@
 package com.summarecon.qcapp.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.summarecon.qcapp.R;
+import com.summarecon.qcapp.core.QCConfig;
 import com.summarecon.qcapp.item.NavDrawerItem;
+import com.summarecon.qcapp.item.NotificationsItem;
 
 import java.util.List;
 
@@ -50,6 +53,44 @@ public class NavDrawerAdapter extends BaseAdapter {
     }
 
     @Override
+    public boolean areAllItemsEnabled() {
+        return super.areAllItemsEnabled();
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        NavDrawerItem item = items.get(position);
+        String label = item.getItemLabel();
+
+        if(label.equals(QCConfig.JENIS_PENUGASAN_SISA) || label.equals(QCConfig.JENIS_PENUGASAN_ULANG) || label.equals(QCConfig.JENIS_PENUGASAN_BARU)){
+            switch(position){
+                case 0:
+                    if(item.getItemCounter() > 0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                case 1:
+                    if(!isEnabled(position - 1) && item.getItemCounter() > 0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                case 2:
+                    if(!isEnabled(position - 1) && item.getItemCounter() > 0){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                default:
+                    return true;
+            }
+        }else{
+            return true;
+        }
+    }
+
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         NavDrawerItem item = items.get(i);
 
@@ -67,6 +108,9 @@ public class NavDrawerAdapter extends BaseAdapter {
             textView_counter.setBackgroundResource(R.drawable.rectangle);
         }
 
+        if(!isEnabled(i)){
+            textView_lbl.setTextColor(Color.GRAY);
+        }
 
         Log.e("COUNTER",  item.getItemLabel() +" = "+ item.counterExist.toString());
 

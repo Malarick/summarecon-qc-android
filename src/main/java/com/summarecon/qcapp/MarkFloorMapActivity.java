@@ -130,7 +130,8 @@ public class MarkFloorMapActivity extends Activity {
         isReplaceDefect = bundle.getBoolean(ACTION_REPLACE_DEFECT);
         isReplaceDenah = bundle.getBoolean(ACTION_REPLACE_DENAH);
 
-        SQII_LANTAI_TIPE_RUMAH denah = db.getLantaiTipeRumah(item.getKD_LANTAI(), item.getKD_JENIS(), item.getKD_TIPE(), item.getKD_KAWASAN());
+        Log.e("EXTRA_", "xxx" + parent.getTIPE_DENAH() + "xxx");
+        SQII_LANTAI_TIPE_RUMAH denah = db.getLantaiTipeRumah(item.getKD_LANTAI(), item.getKD_JENIS(), item.getKD_TIPE(), item.getKD_KAWASAN(), parent.getTIPE_DENAH());
 
         oriMapURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + File.separator + denah.getSRC_FOTO_DENAH();
         if(item.getSRC_FOTO_DENAH().equals("") || isReplaceDenah){
@@ -184,8 +185,8 @@ public class MarkFloorMapActivity extends Activity {
             item.setPATH_FOTO_DENAH(mapDir);
             item.setSRC_FOTO_DENAH(mapName);
             db.updatePelaksanaan(item);
-            db.updateItemDefectPenugasan(parent);
-            Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
+            //db.updateItemDefectPenugasan(parent);
+            //Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
             return true;
         }catch (FileNotFoundException e){
             Log.e(LOG_TAG, e.getMessage());

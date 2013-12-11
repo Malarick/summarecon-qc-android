@@ -45,11 +45,20 @@
                 android:prompt="@string/hint_status_pekerjaan" />
         </LinearLayout>
 
+        <Spinner
+            android:id="@+id/ddl_note"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingTop="5dp"
+            android:spinnerMode="dialog"
+            android:prompt="@string/hint_note"/>
+
         <EditText
             android:id="@+id/edt_note"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:paddingTop="5dp"
-            android:hint="@string/hint_note"/>
+            android:hint="@string/hint_note"
+            android:visibility="gone"/>
     </LinearLayout>
 </com.summarecon.qcapp.customview.CustomScrollView>

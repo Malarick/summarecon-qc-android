@@ -1,6 +1,8 @@
 package com.summarecon.qcapp.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.summarecon.qcapp.R;
+import com.summarecon.qcapp.core.QCConfig;
 import com.summarecon.qcapp.item.NavDrawerItem;
 import com.summarecon.qcapp.item.NotificationsItem;
 
@@ -49,6 +52,40 @@ public class NotificationsAdapter extends BaseAdapter {
     }
 
     @Override
+    public boolean areAllItemsEnabled() {
+        return super.areAllItemsEnabled();
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        NotificationsItem item = items.get(position);
+        String label = item.getItemLabel();
+
+        switch(position){
+            case 0:
+                if(item.getItemCounter() > 0){
+                    return true;
+                }else{
+                    return false;
+                }
+            case 1:
+                if(!isEnabled(position - 1) && item.getItemCounter() > 0){
+                    return true;
+                }else{
+                    return false;
+                }
+            case 2:
+                if(!isEnabled(position - 1) && item.getItemCounter() > 0){
+                    return true;
+                }else{
+                    return false;
+                }
+            default:
+                return true;
+        }
+    }
+
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         NotificationsItem item = items.get(i);
 
@@ -66,6 +103,10 @@ public class NotificationsAdapter extends BaseAdapter {
             TextView textView_counter = (TextView) view.findViewById(R.id.notifications_item_counter);
             textView_counter.setText(String.valueOf(item.getItemCounter()));
             textView_counter.setBackgroundResource(R.drawable.rectangle);
+        }
+
+        if(!isEnabled(i)){
+            textView_lbl.setTextColor(Color.GRAY);
         }
 
         Log.e("NOTIF", item.getItemLabel() + " = " + item.counterExist.toString());

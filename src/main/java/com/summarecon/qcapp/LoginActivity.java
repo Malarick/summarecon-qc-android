@@ -106,7 +106,6 @@ public class LoginActivity extends Activity {
             QCDBHelper.getInstance(this).executeSQLScriptFile();
             checkUserLogin();
         }
-
     }
 
     private boolean checkFileSQLPenugasan() {

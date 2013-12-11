@@ -24,6 +24,7 @@ import com.summarecon.qcapp.adapter.PenugasanExpListAdapter;
 import com.summarecon.qcapp.adapter.SpinnerListAdapter;
 import com.summarecon.qcapp.customview.CustomScrollView;
 import com.summarecon.qcapp.db.QCDBHelper;
+import com.summarecon.qcapp.db.SQII_CATATAN;
 import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.item.SpinnerListItem;
 
@@ -66,10 +67,12 @@ public class MarkPictureActivity extends Activity {
     private EditText mNote;
     private TextView mSelectedViewStatusDefect;
     private TextView mSelectedViewStatusPekerjaan;
+    private TextView mSelectedViewNote;
     private CustomScrollView rootScrollView;
 
     private Spinner mSpnStatusDefect;
     private Spinner mSpnStatusPekerjaan;
+    private Spinner mSpnNote;
 
     private QCDBHelper db;
 
@@ -78,6 +81,9 @@ public class MarkPictureActivity extends Activity {
     private String callingActivity;
     private Boolean isReplaceDefect;
     private Boolean isReplaceDenah;
+    private Boolean actionListenerChecker;
+
+    private String lastItemSelected;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,35 +93,33 @@ public class MarkPictureActivity extends Activity {
 
         rootScrollView = (CustomScrollView) findViewById(R.id.root_scroll_view);
         mNote = (EditText) findViewById(R.id.edt_note);
+        mSpnStatusDefect = (Spinner) findViewById(R.id.ddl_status_defect);
+        mSpnStatusPekerjaan = (Spinner) findViewById(R.id.ddl_status_pekerjaan);
+        mSpnNote = (Spinner) findViewById(R.id.ddl_note);
+        actionListenerChecker = false;
+        lastItemSelected = "";
 
         //get Intent
         intent = getIntent();
 
-        mSpnStatusDefect = (Spinner) findViewById(R.id.ddl_status_defect);
-        mSpnStatusPekerjaan = (Spinner) findViewById(R.id.ddl_status_pekerjaan);
-        populateSpinner(R.array.arr_lbl_status_defect, mSpnStatusDefect);
-        populateSpinner(R.array.arr_lbl_status_pekerjaan, mSpnStatusPekerjaan);
-
-        mSpnStatusDefect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView txt = (TextView) view.findViewById(R.id.spinner_item_key);
-                //mNote.setText(txt.getText());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-
-        //show the photo's preview
+        //SHOW THE PHOTO'S PREVIEW
         photoPreview = (ImageView) findViewById(R.id.img_photo_preview);
         loadPhoto();
 
-        //On Touch Listener
+        //ON TOUCH LISTENER
         photoPreview.setOnTouchListener(new DrawingListener());
+
+        //SPINNERS
+        List<SQII_CATATAN> notes = db.getAllCatatan(item.getKD_ITEM_DEFECT());
+        populateSpinner(R.array.arr_lbl_status_defect, mSpnStatusDefect);
+        if(item.getSTATUS_DEFECT().equals("B")){
+            populateSpinner(R.array.arr_lbl_status_pekerjaan_berat, mSpnStatusPekerjaan);
+        } else{
+            populateSpinner(R.array.arr_lbl_status_pekerjaan, mSpnStatusPekerjaan);
+        }
+        populateSpinnerNote(notes, mSpnNote);
+
+        initSpinners();
     }
 
     @Override
@@ -163,28 +167,58 @@ public class MarkPictureActivity extends Activity {
         item = (SQII_PELAKSANAAN) bundle.getSerializable(ITEM_SQII_PELAKSANAAN);
 
         jumlahFotoRealisasi = parent.getJML_FOTO_REALISASI();
-
-        //CEK SIAPA YANG MEMANGGIL INTENT
-        //KALAU DARI GRID DIA BERSIFAT EDIT, ARTINYA SPINNER-NYA + NOTE-NYA DI SET
-        //KALAU DARI PHOTO DIA BERSIFAT BARU, ARTINYA SEMUA DALAM KEADAAN DEFAULT
         callingActivity = bundle.getString(CALLING_ACTIVITY);
         isReplaceDefect = bundle.getBoolean(ACTION_REPLACE_DEFECT);
         isReplaceDenah = bundle.getBoolean(ACTION_REPLACE_DENAH);
+    }
+
+    private void initSpinners(){
+        //CEK SIAPA YANG MEMANGGIL INTENT
+        //KALAU DARI GRID DIA BERSIFAT EDIT, ARTINYA SPINNER-NYA + NOTE-NYA DI SET
+        //KALAU DARI PHOTO DIA BERSIFAT BARU, ARTINYA SEMUA DALAM KEADAAN DEFAULT
         if(callingActivity.equals(TakePictureActivity.ACTIVITY)){
             if(!isReplaceDefect){
                 jumlahFotoRealisasi++;
             }
-        }else if(callingActivity.equals(PenugasanExpListAdapter.ACTIVITY)){
+        } else if(callingActivity.equals(PenugasanExpListAdapter.ACTIVITY)){
             List<String> arr_status_defect = new ArrayList<String>();
             List<String> arr_status_pekerjaan = new ArrayList<String>();
+            List<SQII_CATATAN> notes = db.getAllCatatan(item.getKD_ITEM_DEFECT());
             Collections.addAll(arr_status_defect, getResources().getStringArray(R.array.arr_lbl_status_defect));
             Collections.addAll(arr_status_pekerjaan, getResources().getStringArray(R.array.arr_lbl_status_pekerjaan));
 
             //SET FIELD-FIELD AGAR SESUAI DENGAN DB SEBELUM DI EDIT
             mSpnStatusDefect.setSelection(arr_status_defect.indexOf(item.getSTATUS_DEFECT()));
             mSpnStatusPekerjaan.setSelection(arr_status_pekerjaan.indexOf(item.getSTATUS_PEKERJAAN()));
-            mNote.setText(item.getCATATAN());
+            mSpnNote.setSelection(notes.indexOf(item.getCATATAN()));
+            Log.e("EXTRA_", item.getSTATUS_DEFECT() + " || " + mSpnStatusDefect.getSelectedItemPosition() + " || " + arr_status_defect.indexOf(item.getSTATUS_DEFECT()));
+            Log.e("EXTRA_", item.getSTATUS_PEKERJAAN() + " || " + mSpnStatusPekerjaan.getSelectedItemPosition() + " || " + arr_status_pekerjaan.indexOf(item.getSTATUS_PEKERJAAN()));
+            Log.e("EXTRA_", item.getCATATAN() + " || " + mSpnNote.getSelectedItemPosition() + " || " + notes.indexOf(item.getCATATAN()));
+            //mNote.setText(item.getCATATAN());
         }
+
+        mSpnStatusDefect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView txt = (TextView) view.findViewById(R.id.spinner_item_key);
+                if(actionListenerChecker){
+                    if(txt.getText().equals("B") && !lastItemSelected.equals("B")){
+                        populateSpinner(R.array.arr_lbl_status_pekerjaan_berat, mSpnStatusPekerjaan);
+                    }else{
+                        if(lastItemSelected.equals("B")){
+                            populateSpinner(R.array.arr_lbl_status_pekerjaan, mSpnStatusPekerjaan);
+                        }
+                    }
+                }
+                lastItemSelected = txt.getText().toString();
+                actionListenerChecker = true;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private boolean savePhoto(){
@@ -195,6 +229,7 @@ public class MarkPictureActivity extends Activity {
         //GET SELECTED ITEM FROM SPINNER/DROPDOWN
         mSelectedViewStatusDefect = (TextView) mSpnStatusDefect.getSelectedView().findViewById(R.id.spinner_item_key);
         mSelectedViewStatusPekerjaan = (TextView) mSpnStatusPekerjaan.getSelectedView().findViewById(R.id.spinner_item_key);
+        mSelectedViewNote = (TextView) mSpnNote.getSelectedView().findViewById(R.id.spinner_item_key);
 
         //File Output Stream
         //Proses write file
@@ -212,10 +247,11 @@ public class MarkPictureActivity extends Activity {
             item.setSRC_FOTO_DEFECT(photoName);
             item.setSTATUS_DEFECT(mSelectedViewStatusDefect.getText().toString());
             item.setSTATUS_PEKERJAAN(mSelectedViewStatusPekerjaan.getText().toString());
-            item.setCATATAN(mNote.getText().toString());
-            parent.setJML_FOTO_REALISASI(jumlahFotoRealisasi);
-            Log.e("EXTRA_", item.getPATH_FOTO_DEFECT() + " || " + item.getSRC_FOTO_DEFECT() + " || " + item.getURUT_FOTO());
-            Log.e("EXTRA_", mSelectedViewStatusDefect.getText().toString() + " || " + mSelectedViewStatusPekerjaan.getText().toString());
+            item.setCATATAN(mSelectedViewNote.getText().toString());
+            //item.setCATATAN(mNote.getText().toString());
+            //parent.setJML_FOTO_REALISASI(jumlahFotoRealisasi);
+            //Log.e("EXTRA_", item.getPATH_FOTO_DEFECT() + " || " + item.getSRC_FOTO_DEFECT() + " || " + item.getURUT_FOTO());
+            //Log.e("EXTRA_", mSelectedViewStatusDefect.getText().toString() + " || " + mSelectedViewStatusPekerjaan.getText().toString());
             //db.updatePelaksanaan(item);
             //db.updateItemDefectPenugasan(parent);
             return true;
@@ -247,17 +283,19 @@ public class MarkPictureActivity extends Activity {
         photoPreview.setImageBitmap(photoBitmap);
     }
 
-    private void populateSpinner(int res_spinner){
-        List<SQII_PELAKSANAAN> listPelaksanaan = db.getAllPelaksanaan();
+    private void populateSpinnerNote(List<SQII_CATATAN> notes, Spinner spinner){
         List<SpinnerListItem> spinnerListItems = new ArrayList<SpinnerListItem>();
 
-        for(SQII_PELAKSANAAN s : listPelaksanaan){
-            spinnerListItems.add(new SpinnerListItem(s.getSTATUS_PEKERJAAN()));
+        if(notes.size() > 0){
+            for(SQII_CATATAN value : notes){
+                spinnerListItems.add(new SpinnerListItem(value.getDESKRIPSI()));
+            }
+        }else{
+            spinnerListItems.add(new SpinnerListItem("None"));
         }
 
         adapter = new SpinnerListAdapter(this, R.layout.spinner_item, spinnerListItems);
 
-        Spinner spinner = (Spinner) findViewById(res_spinner);
         spinner.setAdapter(adapter);
     }
 
