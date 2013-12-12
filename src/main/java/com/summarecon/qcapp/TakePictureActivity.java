@@ -130,20 +130,25 @@ public class TakePictureActivity extends Activity {
         //Button ZoomControls
         //ZoomIn
         zoomControls = (ZoomControls) findViewById(R.id.zoom_controls);
-        zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setZoom(ZOOM_IN_INCREMENT);
-            }
-        });
+        parameters = camera.getParameters();
 
-        //ZoomOut
-        zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setZoom(ZOOM_OUT_INCREMENT);
-            }
-        });
+        //CHECK WHETHER THE ZOOM FUNCTION IS SUPPORTED
+        if(parameters.isZoomSupported()){
+            zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setZoom(ZOOM_IN_INCREMENT);
+                }
+            });
+
+            //ZoomOut
+            zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setZoom(ZOOM_OUT_INCREMENT);
+                }
+            });
+        }
     }
 
     public int setFlash(){
@@ -152,16 +157,20 @@ public class TakePictureActivity extends Activity {
         //get Current Parameters
         parameters = camera.getParameters();
 
-        //Check whether the flash is already on or off and do the opposite
-        if(parameters.getFlashMode().equals(Camera.Parameters.FLASH_MODE_TORCH)){
-            status = 1;
-            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-        }else if(parameters.getFlashMode().equals(Camera.Parameters.FLASH_MODE_OFF)){
-            status = 0;
-            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+        //CHECK WHETHER THE FLASH MODE IS SUPPORTED
+        if(parameters.getSupportedFlashModes().indexOf(Camera.Parameters.FLASH_MODE_TORCH) != -1){
+            //Check whether the flash is already on or off and do the opposite
+            if(parameters.getFlashMode().equals(Camera.Parameters.FLASH_MODE_TORCH)){
+                status = 1;
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            }else if(parameters.getFlashMode().equals(Camera.Parameters.FLASH_MODE_OFF)){
+                status = 0;
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            }
+
+            camera.setParameters(parameters);
         }
 
-        camera.setParameters(parameters);
         return status;
     }
 
@@ -195,7 +204,7 @@ public class TakePictureActivity extends Activity {
 
                 //Setting path dan nama file
                 File pictureFileDir = new File(QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY);
-                String pictureFileName = QCConfig.PREFIX_FILE_DEFECT + parent.getNM_CLUSTER() + "_" + System.currentTimeMillis() + ".jpg";
+                String pictureFileName = QCConfig.PREFIX_FILE_DEFECT + parent.getNM_CLUSTER().replace(" ", "_") + "_" + System.currentTimeMillis() + ".jpg";
                 if(isReplaceDefect){
                     pictureFileName = item.getSRC_FOTO_DEFECT();
                 }

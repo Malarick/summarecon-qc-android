@@ -130,7 +130,7 @@ public class MarkFloorMapActivity extends Activity {
         isReplaceDefect = bundle.getBoolean(ACTION_REPLACE_DEFECT);
         isReplaceDenah = bundle.getBoolean(ACTION_REPLACE_DENAH);
 
-        Log.e("EXTRA_", "xxx" + parent.getTIPE_DENAH() + "xxx");
+        //Log.e("EXTRA_", "xxx" + parent.getTIPE_DENAH() + "xxx");
         SQII_LANTAI_TIPE_RUMAH denah = db.getLantaiTipeRumah(item.getKD_LANTAI(), item.getKD_JENIS(), item.getKD_TIPE(), item.getKD_KAWASAN(), parent.getTIPE_DENAH());
 
         oriMapURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + File.separator + denah.getSRC_FOTO_DENAH();
@@ -141,8 +141,8 @@ public class MarkFloorMapActivity extends Activity {
         }
 
         mapDir = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY;
-        Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
-        Log.e("EXTRA_", denah.getSRC_FOTO_DENAH());
+        //Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
+        //Log.e("EXTRA_", denah.getSRC_FOTO_DENAH());
         if(isReplaceDenah){
             mapName = item.getSRC_FOTO_DENAH();
         }else{

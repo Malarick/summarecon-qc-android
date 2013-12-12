@@ -33,6 +33,7 @@ public class PenugasanFragment extends Fragment {
     private ExpandableListView mExpListPenugasan;
     private PenugasanExpListAdapter mAdapter;
     private String jenisPenugasan;
+    private String kdJenisPenugasan;
     private int lastGroupPosition;
     private QCDBHelper db;
 
@@ -51,10 +52,10 @@ public class PenugasanFragment extends Fragment {
         }
 
         TextView textView = (TextView) rootView.findViewById(R.id.lbl_test);
-        jenisPenugasan = getArguments().getString(ARGS_PENUGASAN, "PENUGASAN");
-        if(jenisPenugasan.equals(QCConfig.KD_PENUGASAN_SISA)){
+        kdJenisPenugasan = getArguments().getString(ARGS_PENUGASAN, "PENUGASAN");
+        if(kdJenisPenugasan.equals(QCConfig.KD_PENUGASAN_SISA)){
             jenisPenugasan = QCConfig.JENIS_PENUGASAN_SISA;
-        }else if(jenisPenugasan.equals(QCConfig.KD_PENUGASAN_ULANG)){
+        }else if(kdJenisPenugasan.equals(QCConfig.KD_PENUGASAN_ULANG)){
             jenisPenugasan = QCConfig.JENIS_PENUGASAN_ULANG;
         }else{
             jenisPenugasan = QCConfig.JENIS_PENUGASAN_BARU;
@@ -74,7 +75,7 @@ public class PenugasanFragment extends Fragment {
     }
 
     public void populateExpListPenugasan(){
-        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan(nik, jenisPenugasan);
+        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan(nik, kdJenisPenugasan);
         List<SQII_PELAKSANAAN> childList;
 
         List<PenugasanParentItem> parentItemsList = new ArrayList<PenugasanParentItem>();
