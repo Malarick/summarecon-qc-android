@@ -1,16 +1,20 @@
 package com.summarecon.qcapp.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.summarecon.qcapp.R;
@@ -31,10 +35,11 @@ public class PenugasanFragment extends Fragment {
     public static final String ARGS_PENUGASAN = "args_penugasan";
 
     private ExpandableListView mExpListPenugasan;
+    private GridView mGridViewPenugasan;
     private PenugasanExpListAdapter mAdapter;
     private String jenisPenugasan;
     private String kdJenisPenugasan;
-    private int lastGroupPosition;
+    private int lastGroupPosition = 0;
     private QCDBHelper db;
 
     private Bundle bundleLogin;
@@ -43,6 +48,7 @@ public class PenugasanFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_penugasan, container, false);
+        View childView = inflater.inflate(R.layout.penugasan_child_item, null);
 
         db = QCDBHelper.getInstance(getActivity());
 
@@ -63,6 +69,7 @@ public class PenugasanFragment extends Fragment {
         textView.setText(jenisPenugasan);
 
         mExpListPenugasan = (ExpandableListView) rootView.findViewById(R.id.exp_list_penugasan);
+        mGridViewPenugasan = (GridView) childView.findViewById(R.id.grid_penugasan_child);
         alignExpIndicatorToRight();
 
         return rootView;
@@ -71,11 +78,12 @@ public class PenugasanFragment extends Fragment {
     @Override
     public void onResume() {
         populateExpListPenugasan();
+        mExpListPenugasan.expandGroup(lastGroupPosition, true);
         super.onResume();
     }
 
     public void populateExpListPenugasan(){
-        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan(nik, kdJenisPenugasan);
+        final List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan(nik, kdJenisPenugasan);
         List<SQII_PELAKSANAAN> childList;
 
         List<PenugasanParentItem> parentItemsList = new ArrayList<PenugasanParentItem>();
@@ -132,6 +140,28 @@ public class PenugasanFragment extends Fragment {
                     mExpListPenugasan.collapseGroup(lastGroupPosition);
                 }
 
+                ViewGroup.LayoutParams layoutParams = mGridViewPenugasan.getLayoutParams();
+                Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+
+                if(parentList.get(groupPosition).getJML_FOTO_PENUGASAN() < 7){
+                    layoutParams.height = convertDpToPixels(80, getActivity());
+                    Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+                }else if(parentList.get(groupPosition).getJML_FOTO_PENUGASAN() < 14){
+                    layoutParams.height = convertDpToPixels(160, getActivity());
+                    Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+                }else if(parentList.get(groupPosition).getJML_FOTO_PENUGASAN() < 21){
+                    layoutParams.height = convertDpToPixels(240, getActivity());
+                    Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+                }else if(parentList.get(groupPosition).getJML_FOTO_PENUGASAN() < 28){
+                    layoutParams.height = convertDpToPixels(320, getActivity());
+                    Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+                }else if(parentList.get(groupPosition).getJML_FOTO_PENUGASAN() < 35){
+                    layoutParams.height = convertDpToPixels(400, getActivity());
+                    Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+                }
+
+                Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+                mGridViewPenugasan.setLayoutParams(layoutParams);
                 lastGroupPosition = groupPosition;
             }
         });
@@ -155,5 +185,14 @@ public class PenugasanFragment extends Fragment {
 
         //convert the dp(s) to pixels
         return (int) (scale * pixels + 0.5f);
+    }
+
+    public static int convertDpToPixels(float dp, Context context){
+        Resources resources = context.getResources();
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                resources.getDisplayMetrics()
+        );
     }
 }

@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -235,7 +238,7 @@ public class TakePictureActivity extends Activity {
 
                 //Convert bitmap to Byte
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                raw_img.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                raw_img.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
 
                 //File Output Stream
                 //Proses write file

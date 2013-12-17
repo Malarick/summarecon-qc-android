@@ -110,9 +110,10 @@ public class MarkPictureActivity extends Activity {
         photoPreview.setOnTouchListener(new DrawingListener());
 
         //SPINNERS
+        //POPULATE AWAL SPINNER
         List<SQII_CATATAN> notes = db.getAllCatatan(item.getKD_ITEM_DEFECT());
         populateSpinner(R.array.arr_lbl_status_defect, mSpnStatusDefect);
-        if(item.getSTATUS_DEFECT().equals("B")){
+        if(item.getSTATUS_DEFECT().equals("B") && !isReplaceDenah){
             populateSpinner(R.array.arr_lbl_status_pekerjaan_berat, mSpnStatusPekerjaan);
         } else{
             populateSpinner(R.array.arr_lbl_status_pekerjaan, mSpnStatusPekerjaan);
