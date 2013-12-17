@@ -2,9 +2,11 @@ package com.summarecon.qcapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,7 +130,7 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
         Log.e("CHILD_COUNT", String.valueOf(getChildrenCount(parentPosition)));
 
         //Load image (using different thread to reduce lag)
-        ImageLoader imageLoader = new ImageLoader(view, penugasanChildItem, penugasanParentItem.getReqImages());
+        ImageLoader imageLoader = new ImageLoader(context, view, penugasanChildItem, penugasanParentItem.getReqImages());
         imageLoader.execute();
 
 
@@ -186,6 +188,7 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
 
     private class ImageLoader extends AsyncTask<Void, Void, PenugasanGridAdapter>{
 
+        Context context;
         ProgressBar progressBar;
         GridView gridView;
         View view;
@@ -197,10 +200,11 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
         SQII_PELAKSANAAN parent;
         List<PenugasanGridItem> gridItems;
 
-        private ImageLoader(View view, PenugasanChildItem penugasanChildItem, Integer reqImg) {
+        private ImageLoader(Context context, View view, PenugasanChildItem penugasanChildItem, Integer reqImg) {
             this.view = view;
             this.penugasanChildItem = penugasanChildItem;
             this.reqImg = reqImg;
+            this.context = context;
         }
 
         @Override
@@ -216,11 +220,42 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
         @Override
         protected void onPostExecute(PenugasanGridAdapter gridAdapter) {
             super.onPostExecute(gridAdapter);
+
+            /* Responsive GridView heigh */
+            ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
+            if(parent.getJML_FOTO_PENUGASAN() < 7){
+                layoutParams.height = convertDpToPixels(80);
+                //Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+            }else if(parent.getJML_FOTO_PENUGASAN() < 14){
+                layoutParams.height = convertDpToPixels(160);
+                //Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+            }else if(parent.getJML_FOTO_PENUGASAN() < 21){
+                layoutParams.height = convertDpToPixels(240);
+                //Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+            }else if(parent.getJML_FOTO_PENUGASAN() < 28){
+                layoutParams.height = convertDpToPixels(320);
+                //Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+            }else if(parent.getJML_FOTO_PENUGASAN() < 35){
+                layoutParams.height = convertDpToPixels(400);
+                //Log.e("EXTRA_1", layoutParams.height + " || " + parentList.get(groupPosition).getJML_FOTO_PENUGASAN());
+            }
+            gridView.setLayoutParams(layoutParams);
+
+
             gridView.setAdapter(gridAdapter);
             gridView.setOnItemClickListener(new GridItemClickListener());
             gridView.setOnItemLongClickListener(new GridItemLongClickListener());
 
             progressBar.setVisibility(View.INVISIBLE);
+        }
+
+        public int convertDpToPixels(float dp){
+            Resources resources = this.context.getResources();
+            return (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    dp,
+                    resources.getDisplayMetrics()
+            );
         }
 
         @Override
