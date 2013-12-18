@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,9 +74,6 @@ public class TakePictureActivity extends Activity {
         isReplaceDefect = bundle.getBoolean(ACTION_REPLACE_DEFECT);
         isReplaceDenah = bundle.getBoolean(ACTION_REPLACE_DENAH);
 
-        //Handle listener untuk zoomControl
-        setZoomControlListener();
-
         btnTakePicture = (Button) findViewById(R.id.btn_take_picture);
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +93,9 @@ public class TakePictureActivity extends Activity {
 
         //Tampilkan camera pada FrameLayout
         cameraLayout.addView(cameraPreview);
+
+        //Handle listener untuk zoomControl
+        setZoomControlListener();
 
         super.onResume();
     }
@@ -167,9 +170,18 @@ public class TakePictureActivity extends Activity {
                 status = 0;
                 parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
             }
-
-            camera.setParameters(parameters);
+        }else if(parameters.getSupportedFlashModes().indexOf(Camera.Parameters.FLASH_MODE_AUTO) != -1){
+            //Check whether the flash is already on or off and do the opposite
+            if(parameters.getFlashMode().equals(Camera.Parameters.FLASH_MODE_AUTO)){
+                status = 1;
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            }else if(parameters.getFlashMode().equals(Camera.Parameters.FLASH_MODE_OFF)){
+                status = 0;
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+            }
         }
+
+        camera.setParameters(parameters);
 
         return status;
     }
@@ -226,7 +238,7 @@ public class TakePictureActivity extends Activity {
 
                 //Convert bitmap to Byte
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                raw_img.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                raw_img.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
 
                 //File Output Stream
                 //Proses write file

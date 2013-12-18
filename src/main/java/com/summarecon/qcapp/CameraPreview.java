@@ -2,6 +2,7 @@ package com.summarecon.qcapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -65,6 +66,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);       //auto-focus
             }
             parameters.setPictureSize(1024, 768);
+            parameters.setPictureFormat(ImageFormat.JPEG);
 
             //apply camera parameters
             camera.setParameters(parameters);

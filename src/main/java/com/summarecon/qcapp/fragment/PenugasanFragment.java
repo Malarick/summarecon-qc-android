@@ -1,16 +1,20 @@
 package com.summarecon.qcapp.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.summarecon.qcapp.R;
@@ -34,7 +38,7 @@ public class PenugasanFragment extends Fragment {
     private PenugasanExpListAdapter mAdapter;
     private String jenisPenugasan;
     private String kdJenisPenugasan;
-    private int lastGroupPosition;
+    private int lastGroupPosition = 0;
     private QCDBHelper db;
 
     private Bundle bundleLogin;
@@ -71,11 +75,12 @@ public class PenugasanFragment extends Fragment {
     @Override
     public void onResume() {
         populateExpListPenugasan();
+        mExpListPenugasan.expandGroup(lastGroupPosition, true);
         super.onResume();
     }
 
     public void populateExpListPenugasan(){
-        List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan(nik, kdJenisPenugasan);
+        final List<SQII_PELAKSANAAN> parentList = db.getAllPelaksanaan(nik, kdJenisPenugasan);
         List<SQII_PELAKSANAAN> childList;
 
         List<PenugasanParentItem> parentItemsList = new ArrayList<PenugasanParentItem>();
