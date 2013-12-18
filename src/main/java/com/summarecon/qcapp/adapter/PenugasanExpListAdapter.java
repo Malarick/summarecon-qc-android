@@ -221,7 +221,7 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
         protected void onPostExecute(PenugasanGridAdapter gridAdapter) {
             super.onPostExecute(gridAdapter);
 
-            /* Responsive GridView heigh */
+            /* Responsive GridView height */
             ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
             if(parent.getJML_FOTO_PENUGASAN() < 7){
                 layoutParams.height = convertDpToPixels(80);
@@ -247,15 +247,6 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
             gridView.setOnItemLongClickListener(new GridItemLongClickListener());
 
             progressBar.setVisibility(View.INVISIBLE);
-        }
-
-        public int convertDpToPixels(float dp){
-            Resources resources = this.context.getResources();
-            return (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    dp,
-                    resources.getDisplayMetrics()
-            );
         }
 
         @Override
@@ -304,6 +295,7 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
         }
 
         private class GridItemClickListener implements AdapterView.OnItemClickListener{
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 if(!gridItems.get(position).getIsFile()){
@@ -313,8 +305,8 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
                 }
             }
         }
-
         private class GridItemLongClickListener implements AdapterView.OnItemLongClickListener{
+
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
                 if(gridItems.get(position).getIsFile()){
@@ -324,6 +316,15 @@ public class PenugasanExpListAdapter extends BaseExpandableListAdapter {
 
                 return false;
             }
+        }
+
+        public int convertDpToPixels(float dp){
+            Resources resources = this.context.getResources();
+            return (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    dp,
+                    resources.getDisplayMetrics()
+            );
         }
     }
 }
