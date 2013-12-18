@@ -224,8 +224,12 @@ public class DashboardFragment extends Fragment {
 
     /* Untuk Panggil Semua Generate*/
     public void GenerateFile(){
+        int ctr_script=1, ctr_bat=1, ctr_pre=1;
+        int ctr_script_name=1, ctr_bat_name=1, ctr_pre_name=1;
         pelaksanaan = (ArrayList<SQII_PELAKSANAAN>) db.getAllPelaksanaan();
+
         for (int i = 0; i < pelaksanaan.size(); i++) {
+
             update_pelaksanaan.add("UPDATE SQII_PELAKSANAAN SET TGL_PELAKSANAAN = '" + pelaksanaan.get(i).getTGL_PELAKSANAAN().toString() + "', STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT().toString() + "', CATATAN = '" + pelaksanaan.get(i).getCATATAN().toString() + "', SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH().toString() + "', SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT().toString() + "' " +
                     "WHERE NO_PENUGASAN ='"+pelaksanaan.get(i).getTGL_PELAKSANAAN()+"'  AND " +
                     "KD_KAWASAN ='"+pelaksanaan.get(i).getKD_KAWASAN()+"' AND " +
@@ -238,8 +242,6 @@ public class DashboardFragment extends Fragment {
                     "URUT_PELAKSANAAN = '"+pelaksanaan.get(i).getURUT_PELAKSANAAN()+"'");
 
         }
-
-
         GenerateScriptOnSD("UPLOAD_"+ nik + year + month + day +".txt", update_pelaksanaan);
 
                         /* Generate file Bat*/

@@ -1,9 +1,7 @@
 package com.summarecon.qcapp.utils;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.summarecon.qcapp.core.QCConfig;
 import com.summarecon.qcapp.db.QCDBHelper;
 
 import java.text.SimpleDateFormat;
@@ -17,11 +15,17 @@ public class CalendarUtility {
     public static ArrayList<String> endDates = new ArrayList<String>();
     public static ArrayList<String> descriptions = new ArrayList<String>();
     public static int jum_penugasan_baru,jum_penugasan_ulang,jum_penugasan_sisa;
-    public static String[] day = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
+    //public static String[] day = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
+
+    public static String day;
     public static String mon;
     public static String year;
     public static String nik;
     public static String eventname = "penugasan";
+
+    public void setDay(String d) {
+        this.day = d;
+    }
 
     public void setMon(String m) {
         this.mon = m;
@@ -35,6 +39,14 @@ public class CalendarUtility {
         this.nik = n;
     }
 
+    public void setEvent(String e) {
+        this.eventname = e;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
     public String getMon() {
         return mon;
     }
@@ -44,6 +56,9 @@ public class CalendarUtility {
     }
     public String getNik() {
         return nik;
+    }
+    public String getEvent() {
+        return eventname;
     }
 
     public static ArrayList<String> readCalendarEvent(Context context) {
@@ -87,9 +102,9 @@ public class CalendarUtility {
         //nameOfEvent.add("2013-12-11"+"\n"+"Penugasan Sisa: 5"+"\n"+"Penugasan Ulang: 3"+"\n"+"Pengasan Baru: 10");
         //startDates.add("2013-12-11");
         //endDates.add("2013-12-11");
-        //descriptions.add("penugasan 10 Desember 2013");
+        //descriptions.add("penugasan" +" 10 Desember 2013");
 
-
+/*
         for (int i=0;i<31;i++){
 
             jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(year+"-"+mon+"-"+day[i]),nik, QCConfig.KD_PENUGASAN_BARU).size();
@@ -106,10 +121,13 @@ public class CalendarUtility {
             }
 
         }
+*/
 
-        if (nameOfEvent != null){
-            Log.e("nama event : ",nameOfEvent+" , start_date:"+startDates+" , end_Date:"+endDates+" , deskripsi:"+descriptions);
-        }
+        nameOfEvent.add(String.valueOf(eventname));
+        startDates.add(String.valueOf(year+"-"+mon+"-"+day));
+        endDates.add(String.valueOf(year+"-"+mon+"-"+day));
+        descriptions.add("xxx");
+
 
         return nameOfEvent;
     }

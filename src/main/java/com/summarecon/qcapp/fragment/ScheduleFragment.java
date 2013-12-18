@@ -32,10 +32,9 @@ public class ScheduleFragment extends Fragment {
     public GregorianCalendar month, itemmonth;// fragment_schedule instances.
 
     public CalendarAdapter adapter;// adapter instance
-    public Handler handler;// for grabbing some event values for showing the dot
-    // marker.
-    public ArrayList<String> items; // container to store fragment_schedule items which
-    // needs showing the event marker
+    public Handler handler;// for grabbing some event values for showing the dot marker.
+    public ArrayList<String> items; // container to store fragment_schedule items which needs showing the event marker
+
     ArrayList<String> event;
     LinearLayout rLayout;
     ArrayList<String> date;
@@ -46,6 +45,7 @@ public class ScheduleFragment extends Fragment {
     RelativeLayout previous,next;
     Bundle bundleLogin;
     String nik,password;
+    public String[] day = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
 
     QCDBHelper db;
     public int jum_penugasan_baru,jum_penugasan_ulang,jum_penugasan_sisa;
@@ -55,7 +55,7 @@ public class ScheduleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_schedule, container, false);
 
-        //Init the DB
+        /* Init the DB */
         db = QCDBHelper.getInstance(getActivity());
         calut= new CalendarUtility();
 
@@ -64,14 +64,6 @@ public class ScheduleFragment extends Fragment {
             nik = bundleLogin.getString("nik");
             password = bundleLogin.getString("password");
         }
-
-        calut.clearvalue();
-
-        //calut.nameOfEvent.add("arnold");
-        //calut.startDates.add("2013-12-01");
-        //calut.endDates.add("2013-12-01");
-
-        //Toast.makeText(getActivity().getApplicationContext(), selectedGridDate, Toast.LENGTH_SHORT).show();
 
         rLayout = (LinearLayout) rootView.findViewById(R.id.text);
         month = (GregorianCalendar) GregorianCalendar.getInstance();
@@ -83,45 +75,34 @@ public class ScheduleFragment extends Fragment {
 
         gridview = (GridView) rootView.findViewById(R.id.gridview);
         gridview.setAdapter(adapter);
-
+/*
         Toast.makeText(getActivity().getApplicationContext(),String.valueOf(gridview.getItemAtPosition(0)),Toast.LENGTH_SHORT).show();
         Toast.makeText(getActivity().getApplicationContext(),"Bulan : "+String.valueOf(android.text.format.DateFormat.format("MM", month)),Toast.LENGTH_LONG).show();
         Toast.makeText(getActivity().getApplicationContext(),"Tahun : "+String.valueOf(android.text.format.DateFormat.format("yyyy", month)),Toast.LENGTH_LONG).show();
 
-        calut.setMon(String.valueOf(android.text.format.DateFormat.format("MM", month)));
-        calut.setYear(String.valueOf(android.text.format.DateFormat.format("yyyy", month)));
-        calut.setNik("201005469");
-
-//        int i=9;
-//        String tgl;
-//            tgl= "2013-11-9";
-//        jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(tgl),"201005469", QCConfig.KD_PENUGASAN_BARU).size();
-//        jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(tgl),"201005469", QCConfig.KD_PENUGASAN_ULANG).size();
-//        jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(tgl),"201005469", QCConfig.KD_PENUGASAN_SISA).size();
-
         Toast.makeText(getActivity().getApplicationContext(),"Penugasan Baru : "+jum_penugasan_baru,Toast.LENGTH_LONG).show();
         Toast.makeText(getActivity().getApplicationContext(),"Penugasan Ulang : "+jum_penugasan_ulang,Toast.LENGTH_LONG).show();
         Toast.makeText(getActivity().getApplicationContext(),"Penugasan Sisa : "+jum_penugasan_sisa,Toast.LENGTH_LONG).show();
-
-        //calut.setmark("yyy","2013-11-09","2013-11-09","xxx");
-
-        //CalendarUtility.nameOfEvent.add("yyy");
-        //CalendarUtility.startDates.add("2013-11-09");
-        //CalendarUtility.endDates.add("2013-11-09");
-/*
-        for (int i = 0; i < 31; i++) {
-            jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(i)),"201005469", QCConfig.KD_PENUGASAN_BARU).size();
-            jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(i)),"201005469", QCConfig.KD_PENUGASAN_ULANG).size();
-            jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(i)),"201005469", QCConfig.KD_PENUGASAN_SISA).size();
-
-            CalendarUtility.nameOfEvent.add("\n Penugasan Baru : "+String.valueOf(jum_penugasan_baru)+"\n Penugasan Ulang : "+String.valueOf(jum_penugasan_ulang)+"\n Penugasan Sisa : "+String.valueOf(jum_penugasan_sisa));
-            CalendarUtility.startDates.add(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(i));
-            CalendarUtility.endDates.add(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(i));
-            //CalendarUtility.descriptions.add(cursor.getString(2));
-            //CalendarUtility.CNames[i] = cursor.getString(1);
-           // CalendarUtility.cursor.moveToNext();
-        }
 */
+
+        /* Saat pertama kali schedule dijalankan dilakukan pengecekan tanggal yg ada penugasan nya. */
+        for (int i=0;i<31;i++){
+
+            jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_BARU).size();
+            jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_ULANG).size();
+            jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_SISA).size();
+
+            if ((jum_penugasan_baru>0) || (jum_penugasan_ulang>0) || (jum_penugasan_sisa>0))
+            {
+                calut.setEvent(String.valueOf(android.text.format.DateFormat.format("yyyy", month)+"-"+android.text.format.DateFormat.format("MM", month)+"-"+day[i]+"\n"+"Penugasan Sisa: "+jum_penugasan_sisa+"\n"+"Penugasan Ulang: "+jum_penugasan_ulang+"\n"+"Pengasan Baru: "+jum_penugasan_baru));
+                calut.setYear(String.valueOf(android.text.format.DateFormat.format("yyyy", month)));
+                calut.setMon(String.valueOf(android.text.format.DateFormat.format("MM", month)));
+                calut.setDay(day[i]);
+                //descriptions.add("xxx");
+                //Log.e("tanggal penugasan : ",String.valueOf(year+"-"+mon+"-"+day[i]));
+            }
+
+        }
 
         handler = new Handler();
         handler.post(calendarUpdater);
@@ -137,11 +118,25 @@ public class ScheduleFragment extends Fragment {
             public void onClick(View v) {
                 setPreviousMonth();
                 refreshCalendar();
+                /* Saat tekan next month check ulang dalam bulan tersebut apakah ada penugasan */
+                for (int i=0;i<31;i++){
 
-                //Saat tekan next month isi set nilai bulan dan tahun baru
-                calut.setMon(String.valueOf(android.text.format.DateFormat.format("MM", month)));
-                calut.setYear(String.valueOf(android.text.format.DateFormat.format("yyyy", month)));
-                calut.setNik(nik);
+                    jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_BARU).size();
+                    jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_ULANG).size();
+                    jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_SISA).size();
+
+                    if ((jum_penugasan_baru>0) || (jum_penugasan_ulang>0) || (jum_penugasan_sisa>0))
+                    {
+                        calut.setEvent(String.valueOf(android.text.format.DateFormat.format("yyyy", month)+"-"+android.text.format.DateFormat.format("MM", month)+"-"+day[i]+"\n"+"Penugasan Sisa: "+jum_penugasan_sisa+"\n"+"Penugasan Ulang: "+jum_penugasan_ulang+"\n"+"Pengasan Baru: "+jum_penugasan_baru));
+                        calut.setYear(String.valueOf(android.text.format.DateFormat.format("yyyy", month)));
+                        calut.setMon(String.valueOf(android.text.format.DateFormat.format("MM", month)));
+                        calut.setDay(day[i]);
+                        //descriptions.add("xxx");
+                        //Log.e("tanggal penugasan : ",String.valueOf(year+"-"+mon+"-"+day[i]));
+                    }
+
+                }
+
             }
         });
 
@@ -152,11 +147,25 @@ public class ScheduleFragment extends Fragment {
             public void onClick(View v) {
                 setNextMonth();
                 refreshCalendar();
+                /* Saat tekan next month check ulang dalam bulan tersebut apakah ada penugasan */
+                for (int i=0;i<31;i++){
 
-                //Saat tekan next month isi set nilai bulan dan tahun baru
-                calut.setMon(String.valueOf(android.text.format.DateFormat.format("MM", month)));
-                calut.setYear(String.valueOf(android.text.format.DateFormat.format("yyyy", month)));
-                calut.setNik(nik);
+                    jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_BARU).size();
+                    jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_ULANG).size();
+                    jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_SISA).size();
+
+                    if ((jum_penugasan_baru>0) || (jum_penugasan_ulang>0) || (jum_penugasan_sisa>0))
+                    {
+                        calut.setEvent(String.valueOf(android.text.format.DateFormat.format("yyyy", month)+"-"+android.text.format.DateFormat.format("MM", month)+"-"+day[i]+"\n"+"Penugasan Sisa: "+jum_penugasan_sisa+"\n"+"Penugasan Ulang: "+jum_penugasan_ulang+"\n"+"Pengasan Baru: "+jum_penugasan_baru));
+                        calut.setYear(String.valueOf(android.text.format.DateFormat.format("yyyy", month)));
+                        calut.setMon(String.valueOf(android.text.format.DateFormat.format("MM", month)));
+                        calut.setDay(day[i]);
+                        //descriptions.add("xxx");
+                        //Log.e("tanggal penugasan : ",String.valueOf(year+"-"+mon+"-"+day[i]));
+                    }
+
+                }
+
             }
         });
 
@@ -164,7 +173,7 @@ public class ScheduleFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                // removing the previous view if added
+                /* removing the previous view if added */
                 if (((LinearLayout) rLayout).getChildCount() > 0) {
                     ((LinearLayout) rLayout).removeAllViews();
                 }
@@ -177,8 +186,8 @@ public class ScheduleFragment extends Fragment {
                 String gridvalueString = separatedTime[2].replaceFirst("^0*",
                         "");// taking last part of date. ie; 2 from 2012-12-02.
                 int gridvalue = Integer.parseInt(gridvalueString);
-                // navigate to next or previous month on clicking offdays.
-                Toast.makeText(getActivity().getApplicationContext(), selectedGridDate, Toast.LENGTH_SHORT).show();
+                /* navigate to next or previous month on clicking offdays.*/
+                //Toast.makeText(getActivity().getApplicationContext(), selectedGridDate, Toast.LENGTH_SHORT).show();
                 jum_penugasan_baru = db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(selectedGridDate),"201005469", QCConfig.KD_PENUGASAN_BARU).size();
                 jum_penugasan_ulang = db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(selectedGridDate),"201005469", QCConfig.KD_PENUGASAN_ULANG).size();
                 jum_penugasan_sisa = db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(selectedGridDate),"201005469", QCConfig.KD_PENUGASAN_SISA).size();
@@ -241,7 +250,6 @@ public class ScheduleFragment extends Fragment {
             month.set(GregorianCalendar.MONTH,
                     month.get(GregorianCalendar.MONTH) + 1);
         }
-
     }
 
     protected void setPreviousMonth() {
@@ -253,7 +261,6 @@ public class ScheduleFragment extends Fragment {
             month.set(GregorianCalendar.MONTH,
                     month.get(GregorianCalendar.MONTH) - 1);
         }
-
     }
 
     protected void showToast(String string) {
@@ -265,6 +272,7 @@ public class ScheduleFragment extends Fragment {
         TextView title = (TextView) rootView.findViewById(R.id.title);
 
         adapter.refreshDays();
+
         adapter.notifyDataSetChanged();
         handler.post(calendarUpdater); // generate some fragment_schedule items
 
