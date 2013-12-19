@@ -224,14 +224,14 @@ public class MarkPictureActivity extends Activity {
     }
 
     private boolean savePhoto(){
-        //Convert bitmap to Byte
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        photoBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
-
         //GET SELECTED ITEM FROM SPINNER/DROPDOWN
         mSelectedViewStatusDefect = (TextView) mSpnStatusDefect.getSelectedView().findViewById(R.id.spinner_item_key);
         mSelectedViewStatusPekerjaan = (TextView) mSpnStatusPekerjaan.getSelectedView().findViewById(R.id.spinner_item_key);
         mSelectedViewNote = (TextView) mSpnNote.getSelectedView().findViewById(R.id.spinner_item_key);
+
+        //Convert bitmap to Byte
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        photoBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
 
         //File Output Stream
         //Proses write file
@@ -239,12 +239,12 @@ public class MarkPictureActivity extends Activity {
         //photoBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
 
         photoBitmap.recycle();
-        Bitmap compressed = BitmapUtil.makeBitmap(byteArrayOutputStream.toByteArray(), 1024*768);
+        //Bitmap compressed = BitmapUtil.makeBitmap(byteArrayOutputStream.toByteArray(), 1024*768);
         //photoBitmap.recycle();
-        ByteArrayOutputStream byteArrayOutputStreamCompressed = new ByteArrayOutputStream();
-        compressed.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStreamCompressed);
+        //ByteArrayOutputStream byteArrayOutputStreamCompressed = new ByteArrayOutputStream();
+        //compressed.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStreamCompressed);
 
-        byte[] final_data = byteArrayOutputStreamCompressed.toByteArray();
+        byte[] final_data = byteArrayOutputStream.toByteArray();
 
         File pictureFile = new File(photoURL);
         FileOutputStream fileOutputStream;

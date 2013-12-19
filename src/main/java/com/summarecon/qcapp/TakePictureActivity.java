@@ -226,6 +226,7 @@ public class TakePictureActivity extends Activity {
                 }
 
                 /* Make Compressed Bitmap from JPEG Byte Stream */
+                //Bitmap raw_img = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 Bitmap raw_img = BitmapUtil.makeBitmap(bytes, 1024*768);
 
                 //Creating the matrix to rotate the image 90 degree

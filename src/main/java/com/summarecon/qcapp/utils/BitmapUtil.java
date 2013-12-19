@@ -9,8 +9,6 @@ public class BitmapUtil {
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length,
-                    options);
             if (options.mCancel || options.outWidth == -1
                     || options.outHeight == -1) {
                 return null;
