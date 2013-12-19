@@ -3,13 +3,9 @@ package com.summarecon.qcapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
 import android.graphics.Matrix;
-import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +18,7 @@ import android.widget.ZoomControls;
 import com.summarecon.qcapp.core.QCConfig;
 import com.summarecon.qcapp.db.QCDBHelper;
 import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
+import com.summarecon.qcapp.utils.BitmapUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -228,7 +225,9 @@ public class TakePictureActivity extends Activity {
                     pictureFileDir.mkdirs();
                 }
 
-                Bitmap raw_img = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                /* Make Compressed Bitmap from JPEG Byte Stream */
+                Bitmap raw_img = BitmapUtil.makeBitmap(bytes, 1024*768);
+
                 //Creating the matrix to rotate the image 90 degree
                 Matrix matrix = new Matrix();
                 matrix.postRotate(90);
@@ -238,7 +237,7 @@ public class TakePictureActivity extends Activity {
 
                 //Convert bitmap to Byte
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                raw_img.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
+                raw_img.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
 
                 //File Output Stream
                 //Proses write file
