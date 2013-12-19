@@ -88,9 +88,9 @@ public class ScheduleFragment extends Fragment {
         /* Saat pertama kali schedule dijalankan dilakukan pengecekan tanggal yg ada penugasan nya. */
         for (int i=0;i<31;i++){
 
-            jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_BARU).size();
-            jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_ULANG).size();
-            jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_SISA).size();
+            jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),nik, QCConfig.KD_PENUGASAN_BARU).size();
+            jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),nik, QCConfig.KD_PENUGASAN_ULANG).size();
+            jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),nik, QCConfig.KD_PENUGASAN_SISA).size();
 
             if ((jum_penugasan_baru>0) || (jum_penugasan_ulang>0) || (jum_penugasan_sisa>0))
             {
@@ -121,9 +121,9 @@ public class ScheduleFragment extends Fragment {
                 /* Saat tekan next month check ulang dalam bulan tersebut apakah ada penugasan */
                 for (int i=0;i<31;i++){
 
-                    jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_BARU).size();
-                    jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_ULANG).size();
-                    jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_SISA).size();
+                    jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),nik, QCConfig.KD_PENUGASAN_BARU).size();
+                    jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),nik, QCConfig.KD_PENUGASAN_ULANG).size();
+                    jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),nik, QCConfig.KD_PENUGASAN_SISA).size();
 
                     if ((jum_penugasan_baru>0) || (jum_penugasan_ulang>0) || (jum_penugasan_sisa>0))
                     {
@@ -150,9 +150,9 @@ public class ScheduleFragment extends Fragment {
                 /* Saat tekan next month check ulang dalam bulan tersebut apakah ada penugasan */
                 for (int i=0;i<31;i++){
 
-                    jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_BARU).size();
-                    jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_ULANG).size();
-                    jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),"201005469", QCConfig.KD_PENUGASAN_SISA).size();
+                    jum_penugasan_baru=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),nik, QCConfig.KD_PENUGASAN_BARU).size();
+                    jum_penugasan_ulang=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),nik, QCConfig.KD_PENUGASAN_ULANG).size();
+                    jum_penugasan_sisa=db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(String.valueOf(android.text.format.DateFormat.format("yyyy", month))+"-"+String.valueOf(android.text.format.DateFormat.format("MM", month))+"-"+String.valueOf(day[i])),nik, QCConfig.KD_PENUGASAN_SISA).size();
 
                     if ((jum_penugasan_baru>0) || (jum_penugasan_ulang>0) || (jum_penugasan_sisa>0))
                     {
@@ -188,9 +188,9 @@ public class ScheduleFragment extends Fragment {
                 int gridvalue = Integer.parseInt(gridvalueString);
                 /* navigate to next or previous month on clicking offdays.*/
                 //Toast.makeText(getActivity().getApplicationContext(), selectedGridDate, Toast.LENGTH_SHORT).show();
-                jum_penugasan_baru = db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(selectedGridDate),"201005469", QCConfig.KD_PENUGASAN_BARU).size();
-                jum_penugasan_ulang = db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(selectedGridDate),"201005469", QCConfig.KD_PENUGASAN_ULANG).size();
-                jum_penugasan_sisa = db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(selectedGridDate),"201005469", QCConfig.KD_PENUGASAN_SISA).size();
+                jum_penugasan_baru = db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(selectedGridDate),nik, QCConfig.KD_PENUGASAN_BARU).size();
+                jum_penugasan_ulang = db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(selectedGridDate),nik, QCConfig.KD_PENUGASAN_ULANG).size();
+                jum_penugasan_sisa = db.getAllPelaksanaanPenugasan(java.sql.Date.valueOf(selectedGridDate),nik, QCConfig.KD_PENUGASAN_SISA).size();
 
                 if ((gridvalue > 10) && (position < 8)) {
                     setPreviousMonth();

@@ -70,7 +70,7 @@ public class MarkFloorMapActivity extends Activity {
     private ArrayList<String> foto_pelaksanaan;
     private ArrayList<String> filepreupload;
     private String year,month,day;
-    private String nik = "200302084";
+    private String nik;
     private Calendar today;
     private Bundle bundleLogin;
 
@@ -95,6 +95,7 @@ public class MarkFloorMapActivity extends Activity {
         foto_pelaksanaan = new ArrayList<String>();
         filepreupload = new ArrayList<String>();
 
+        nik = QCConfig.TMP_NIK;
         today = Calendar.getInstance();
         day = String.format("%02d", today.get(Calendar.DATE));
         month = String.format("%02d", today.get(Calendar.MONTH)+1);

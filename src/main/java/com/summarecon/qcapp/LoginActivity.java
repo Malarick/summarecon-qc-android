@@ -93,7 +93,6 @@ public class LoginActivity extends Activity {
     }
 
 
-
     @Override
     protected void onResume() {
         edt_nik.setText(QCConfig.TMP_NIK);
