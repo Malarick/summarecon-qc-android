@@ -1,6 +1,7 @@
 package com.summarecon.qcapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -75,6 +76,23 @@ public class LoginActivity extends Activity {
         });
 
     }
+
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Apakah anda yakin ingin keluar?")
+                .setCancelable(false)
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        LoginActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("Tidak", null)
+                .show();
+    }
+
+
 
     private boolean validasiFormLogin() {
         String nik = edt_nik.getText().toString().trim();
