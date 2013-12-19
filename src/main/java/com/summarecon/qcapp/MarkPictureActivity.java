@@ -3,7 +3,6 @@ package com.summarecon.qcapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -27,6 +26,7 @@ import com.summarecon.qcapp.db.QCDBHelper;
 import com.summarecon.qcapp.db.SQII_CATATAN;
 import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.item.SpinnerListItem;
+import com.summarecon.qcapp.utils.BitmapUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -160,7 +160,8 @@ public class MarkPictureActivity extends Activity {
         photoName = bundle.getString(PHOTO_NAME);
         urutFoto = bundle.getFloat(URUT_FOTO, 1);
 
-        photoBitmap = BitmapFactory.decodeFile(photoURL);
+        //photoBitmap = BitmapFactory.decodeFile(photoURL);
+        photoBitmap = BitmapUtil.makeBitmapFromFile(photoURL, 1024 * 768);
         oriPhotoBitmap = photoBitmap;
         photoPreview.setImageBitmap(photoBitmap);
 
@@ -223,18 +224,28 @@ public class MarkPictureActivity extends Activity {
     }
 
     private boolean savePhoto(){
-        //Convert bitmap to Byte
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-
         //GET SELECTED ITEM FROM SPINNER/DROPDOWN
         mSelectedViewStatusDefect = (TextView) mSpnStatusDefect.getSelectedView().findViewById(R.id.spinner_item_key);
         mSelectedViewStatusPekerjaan = (TextView) mSpnStatusPekerjaan.getSelectedView().findViewById(R.id.spinner_item_key);
         mSelectedViewNote = (TextView) mSpnNote.getSelectedView().findViewById(R.id.spinner_item_key);
 
+        //Convert bitmap to Byte
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        photoBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+
         //File Output Stream
         //Proses write file
+        //byte[] final_data = byteArrayOutputStream.toByteArray();
+        //photoBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+
+        photoBitmap.recycle();
+        //Bitmap compressed = BitmapUtil.makeBitmap(byteArrayOutputStream.toByteArray(), 1024*768);
+        //photoBitmap.recycle();
+        //ByteArrayOutputStream byteArrayOutputStreamCompressed = new ByteArrayOutputStream();
+        //compressed.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStreamCompressed);
+
         byte[] final_data = byteArrayOutputStream.toByteArray();
+
         File pictureFile = new File(photoURL);
         FileOutputStream fileOutputStream;
         try{
