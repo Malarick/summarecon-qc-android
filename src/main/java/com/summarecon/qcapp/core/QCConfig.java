@@ -8,6 +8,9 @@ import java.io.File;
 
 public class QCConfig {
 
+    //NIK
+    public static String TMP_NIK;
+
     //PENUGASAN
     public static final String JENIS_PENUGASAN_SISA = "Penugasan Sisa";
     public static final String JENIS_PENUGASAN_ULANG = "Penugasan Ulang";

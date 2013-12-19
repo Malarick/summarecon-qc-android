@@ -76,6 +76,12 @@ public class LoginActivity extends Activity {
 
     }
 
+    @Override
+    protected void onResume() {
+        edt_nik.setText(QCConfig.TMP_NIK);
+        super.onResume();
+    }
+
     private boolean validasiFormLogin() {
         String nik = edt_nik.getText().toString().trim();
         String password = edt_password.getText().toString().trim();
@@ -143,6 +149,7 @@ public class LoginActivity extends Activity {
             bundle.putString("password", MD5Hash.getMD5(edt_password.getText().toString()));
             intent.putExtra("bundleLogin", bundle);
             startActivity(intent);
+            QCConfig.TMP_NIK = edt_nik.getText().toString();
             LoginActivity.this.finish();
         } else {
             Toast.makeText(getApplicationContext(), "Login Gagal", Toast.LENGTH_SHORT).show();
