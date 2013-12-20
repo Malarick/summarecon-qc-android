@@ -121,7 +121,7 @@ public class DashboardFragment extends Fragment {
                 btn_upload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        GenerateFile();
+                        //GenerateFile();
                     }
                 });
 
