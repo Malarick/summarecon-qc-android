@@ -77,7 +77,7 @@ public class NavDrawerAdapter extends BaseAdapter {
                         return false;
                     }
                 case 2:
-                    if(!isEnabled(position - 1) && item.getItemCounter() > 0){
+                    if(!isEnabled(position - 1) && !isEnabled(position - 2) && item.getItemCounter() > 0){
                         return true;
                     }else{
                         return false;
