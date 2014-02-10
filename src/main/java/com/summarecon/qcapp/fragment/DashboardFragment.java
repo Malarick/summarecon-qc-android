@@ -436,17 +436,26 @@ public class DashboardFragment extends Fragment {
 
     private void delete_dialog(){
         new AlertDialog.Builder(getActivity())
-                .setMessage("Ingin menghapus penugasan?")
+                .setMessage("Ingin menghapus semua data penugasan? (Anda akan otomatis logout dari sistem)")
                 .setCancelable(false)
                 .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         deletefile("sdcard/Android/data/com.summarecon.qcapp/databases/summareconqc.db");
                         deletefile("sdcard/Android/data/com.summarecon.qcapp/databases/summareconqc.db-journal");
-
+                        deletefile("sdcard/Android/data/com.summarecon.qcapp/files/tmp/summareconqc.sql");
                         //FileUtils.cleanDirectory("sdcard/Android/data/com.summarecon.qcapp/files/images");
                         //delete("sdcard/Android/data/com.summarecon.qcapp/files/images");
 
                         deletefilesindirectory("sdcard/Android/data/com.summarecon.qcapp/files/images");
+                        new AlertDialog.Builder(getActivity())
+                                .setMessage("Data sudah berhasil di-delete, otomatis Logout")
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        getActivity().finish();
+                                    }
+                                })
+                                .show();
 
                     }
                 })
