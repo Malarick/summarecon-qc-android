@@ -3089,4 +3089,33 @@ public class QCDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    //FUNGSI UNTUK HAPUS DATABASE DI HANDPHONE ANDROID
+    public boolean cleandatabasedata(){
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(QCConfig.APP_EXTERNAL_DATABASE_DIRECTORY, null);
+        //Cursor cursor = db.rawQuery("DELETE FROM SQII_USER,", null);
+        //cursor = db.rawQuery("DELETE FROM SQII_USER,", null);
+        db.execSQL("DELETE FROM SQII_CATATAN");
+        db.execSQL("DELETE FROM SQII_CLUSTER");
+        db.execSQL("DELETE FROM SQII_HISTORY_UPLOAD");
+        db.execSQL("DELETE FROM SQII_ITEM_DEFECT");
+        db.execSQL("DELETE FROM SQII_ITEM_DEFECT_PENUGASAN");
+        db.execSQL("DELETE FROM SQII_ITEM_DEFECT_TIPE_RUMAH");
+        db.execSQL("DELETE FROM SQII_JENIS_BANGUNAN");
+        db.execSQL("DELETE FROM SQII_KATEGORI_DEFECT");
+        db.execSQL("DELETE FROM SQII_KAWASAN");
+        db.execSQL("DELETE FROM SQII_KAWASAN_USER");
+        db.execSQL("DELETE FROM SQII_KONTRAKTOR");
+        db.execSQL("DELETE FROM SQII_LANTAI");
+        db.execSQL("DELETE FROM SQII_LANTAI_TIPE_RUMAH");
+        db.execSQL("DELETE FROM SQII_PELAKSANAAN");
+        db.execSQL("DELETE FROM SQII_PENUGASAN");
+        db.execSQL("DELETE FROM SQII_PENUGASAN_DETAIL");
+        db.execSQL("DELETE FROM SQII_STOK");
+        db.execSQL("DELETE FROM SQII_TIPE_RUMAH");
+        db.execSQL("DELETE FROM SQII_USER");
+        db.close();
+        //cursor.close();
+        return true; /* Login Sukses*/
+    }
+
 }

@@ -1,8 +1,10 @@
 package com.summarecon.qcapp.fragment;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -27,9 +29,13 @@ import com.summarecon.qcapp.db.SQII_USER;
 import com.summarecon.qcapp.item.NotificationsItem;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -57,11 +63,12 @@ public class DashboardFragment extends Fragment {
     private ArrayList<String> foto_pelaksanaan;
     private ArrayList<String> filepreupload;
 
-    private Button btn_upload;
+    private Button btn_upload,btn_delete;
     private String year,month,day;
     private Calendar today;
     private String server_ip;
     private String client_ip;
+
 
     public DashboardFragment() {
         setRetainInstance(true);
@@ -79,6 +86,7 @@ public class DashboardFragment extends Fragment {
         txt_profile_jabatan = (TextView) rootView.findViewById(R.id.txt_profile_position);
 
         btn_upload = (Button) rootView.findViewById(R.id.btn_upload);
+        btn_delete = (Button) rootView.findViewById(R.id.btn_delete);
 
         bundleLogin = getActivity().getIntent().getBundleExtra("bundleLogin");
         if (bundleLogin != null) {
@@ -125,6 +133,12 @@ public class DashboardFragment extends Fragment {
                     }
                 });
 
+                btn_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        delete_dialog();
+                    }
+                });
         return rootView;
     }
 
@@ -228,6 +242,10 @@ public class DashboardFragment extends Fragment {
         int ctr_script_name=1, ctr_bat_name=1, ctr_pre_name=1;
         pelaksanaan = (ArrayList<SQII_PELAKSANAAN>) db.getAllPelaksanaan();
 
+        /* Panggil fungsi copi file untuk copi file dari folder database ke file/temp tujuan nya untuk di tarik lewat .bat (untuk backup di server)*/
+        copyfile("sdcard/Android/data/com.summarecon.qcapp/databases/summareconqc.db","sdcard/Android/data/com.summarecon.qcapp/files/tmp/summareconqc.db");
+        copyfile("sdcard/Android/data/com.summarecon.qcapp/databases/summareconqc.db-journal","sdcard/Android/data/com.summarecon.qcapp/files/tmp/summareconqc.db-journal");
+
         for (int i = 0; i < pelaksanaan.size(); i++) {
 
             update_pelaksanaan.add("UPDATE SQII_PELAKSANAAN SET TGL_PELAKSANAAN = '" + pelaksanaan.get(i).getTGL_PELAKSANAAN().toString() + "', STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT().toString() + "', CATATAN = '" + pelaksanaan.get(i).getCATATAN().toString() + "', SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH().toString() + "', SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT().toString() + "' " +
@@ -244,7 +262,9 @@ public class DashboardFragment extends Fragment {
         }
         GenerateScriptOnSD("UPLOAD_"+ nik + year + month + day +".txt", update_pelaksanaan);
 
-                        /* Generate file Bat*/
+        /* Generate file Bat*/
+            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/temp/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,"summareconqc.db",nik,year,month,day,"summareconqc.db"));
+            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/temp/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,"summareconqc.db-journal",nik,year,month,day,"summareconqc.db-journal"));
         for (int i = 0; i < pelaksanaan.size(); i++) {
             foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT()));
             foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH()));
@@ -252,7 +272,7 @@ public class DashboardFragment extends Fragment {
         GenerateBat("BAT_UPLOAD_"+ nik + year + month + day +".bat", foto_pelaksanaan);
 
 
-                        /* Tambahkan dan generate*/
+        /* Tambahkan dan generate*/
         for (int i = 0; i < pelaksanaan.size(); i++) {
             filepreupload.add("JENIS_PENUGASAN = '" + pelaksanaan.get(i).getJENIS_PENUGASAN() + "'|TGL_PElAKSANAAN = '" + year + "-" + month + "-" + day + "'|STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT() + "'| STATUS_PEKERJAAN = '" + pelaksanaan.get(i).getSTATUS_PEKERJAAN() + "'|CATATAN = '" + pelaksanaan.get(i).getCATATAN() + "'|SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH() + "'|SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT() + "'#NO_PENUGASAN = '" + pelaksanaan.get(i).getNO_PENUGASAN() + "'|KD_KAWASAN = '" + pelaksanaan.get(i).getKD_KAWASAN() + "'|BLOK = '" + pelaksanaan.get(i).getBLOK() + "'|NOMOR = '" + pelaksanaan.get(i).getNOMOR() + "'|KD_JENIS = '" + pelaksanaan.get(i).getKD_JENIS() + "'|KD_TIPE = '" + pelaksanaan.get(i).getKD_TIPE() + "'|KD_ITEM_DEFECT = '" + pelaksanaan.get(i).getKD_ITEM_DEFECT() + "'|KD_LANTAI = '" + pelaksanaan.get(i).getKD_LANTAI() + "'|URUT_PELAKSANAAN = '" + pelaksanaan.get(i).getURUT_PELAKSANAAN() + "'|URUT_FOTO = '" + pelaksanaan.get(i).getURUT_FOTO() + "'");
         }
@@ -372,5 +392,76 @@ public class DashboardFragment extends Fragment {
         }
 
         return null;
+    }
+
+    private static void copyfile(String srFile, String dtFile){
+        try{
+            File f1 = new File(srFile);
+            File f2 = new File(dtFile);
+            InputStream in = new FileInputStream(f1);
+
+            //For Append the file.
+            //OutputStream out = new FileOutputStream(f2,true);
+
+            //For Overwrite the file.
+            OutputStream out = new FileOutputStream(f2);
+
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0){
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+            System.out.println("File copied.");
+        }
+        catch(FileNotFoundException ex){
+            System.out.println(ex.getMessage() + " in the specified directory.");
+            System.exit(0);
+        }
+        catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void deletefile(final String filepath){
+        File file = new File(filepath); //initial file path untuk delete sumareconqc.db
+        file.delete();                  //delete sumareconqc.db
+    }
+
+    private void deletefilesindirectory(final String filepath){
+        File file = new File(filepath); //initial directory path buat delete semua gambar penugasan
+        purgeDirectory(file); //panggil fungsi delete file untuk delete foto penugasan
+    }
+
+    private void delete_dialog(){
+        new AlertDialog.Builder(getActivity())
+                .setMessage("Ingin menghapus penugasan?")
+                .setCancelable(false)
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deletefile("sdcard/Android/data/com.summarecon.qcapp/databases/summareconqc.db");
+                        deletefile("sdcard/Android/data/com.summarecon.qcapp/databases/summareconqc.db-journal");
+
+                        //FileUtils.cleanDirectory("sdcard/Android/data/com.summarecon.qcapp/files/images");
+                        //delete("sdcard/Android/data/com.summarecon.qcapp/files/images");
+
+                        deletefilesindirectory("sdcard/Android/data/com.summarecon.qcapp/files/images");
+
+                    }
+                })
+                .setNegativeButton("Tidak", null)
+                .show();
+
+        //panggil fungsi hapus data di database handphone
+        //db.cleandatabasedata();
+    }
+
+
+    void purgeDirectory(File dir) {
+        for (File file: dir.listFiles()) {
+            if (file.isDirectory()) purgeDirectory(file);
+            file.delete();
+        }
     }
 }
