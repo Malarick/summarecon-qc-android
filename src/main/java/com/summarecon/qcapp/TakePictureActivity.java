@@ -121,6 +121,9 @@ public class TakePictureActivity extends Activity {
                     item.setIcon(R.drawable.ic_action_flash_off);
                 }
                 return true;
+            case R.id.action_preview:
+                previewPrevPhoto();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -181,6 +184,11 @@ public class TakePictureActivity extends Activity {
         camera.setParameters(parameters);
 
         return status;
+    }
+
+    public void previewPrevPhoto(){
+        Intent intent = new Intent(this, PrevPicActivity.class);
+        this.startActivity(intent);
     }
 
     public void setZoom(int zoomValue){

@@ -3,34 +3,28 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="app_name">SummareconQC</string>
-
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
-
+    <string name="action_preview">Preview</string>
     <string name="title_activity_main">Main Activity</string>
     <string name="title_activity_display_message">Display Message Activity</string>
     <string name="title_activity_camera">Camera</string>
     <string name="title_activity_test">Test</string>
     <string name="title_activity_photo_preview">PhotoPreviewActivity</string>
-
     <string name="hint_send_message">Enter your text here...</string>
     <string name="hint_note">Note</string>
     <string name="hint_status_defect">Status Defect</string>
     <string name="hint_status_pekerjaan">Status Pekerjaan</string>
-
     <string name="btn_send">Send</string>
     <string name="btn_camera">Take Picture</string>
     <string name="btn_upload">Upload</string>
-
     <string name="desc_drawer_open">Drawer Opened</string>
     <string name="desc_drawer_close">Drawer Closed</string>
-
     <string name="header_section_penugasan">MENU PENUGASAN</string>
     <string name="header_section_etc">LAIN-LAIN</string>
     <string name="header_section_profile">PROFILE</string>
     <string name="header_section_notifications">NOTIFICATIONS</string>
     <string name="header_section_upload">UPLOAD</string>
-
     <string name="lbl_parent_tgl">12/12/2013</string>
     <string name="lbl_parent_blok">Blok: A3/4</string>
     <string name="lbl_parent_total_images">Foto defects: 8/10</string>
@@ -44,5 +38,6 @@
     <!-- referensi arr_lbl_staus -->
     <string name="P">Pending</string>
     <string name="F">Finish</string>
+    <string name="title_activity_prev_pic">PrevPicActivity</string>
 
 </resources>
