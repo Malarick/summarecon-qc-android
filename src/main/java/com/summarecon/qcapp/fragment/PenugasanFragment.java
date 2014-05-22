@@ -1,20 +1,15 @@
 package com.summarecon.qcapp.fragment;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import com.summarecon.qcapp.R;
@@ -25,9 +20,7 @@ import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.item.PenugasanChildItem;
 import com.summarecon.qcapp.item.PenugasanParentItem;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class PenugasanFragment extends Fragment {
@@ -39,6 +32,7 @@ public class PenugasanFragment extends Fragment {
     private String jenisPenugasan;
     private String kdJenisPenugasan;
     private int lastGroupPosition = 0;
+    private Boolean flag_first_expand = true;
     private QCDBHelper db;
 
     private Bundle bundleLogin;
@@ -75,7 +69,10 @@ public class PenugasanFragment extends Fragment {
     @Override
     public void onResume() {
         populateExpListPenugasan();
-        mExpListPenugasan.expandGroup(lastGroupPosition, true);
+        if(!flag_first_expand){
+            mExpListPenugasan.expandGroup(lastGroupPosition, true);
+            flag_first_expand = false;
+        }
         super.onResume();
     }
 
@@ -92,6 +89,7 @@ public class PenugasanFragment extends Fragment {
 
         int c = 0;
         int row_id = 1;
+        Log.e("MAINMAIN", parentList.size() + "");
         for(SQII_PELAKSANAAN sParent : parentList){
             PenugasanParentItem parentItem = new PenugasanParentItem(
                     row_id + ". " + sParent.getNM_CLUSTER()

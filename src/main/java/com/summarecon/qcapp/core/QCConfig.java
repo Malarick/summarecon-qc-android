@@ -21,6 +21,9 @@ public class QCConfig {
     public static final String PREFIX_FILE_DEFECT = "DFC_";
     public static final String PREFIX_FILE_DENAH = "DNH_";
 
+    //TANGGAL TERAKHIR FILE
+    public static String GENERATE_FILE_DATE ="";
+
     // Files & Directory
     public static String APP_EXTERNAL_IMAGES_DIRECTORY;
     public static String APP_EXTERNAL_DATABASE_DIRECTORY;

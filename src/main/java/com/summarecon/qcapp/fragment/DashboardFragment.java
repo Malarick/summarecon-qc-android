@@ -63,7 +63,7 @@ public class DashboardFragment extends Fragment {
     private ArrayList<String> foto_pelaksanaan;
     private ArrayList<String> filepreupload;
 
-    private Button btn_upload,btn_delete;
+    private Button btn_generate,btn_delete;
     private String year,month,day;
     private Calendar today;
     private String server_ip;
@@ -85,7 +85,9 @@ public class DashboardFragment extends Fragment {
         txt_profile_nik = (TextView) rootView.findViewById(R.id.txt_profile_nik);
         txt_profile_jabatan = (TextView) rootView.findViewById(R.id.txt_profile_position);
 
-        btn_upload = (Button) rootView.findViewById(R.id.btn_upload);
+        btn_generate = (Button) rootView.findViewById(R.id.btn_upload);
+        //if (tanggal penugasan > tanggal skrg)
+        //btn_generate.setVisibility(View.VISIBLE);
         btn_delete = (Button) rootView.findViewById(R.id.btn_delete);
 
         bundleLogin = getActivity().getIntent().getBundleExtra("bundleLogin");
@@ -126,10 +128,15 @@ public class DashboardFragment extends Fragment {
         month = String.format("%02d", today.get(Calendar.MONTH)+1);
         year = String.format("%02d", today.get(Calendar.YEAR));
 
-                btn_upload.setOnClickListener(new View.OnClickListener() {
+                btn_generate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //GenerateFile();
+                        generateFile();
+                        //Calendar c = Calendar.getInstance();
+                        //int seconds = c.get(Calendar.DATE);
+                        //tes ambil tanggal saat ini waktu generate file
+                        //QCConfig.GENERATE_FILE_DATE="Today";
+
                     }
                 });
 
@@ -237,14 +244,10 @@ public class DashboardFragment extends Fragment {
     }
 
     /* Untuk Panggil Semua Generate*/
-    public void GenerateFile(){
+    public void generateFile(){
         int ctr_script=1, ctr_bat=1, ctr_pre=1;
         int ctr_script_name=1, ctr_bat_name=1, ctr_pre_name=1;
         pelaksanaan = (ArrayList<SQII_PELAKSANAAN>) db.getAllPelaksanaan();
-
-        /* Panggil fungsi copi file untuk copi file dari folder database ke file/temp tujuan nya untuk di tarik lewat .bat (untuk backup di server)*/
-        copyfile("sdcard/Android/data/com.summarecon.qcapp/databases/summareconqc.db","sdcard/Android/data/com.summarecon.qcapp/files/tmp/summareconqc.db");
-        copyfile("sdcard/Android/data/com.summarecon.qcapp/databases/summareconqc.db-journal","sdcard/Android/data/com.summarecon.qcapp/files/tmp/summareconqc.db-journal");
 
         for (int i = 0; i < pelaksanaan.size(); i++) {
 
@@ -260,26 +263,24 @@ public class DashboardFragment extends Fragment {
                     "URUT_PELAKSANAAN = '"+pelaksanaan.get(i).getURUT_PELAKSANAAN()+"'");
 
         }
-        GenerateScriptOnSD("UPLOAD_"+ nik + year + month + day +".txt", update_pelaksanaan);
+        generateScriptOnSD("UPLOAD_" + nik + ".txt", update_pelaksanaan);
 
-        /* Generate file Bat*/
-            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/temp/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,"summareconqc.db",nik,year,month,day,"summareconqc.db"));
-            foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/temp/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,"summareconqc.db-journal",nik,year,month,day,"summareconqc.db-journal"));
+                        /* Generate file Bat*/
         for (int i = 0; i < pelaksanaan.size(); i++) {
             foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DEFECT()));
             foto_pelaksanaan.add(String.format("\"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/adb\" pull \"/sdcard/Android/data/com.summarecon.qcapp/files/images/%s\" \"c://xampp/htdocs/sqii_api/ext-upload/sqii/bat_file/%s%s%s%s/%s\"",nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH(),nik,year,month,day,pelaksanaan.get(i).getSRC_FOTO_DENAH()));
         }
-        GenerateBat("BAT_UPLOAD_"+ nik + year + month + day +".bat", foto_pelaksanaan);
+        generateBat("BAT_UPLOAD_" + nik + ".bat", foto_pelaksanaan);
 
 
-        /* Tambahkan dan generate*/
+                        /* Tambahkan dan generate*/
         for (int i = 0; i < pelaksanaan.size(); i++) {
             filepreupload.add("JENIS_PENUGASAN = '" + pelaksanaan.get(i).getJENIS_PENUGASAN() + "'|TGL_PElAKSANAAN = '" + year + "-" + month + "-" + day + "'|STATUS_DEFECT = '" + pelaksanaan.get(i).getSTATUS_DEFECT() + "'| STATUS_PEKERJAAN = '" + pelaksanaan.get(i).getSTATUS_PEKERJAAN() + "'|CATATAN = '" + pelaksanaan.get(i).getCATATAN() + "'|SRC_FOTO_DENAH = '" + pelaksanaan.get(i).getSRC_FOTO_DENAH() + "'|SRC_FOTO_DEFECT = '" + pelaksanaan.get(i).getSRC_FOTO_DEFECT() + "'#NO_PENUGASAN = '" + pelaksanaan.get(i).getNO_PENUGASAN() + "'|KD_KAWASAN = '" + pelaksanaan.get(i).getKD_KAWASAN() + "'|BLOK = '" + pelaksanaan.get(i).getBLOK() + "'|NOMOR = '" + pelaksanaan.get(i).getNOMOR() + "'|KD_JENIS = '" + pelaksanaan.get(i).getKD_JENIS() + "'|KD_TIPE = '" + pelaksanaan.get(i).getKD_TIPE() + "'|KD_ITEM_DEFECT = '" + pelaksanaan.get(i).getKD_ITEM_DEFECT() + "'|KD_LANTAI = '" + pelaksanaan.get(i).getKD_LANTAI() + "'|URUT_PELAKSANAAN = '" + pelaksanaan.get(i).getURUT_PELAKSANAAN() + "'|URUT_FOTO = '" + pelaksanaan.get(i).getURUT_FOTO() + "'");
         }
-        GeneratePreUpload("PRE_UPLOAD_" + nik + year + month + day + ".txt", filepreupload);
+        generatePreUpload("PRE_UPLOAD_" + nik + ".txt", filepreupload);
     }
 
-    public void GenerateScriptOnSD(String sFileName, ArrayList<String> sBody){
+    public void generateScriptOnSD(String sFileName, ArrayList<String> sBody){
         int jum_data=sBody.size();
         try
         {
@@ -292,12 +293,12 @@ public class DashboardFragment extends Fragment {
 
             for (int i=0;i<jum_data;i++){
                 writer.append(sBody.get(i));
-                    writer.append("\r\n");
+                writer.append("\r\n");
 
             }
             writer.flush();
             writer.close();
-            Toast.makeText(getActivity().getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this.getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
         }
         catch(IOException e)
         {
@@ -307,7 +308,7 @@ public class DashboardFragment extends Fragment {
         }
     }
 
-    public void GenerateBat(String sFileName, ArrayList<String> sBody){
+    public void generateBat(String sFileName, ArrayList<String> sBody){
         int jum_data=sBody.size();
         try
         {
@@ -330,7 +331,7 @@ public class DashboardFragment extends Fragment {
             writer.append("taskkill /f /im adb.exe");
             writer.flush();
             writer.close();
-            Toast.makeText(getActivity().getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this.getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
         }
         catch(IOException e)
         {
@@ -340,7 +341,7 @@ public class DashboardFragment extends Fragment {
         }
     }
 
-    public void GeneratePreUpload(String sFileName, ArrayList<String> sBody){
+    public void generatePreUpload(String sFileName, ArrayList<String> sBody){
         int jum_data=sBody.size();
         try
         {
@@ -360,7 +361,7 @@ public class DashboardFragment extends Fragment {
 
             writer.flush();
             writer.close();
-            Toast.makeText(getActivity().getApplicationContext(), "Data berhasil dibuat", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getActivity().getApplicationContext(), "Data berhasil dibuat", Toast.LENGTH_SHORT).show();
         }
         catch(IOException e)
         {

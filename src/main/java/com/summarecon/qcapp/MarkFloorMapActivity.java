@@ -211,6 +211,11 @@ public class MarkFloorMapActivity extends Activity {
             item.setSRC_FOTO_DENAH(mapName);
             db.updatePelaksanaan(item);
             generateFile();
+            //update tanggal terakhir create file
+            //Calendar c = Calendar.getInstance();
+            //int seconds = c.get(Calendar.DATE);
+            //QCConfig.GENERATE_FILE_DATE = "";
+
             //db.updateItemDefectPenugasan(parent);
             //Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
             return true;
