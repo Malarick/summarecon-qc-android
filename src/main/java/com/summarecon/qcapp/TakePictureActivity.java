@@ -106,14 +106,14 @@ public class TakePictureActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.camera, menu);
-        MenuItem mShowPrevPic = menu.findItem(R.id.action_preview);
-
-        if(item.getSRC_FOTO_DEFECT_LAMA() == "" || item.getSRC_FOTO_DEFECT_LAMA() == null){
-            mShowPrevPic.setVisible(false);
-        }else{
-            mShowPrevPic.setVisible(true);
-        }
-        invalidateOptionsMenu();
+//        MenuItem mShowPrevPic = menu.findItem(R.id.action_preview);
+//
+//        if(item.getSRC_FOTO_DEFECT_LAMA() == "" || item.getSRC_FOTO_DEFECT_LAMA() == null){
+//            mShowPrevPic.setVisible(false);
+//        }else{
+//            mShowPrevPic.setVisible(true);
+//        }
+//        invalidateOptionsMenu();
 
         return true;
     }

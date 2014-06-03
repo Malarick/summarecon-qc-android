@@ -44,6 +44,11 @@
             android:screenOrientation="portrait"
             android:label="TakePictureActivity" />
         <activity
+            android:name=".PrevPicActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            android:label="PrevPicActivity" />
+        <activity
             android:name=".MarkPictureActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"

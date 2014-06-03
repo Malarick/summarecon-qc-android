@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textSize="10sp"
-            android:text="Version v.07"/>
+            android:text="Version v.09"/>
 
     </LinearLayout>
 

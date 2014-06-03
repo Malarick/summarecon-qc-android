@@ -2170,9 +2170,9 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        SQII_PELAKSANAAN.TGL_UPDATE,\n" +
                 "        SQII_PELAKSANAAN.PARENT_ROWID,\n" +
                 "        SQII_PELAKSANAAN.ROWID, \n" +
-                "        SQII_KATEGORI_DEFECT.TIPE_DENAH \n" +
+                "        SQII_KATEGORI_DEFECT.TIPE_DENAH, \n" +
                 "        SQII_PELAKSANAAN.SRC_FOTO_DENAH_LAMA,\n" +
-                "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT_LAMA,\n" +
+                "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT_LAMA\n" +
                 "\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
                 "\n" +

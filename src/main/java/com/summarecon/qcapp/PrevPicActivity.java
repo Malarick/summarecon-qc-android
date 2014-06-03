@@ -95,7 +95,9 @@ public class PrevPicActivity extends Activity {
             bundle = getActivity().getIntent().getBundleExtra(PHOTO_BUNDLE);
             itemPelaksanaan = (SQII_PELAKSANAAN) bundle.getSerializable(ITEM_SQII_PELAKSANAAN);
 
-            photoURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + itemPelaksanaan.getSRC_FOTO_DEFECT_LAMA();
+
+            photoURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + "/" + itemPelaksanaan.getSRC_FOTO_DEFECT_LAMA();
+            Log.e("MAIN", photoURL);
             photoBitmap = BitmapUtil.makeBitmapFromFile(photoURL, 1024 * 768);
             mPhoto_preview.setImageBitmap(photoBitmap);
         }
