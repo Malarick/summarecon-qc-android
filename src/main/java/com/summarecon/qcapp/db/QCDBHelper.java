@@ -372,6 +372,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "TGL_UPDATE DATETIME, " +
                 "PARENT_ROWID DECIMAL(18,0), " +
                 "ROWID DECIMAL(18,0), " +
+                "SRC_FOTO_DENAH_LAMA VARCHAR(255), " +
+                "SRC_FOTO_DEFECT_LAMA VARCHAR(255), " +
                 "PRIMARY KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI, URUT_PELAKSANAAN, URUT_FOTO)" +
                 "FOREIGN KEY (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI) REFERENCES SQII_ITEM_DEFECT_PENUGASAN (NO_PENUGASAN, KD_KAWASAN, BLOK, NOMOR, KD_JENIS, KD_TIPE, KD_ITEM_DEFECT, KD_LANTAI))"
         );
@@ -1895,6 +1897,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 item.setTGL_UPDATE(cursor.getString(39));
                 item.setPARENT_ROWID(cursor.getFloat(40));
                 item.setROWID(cursor.getFloat(41));
+                item.setSRC_FOTO_DENAH_LAMA(cursor.getString(42));
+                item.setSRC_FOTO_DEFECT_LAMA(cursor.getString(43));
 
                 listData.add(item);
             }
@@ -2083,6 +2087,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 item.setTGL_UPDATE(cursor.getString(39));
                 item.setPARENT_ROWID(cursor.getFloat(40));
                 item.setROWID(cursor.getFloat(41));
+                item.setSRC_FOTO_DENAH_LAMA(cursor.getString(42));
+                item.setSRC_FOTO_DEFECT_LAMA(cursor.getString(43));
 
                 listData.add(item);
             }
@@ -2165,6 +2171,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "        SQII_PELAKSANAAN.PARENT_ROWID,\n" +
                 "        SQII_PELAKSANAAN.ROWID, \n" +
                 "        SQII_KATEGORI_DEFECT.TIPE_DENAH \n" +
+                "        SQII_PELAKSANAAN.SRC_FOTO_DENAH_LAMA,\n" +
+                "        SQII_PELAKSANAAN.SRC_FOTO_DEFECT_LAMA,\n" +
                 "\n" +
                 "FROM    SQII_PELAKSANAAN\n" +
                 "\n" +
@@ -2267,6 +2275,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 item.setPARENT_ROWID(cursor.getFloat(47));
                 item.setROWID(cursor.getFloat(48));
                 item.setTIPE_DENAH(cursor.getString(49));
+                item.setSRC_FOTO_DENAH_LAMA(cursor.getString(50));
+                item.setSRC_FOTO_DEFECT_LAMA(cursor.getString(51));
 
                 listData.add(item);
             }
@@ -2333,6 +2343,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 item.setTGL_UPDATE(cursor.getString(39));
                 item.setPARENT_ROWID(cursor.getFloat(40));
                 item.setROWID(cursor.getFloat(41));
+                item.setSRC_FOTO_DENAH_LAMA(cursor.getString(42));
+                item.setSRC_FOTO_DEFECT_LAMA(cursor.getString(43));
 
                 listData.add(item);
             }
@@ -2390,6 +2402,8 @@ public class QCDBHelper extends SQLiteOpenHelper {
         values.put("TGL_UPDATE", item.getTGL_UPDATE());
         values.put("PARENT_ROWID", item.getROWID());
         values.put("ROWID", item.getROWID());
+        values.put("SRC_FOTO_DENAH_LAMA", item.getSRC_FOTO_DENAH_LAMA());
+        values.put("SRC_FOTO_DEFECT_LAMA", item.getSRC_FOTO_DEFECT_LAMA());
 
         long id = db.insert("SQII_PELAKSANAAN", null, values);
         db.close();

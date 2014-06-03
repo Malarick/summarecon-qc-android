@@ -106,6 +106,15 @@ public class TakePictureActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.camera, menu);
+        MenuItem mShowPrevPic = menu.findItem(R.id.action_preview);
+
+        if(item.getSRC_FOTO_DEFECT_LAMA() == "" || item.getSRC_FOTO_DEFECT_LAMA() == null){
+            mShowPrevPic.setVisible(false);
+        }else{
+            mShowPrevPic.setVisible(true);
+        }
+        invalidateOptionsMenu();
+
         return true;
     }
 
@@ -188,6 +197,12 @@ public class TakePictureActivity extends Activity {
 
     public void previewPrevPhoto(){
         Intent intent = new Intent(this, PrevPicActivity.class);
+        Bundle bundle = new Bundle();
+
+        bundle.putSerializable(PrevPicActivity.PARENT_ITEM_SQII_PELAKSANAAN, parent);
+        bundle.putSerializable(PrevPicActivity.ITEM_SQII_PELAKSANAAN, item);
+
+        intent.putExtra(PrevPicActivity.PHOTO_BUNDLE, bundle);
         this.startActivity(intent);
     }
 

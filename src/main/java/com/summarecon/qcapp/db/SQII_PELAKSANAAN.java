@@ -28,8 +28,10 @@ public class SQII_PELAKSANAAN implements Serializable {
     private String TGL_UPLOAD;
     private String PATH_FOTO_DENAH;
     private String SRC_FOTO_DENAH;
+    private String SRC_FOTO_DENAH_LAMA;
     private String PATH_FOTO_DEFECT;
     private String SRC_FOTO_DEFECT;
+    private String SRC_FOTO_DEFECT_LAMA;
     private Float LAMA_PERBAIKAN;
     private String TGL_ENTRY_LAMA_PERBAIKAN;
     private String TGL_JATUH_TEMPO_PERBAIKAN;
@@ -456,5 +458,21 @@ public class SQII_PELAKSANAAN implements Serializable {
 
     public void setROWID(Float ROWID) {
         this.ROWID = ROWID;
+    }
+
+    public String getSRC_FOTO_DENAH_LAMA() {
+        return SRC_FOTO_DENAH_LAMA;
+    }
+
+    public void setSRC_FOTO_DENAH_LAMA(String SRC_FOTO_DENAH_LAMA) {
+        this.SRC_FOTO_DENAH_LAMA = SRC_FOTO_DENAH_LAMA;
+    }
+
+    public String getSRC_FOTO_DEFECT_LAMA() {
+        return SRC_FOTO_DEFECT_LAMA;
+    }
+
+    public void setSRC_FOTO_DEFECT_LAMA(String SRC_FOTO_DEFECT_LAMA) {
+        this.SRC_FOTO_DEFECT_LAMA = SRC_FOTO_DEFECT_LAMA;
     }
 }

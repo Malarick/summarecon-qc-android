@@ -3,6 +3,7 @@ package com.summarecon.qcapp;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,14 +17,25 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.summarecon.qcapp.core.QCConfig;
+import com.summarecon.qcapp.db.SQII_PELAKSANAAN;
 import com.summarecon.qcapp.utils.BitmapUtil;
 
+import java.util.List;
+
 public class PrevPicActivity extends Activity {
+
+    public final static String PARENT_ITEM_SQII_PELAKSANAAN = "PARENT_ITEM_SQII_PELAKSANAAN";
+    public final static String ITEM_SQII_PELAKSANAAN = "ITEM_SQII_PELAKSANAAN";
+    public static final String PHOTO_BUNDLE = "PHOTO_BUNDLE";
+
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prevpic);
+
+        intent = getIntent();
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -60,6 +72,7 @@ public class PrevPicActivity extends Activity {
 
         private ImageView mPhoto_preview;
         private Bitmap photoBitmap;
+        private SQII_PELAKSANAAN itemPelaksanaan;
 
         public PlaceholderFragment() {
         }
@@ -77,7 +90,12 @@ public class PrevPicActivity extends Activity {
 
         public void loadPhoto(){
             String photoURL;
-            photoURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + "/DFC_VERNONIA_RESIDENCE_1400583562915.jpg";
+
+            Bundle bundle = new Bundle();
+            bundle = getActivity().getIntent().getBundleExtra(PHOTO_BUNDLE);
+            itemPelaksanaan = (SQII_PELAKSANAAN) bundle.getSerializable(ITEM_SQII_PELAKSANAAN);
+
+            photoURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + itemPelaksanaan.getSRC_FOTO_DEFECT_LAMA();
             photoBitmap = BitmapUtil.makeBitmapFromFile(photoURL, 1024 * 768);
             mPhoto_preview.setImageBitmap(photoBitmap);
         }
