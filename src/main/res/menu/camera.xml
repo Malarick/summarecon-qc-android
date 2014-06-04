@@ -8,12 +8,6 @@
         android:icon="@drawable/ic_action_flash_off"
         android:showAsAction="ifRoom" />
 
-    <item android:id="@+id/action_preview"
-        android:title="@string/action_preview"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_prev_pic"
-        android:showAsAction="ifRoom" />
-
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
