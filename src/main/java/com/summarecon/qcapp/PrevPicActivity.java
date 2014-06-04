@@ -97,7 +97,7 @@ public class PrevPicActivity extends Activity {
 
 
             photoURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + "/" + itemPelaksanaan.getSRC_FOTO_DEFECT_LAMA();
-            Log.e("MAIN", photoURL);
+//            Log.e("MAIN", photoURL);
             photoBitmap = BitmapUtil.makeBitmapFromFile(photoURL, 1024 * 768);
             mPhoto_preview.setImageBitmap(photoBitmap);
         }

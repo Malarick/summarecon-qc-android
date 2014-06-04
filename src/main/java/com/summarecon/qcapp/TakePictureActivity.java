@@ -55,6 +55,8 @@ public class TakePictureActivity extends Activity {
     private Boolean isReplaceDefect;
     private Boolean isReplaceDenah;
 
+    private Menu mMenu;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_picture);
@@ -106,14 +108,9 @@ public class TakePictureActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.camera, menu);
-//        MenuItem mShowPrevPic = menu.findItem(R.id.action_preview);
-//
-//        if(item.getSRC_FOTO_DEFECT_LAMA() == "" || item.getSRC_FOTO_DEFECT_LAMA() == null){
-//            mShowPrevPic.setVisible(false);
-//        }else{
-//            mShowPrevPic.setVisible(true);
-//        }
-//        invalidateOptionsMenu();
+        this.mMenu = menu;
+        checkPrevImage();
+        //invalidateOptionsMenu();
 
         return true;
     }
@@ -136,6 +133,18 @@ public class TakePictureActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean checkPrevImage(){
+        MenuItem mShowPrevPic = mMenu.findItem(R.id.action_preview);
+        Log.e("MAIN", item.getSRC_FOTO_DEFECT_LAMA());
+        if(item.getSRC_FOTO_DEFECT_LAMA() == "" || item.getSRC_FOTO_DEFECT_LAMA() == null){
+            mShowPrevPic.setVisible(false);
+            return false;
+        }else{
+            mShowPrevPic.setVisible(true);
+            return true;
+        }
     }
 
     public void setZoomControlListener(){
