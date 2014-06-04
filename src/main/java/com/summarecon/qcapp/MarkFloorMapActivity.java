@@ -101,6 +101,7 @@ public class MarkFloorMapActivity extends Activity {
         month = String.format("%02d", today.get(Calendar.MONTH)+1);
         year = String.format("%02d", today.get(Calendar.YEAR));
 
+
     }
 
     @Override
@@ -214,10 +215,15 @@ public class MarkFloorMapActivity extends Activity {
             //update tanggal terakhir create file
             //Calendar c = Calendar.getInstance();
             //int seconds = c.get(Calendar.DATE);
-            //QCConfig.GENERATE_FILE_DATE = "";
-
+            //QCConfig.GENERATE_FILE_DATE = String.valueOf(seconds);
             //db.updateItemDefectPenugasan(parent);
             //Log.e("EXTRA_", item.getSRC_FOTO_DENAH());
+
+            /*===================Simpan tanggal terakhir pelaksanaan================*/
+            Calendar mCal = Calendar.getInstance();
+            QCConfig.GENERATE_FILE_DATE = mCal.getTime();
+            Log.e("TGL TERAKHIR PELAKSANAAN", String.valueOf(QCConfig.GENERATE_FILE_DATE));
+
             return true;
         }catch (FileNotFoundException e){
             Log.e(LOG_TAG, e.getMessage());

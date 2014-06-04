@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import java.io.File;
+import java.util.Date;
 
 public class QCConfig {
 
@@ -22,7 +23,7 @@ public class QCConfig {
     public static final String PREFIX_FILE_DENAH = "DNH_";
 
     //TANGGAL TERAKHIR FILE
-    public static String GENERATE_FILE_DATE ="";
+    public static Date GENERATE_FILE_DATE;
 
     // Files & Directory
     public static String APP_EXTERNAL_IMAGES_DIRECTORY;

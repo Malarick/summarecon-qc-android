@@ -38,9 +38,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class DashboardFragment extends Fragment {
@@ -87,7 +90,46 @@ public class DashboardFragment extends Fragment {
 
         btn_generate = (Button) rootView.findViewById(R.id.btn_upload);
         //if (tanggal penugasan > tanggal skrg)
-        //btn_generate.setVisibility(View.VISIBLE);
+        //QCConfig.GENERATE_FILE_DATE ="2";
+        /*
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date strDate = null;
+        try {
+            strDate = sdf.parse("2009-12-1");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        QCConfig.GENERATE_FILE_DATE = strDate;
+        */
+
+        /*==================== compare date skrg dengan date terakhir penugasan===================*/
+
+
+
+
+//        /*=============== Buat isi manual untuk simulasi kalau kemarin sebelumnya belum upload=============*/
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        Date strDate = null;
+//        try {
+//            strDate = sdf.parse("2014-01-20");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        QCConfig.GENERATE_FILE_DATE=strDate;
+//        /*=================================================================================================*/
+
+//        Log.e("MAIN", String.valueOf(mCal.getTime()));
+//        Log.e("MAIN", String.valueOf(strDate));
+        Calendar mCal = Calendar.getInstance();
+        if (QCConfig.GENERATE_FILE_DATE!=null){
+            if(mCal.getTime().compareTo(QCConfig.GENERATE_FILE_DATE) > 0){
+                //Toast.makeText(getActivity().getApplicationContext(),"OUTDATE",Toast.LENGTH_SHORT).show();
+                btn_generate.setVisibility(View.VISIBLE);
+            }else{
+                //Toast.makeText(getActivity().getApplicationContext(),"Before",Toast.LENGTH_SHORT).show();
+            }
+        }
+
         btn_delete = (Button) rootView.findViewById(R.id.btn_delete);
 
         bundleLogin = getActivity().getIntent().getBundleExtra("bundleLogin");
@@ -132,11 +174,14 @@ public class DashboardFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         generateFile();
+                        Calendar mCal = Calendar.getInstance();
+
                         //Calendar c = Calendar.getInstance();
                         //int seconds = c.get(Calendar.DATE);
-                        //tes ambil tanggal saat ini waktu generate file
-                        //QCConfig.GENERATE_FILE_DATE="Today";
 
+                        //tes ambil tanggal saat ini waktu generate file
+                        //QCConfig.GENERATE_FILE_DATE= String.valueOf(seconds);
+                        Toast.makeText(getActivity().getApplicationContext(),String.valueOf(mCal.getTime()),Toast.LENGTH_SHORT).show();
                     }
                 });
 
