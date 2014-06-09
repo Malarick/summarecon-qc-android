@@ -137,7 +137,7 @@ public class TakePictureActivity extends Activity {
 
     public boolean checkPrevImage(){
         MenuItem mShowPrevPic = mMenu.findItem(R.id.action_preview);
-        Log.e("MAIN", item.getSRC_FOTO_DEFECT_LAMA());
+        Log.e("MAIN", "SRC_FOTO_SEBELUMNYA: " + item.getSRC_FOTO_DEFECT_LAMA());
         if(item.getSRC_FOTO_DEFECT_LAMA() == "" || item.getSRC_FOTO_DEFECT_LAMA() == null){
             mShowPrevPic.setVisible(false);
             return false;
