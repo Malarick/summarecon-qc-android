@@ -69,7 +69,7 @@
 
 
         <TextView
-            android:id="@+id/lbl_footer"
+            android:id="@+id/lbl_footer1"
             android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,13 +77,13 @@
             android:text="\u00a9 2013 PT.Summarecon Tbk."/>
 
         <TextView
-            android:id="@+id/lbl_footer"
+            android:id="@+id/lbl_footer2"
             android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textSize="10sp"
-            android:text="Version v.09"/>
+            android:text="Version v.9.1"/>
 
     </LinearLayout>
 
