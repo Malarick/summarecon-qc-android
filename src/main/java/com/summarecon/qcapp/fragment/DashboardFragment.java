@@ -120,6 +120,8 @@ public class DashboardFragment extends Fragment {
 
 //        Log.e("MAIN", String.valueOf(mCal.getTime()));
 //        Log.e("MAIN", String.valueOf(strDate));
+        btn_generate.setVisibility(View.VISIBLE);
+/*
         Calendar mCal = Calendar.getInstance();
         if (QCConfig.GENERATE_FILE_DATE!=null){
             if(mCal.getTime().compareTo(QCConfig.GENERATE_FILE_DATE) > 0){
@@ -129,7 +131,7 @@ public class DashboardFragment extends Fragment {
                 //Toast.makeText(getActivity().getApplicationContext(),"Before",Toast.LENGTH_SHORT).show();
             }
         }
-
+*/
         btn_delete = (Button) rootView.findViewById(R.id.btn_delete);
 
         bundleLogin = getActivity().getIntent().getBundleExtra("bundleLogin");
