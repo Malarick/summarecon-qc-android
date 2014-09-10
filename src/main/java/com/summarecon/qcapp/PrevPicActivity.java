@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -73,6 +74,7 @@ public class PrevPicActivity extends Activity {
         private ImageView mPhoto_preview;
         private Bitmap photoBitmap;
         private SQII_PELAKSANAAN itemPelaksanaan;
+        private Button btnPrevDefect, btnPrevDenah;
 
         public PlaceholderFragment() {
         }
@@ -83,20 +85,39 @@ public class PrevPicActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_prevpic, container, false);
 
             mPhoto_preview = (ImageView) rootView.findViewById(R.id.img_prev_photo_preview);
-            loadPhoto();
+            btnPrevDefect = (Button) rootView.findViewById(R.id.btn_view_prev_defect);
+            btnPrevDefect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    loadPhoto("DEFECT");
+                }
+            });
+
+            btnPrevDenah = (Button) rootView.findViewById(R.id.btn_view_prev_denah);
+            btnPrevDenah.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    loadPhoto("DENAH");
+                }
+            });
+            //loadPhoto();
 
             return rootView;
         }
 
-        public void loadPhoto(){
+        public void loadPhoto(String p_jenis_foto){
             String photoURL;
 
+            photoURL = "";
             Bundle bundle = new Bundle();
             bundle = getActivity().getIntent().getBundleExtra(PHOTO_BUNDLE);
             itemPelaksanaan = (SQII_PELAKSANAAN) bundle.getSerializable(ITEM_SQII_PELAKSANAAN);
 
-
-            photoURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + "/" + itemPelaksanaan.getSRC_FOTO_DEFECT_LAMA();
+            if(p_jenis_foto.equals("DEFECT")){
+                photoURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + "/" + itemPelaksanaan.getSRC_FOTO_DEFECT_LAMA();
+            }else if(p_jenis_foto.equals("DENAH")){
+                photoURL = QCConfig.APP_EXTERNAL_IMAGES_DIRECTORY + "/" + itemPelaksanaan.getSRC_FOTO_DENAH_LAMA();
+            }
 //            Log.e("MAIN", photoURL);
             photoBitmap = BitmapUtil.makeBitmapFromFile(photoURL, 1024 * 768);
             mPhoto_preview.setImageBitmap(photoBitmap);

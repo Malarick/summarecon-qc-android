@@ -19,6 +19,8 @@
     <string name="btn_send">Send</string>
     <string name="btn_camera">Take Picture</string>
     <string name="btn_upload">Upload</string>
+    <string name="btn_view_prev_defect">Previous Defect</string>
+    <string name="btn_view_prev_denah">Previous Denah</string>
     <string name="desc_drawer_open">Drawer Opened</string>
     <string name="desc_drawer_close">Drawer Closed</string>
     <string name="header_section_penugasan">MENU PENUGASAN</string>
