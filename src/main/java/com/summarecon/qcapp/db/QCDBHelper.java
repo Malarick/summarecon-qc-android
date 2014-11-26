@@ -2188,7 +2188,7 @@ public class QCDBHelper extends SQLiteOpenHelper {
                 "\n" +
                 "        INNER JOIN SQII_CLUSTER\n" +
                 "        ON SQII_ITEM_DEFECT_PENUGASAN.KD_KAWASAN = SQII_CLUSTER.KD_KAWASAN AND\n" +
-                "           SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER = TRIM(SQII_CLUSTER.KD_CLUSTER)\n" +
+                "           TRIM(SQII_ITEM_DEFECT_PENUGASAN.KD_CLUSTER) = TRIM(SQII_CLUSTER.KD_CLUSTER)\n" +
                 "\n" +
                 "        INNER JOIN SQII_ITEM_DEFECT\n" +
                 "        ON SQII_PELAKSANAAN.KD_ITEM_DEFECT = SQII_ITEM_DEFECT.KD_ITEM_DEFECT\n" +

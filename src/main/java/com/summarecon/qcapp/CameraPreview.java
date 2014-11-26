@@ -11,6 +11,7 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by arnold on 14/11/13.
@@ -22,6 +23,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private Camera camera;
     private DisplayMetrics displayMetrics;
     private Camera.Parameters parameters;
+    private Camera.Size size;
+    private List supportedSizes;
     //private MediaActionSound mediaActionSound;
 
     public CameraPreview(Context context) {
@@ -65,7 +68,23 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             if(parameters.getSupportedFocusModes().indexOf(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE) != -1){
                 parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);       //auto-focus
             }
-            parameters.setPictureSize(1024, 768);
+
+            supportedSizes = parameters.getSupportedPictureSizes();
+            if(supportedSizes == null){
+                Log.e("CameraPreview", "Supported PictureSize not found");
+                return;
+            }else{
+                //CHECK FOR SUPPORTED PICTURE SIZE
+                for(int i = supportedSizes.size() - 1; i >= 0; i--){
+                    size = (Camera.Size)supportedSizes.get(i);
+                    //ASPECT RATIO 1.7 (16:9) OR 1.3 (4:3)
+                    if(size.width >= 1024 && size.height >= 768){
+                        parameters.setPictureSize(size.width, size.height);
+                        break;
+                    }
+                }
+                Log.e("CameraPreview", parameters.getPictureSize().width + "x" + parameters.getPictureSize().height);
+            }
             parameters.setPictureFormat(ImageFormat.JPEG);
 
             //apply camera parameters
