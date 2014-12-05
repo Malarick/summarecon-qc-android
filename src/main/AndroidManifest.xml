@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.summarecon.qcapp"
     android:versionCode="10"
-    android:versionName="10.3">
+    android:versionName="10.4">
 
     <uses-sdk
         android:minSdkVersion="14"

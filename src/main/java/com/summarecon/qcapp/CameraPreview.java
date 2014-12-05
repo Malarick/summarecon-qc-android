@@ -74,13 +74,27 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 Log.e("CameraPreview", "Supported PictureSize not found");
                 return;
             }else{
-                //CHECK FOR SUPPORTED PICTURE SIZE
-                for(int i = supportedSizes.size() - 1; i >= 0; i--){
-                    size = (Camera.Size)supportedSizes.get(i);
-                    //ASPECT RATIO 1.7 (16:9) OR 1.3 (4:3)
-                    if(size.width >= 1024 && size.height >= 768){
-                        parameters.setPictureSize(size.width, size.height);
-                        break;
+                int first = ((Camera.Size)supportedSizes.get(0)).width;
+                int last = ((Camera.Size)supportedSizes.get(supportedSizes.size() - 1)).width;
+                if(last > first){
+                    //CHECK FOR SUPPORTED PICTURE SIZE ASCENDING
+                    for(int i = 0; i < supportedSizes.size(); i++){
+                        size = (Camera.Size)supportedSizes.get(i);
+                        //ASPECT RATIO 1.7 (16:9) OR 1.3 (4:3)
+                        if(size.width >= 1024 && size.height >= 720){
+                            parameters.setPictureSize(size.width, size.height);
+                            break;
+                        }
+                    }
+                }else{
+                    //CHECK FOR SUPPORTED PICTURE SIZE DESCENDING
+                    for(int i = supportedSizes.size() - 1; i >= 0; i--){
+                        size = (Camera.Size)supportedSizes.get(i);
+                        //ASPECT RATIO 1.7 (16:9) OR 1.3 (4:3)
+                        if(size.width >= 1024 && size.height >= 720){
+                            parameters.setPictureSize(size.width, size.height);
+                            break;
+                        }
                     }
                 }
                 Log.e("CameraPreview", parameters.getPictureSize().width + "x" + parameters.getPictureSize().height);
